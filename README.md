@@ -12,6 +12,13 @@
 
 A suite of programs to help enhance figures in Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples but for the full scope of each program, see the help file.
 
+Currently, this package contains:
+
+```
+|
+|--- labsplit.ado
+```
+
 The programs here are designed/upgraded/bug-fixed on a needs basis to support the other packages. If you have specific requests, or find major bugs, then please open up an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
 
 ## Installation
@@ -30,12 +37,7 @@ GitHub (**v1.0**):
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
 ```
 
-See the help file `help graphfunctions` for details. Currently, this package contains:
-
-```
-|
-|--- labsplit.ado
-```
+See the help file `help graphfunctions` for details. 
 
 
 If you want to make a clean figure, then it is advisable to load a clean scheme. These are several available and I personally use the following:
