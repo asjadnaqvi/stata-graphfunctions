@@ -76,7 +76,16 @@ Let's test the `labsplit` command:
 labsplit mylab, wrap(10) gen(newlab1)
 labsplit mylab, wrap(10) gen(newlab2) strict
 labsplit mylab, word(2) gen(newlab3)
+```
 
+Code for figures:
+
+```
+twoway (scatter y x, mlabel(mylab)   mlabsize(3)), title("Standard")
+twoway (scatter y x, mlabel(newlab1) mlabsize(3)), title("Wrapping")
+
+twoway (scatter y x, mlabel(newlab2) mlabsize(3)), title("Wrapping strict") 
+twoway (scatter y x, mlabel(newlab3) mlabsize(3)), title("Word wrap")
 ```
 
 <img src="/figures/labsplit0.png" width="50%"><img src="/figures/labsplit1.png" width="50%">
