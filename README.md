@@ -8,7 +8,7 @@
 
 
 # graphfunctions v1.0
-*(26 Sep 2025)*
+*(28 Sep 2025)*
 
 A suite of programs to help enhance figures in Stata. The program is designed to be called by other programs. But it can be used as a standalone as well. The page will provide some minimum examples but for the full scope of each program, see the help file.
 
@@ -31,9 +31,8 @@ net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/s
 See the help file `help graphfunctions` for details. Currently, this package contains:
 
 ```
--   graphfunctions
 |
------ labsplit.ado
+|--- labsplit.ado
 ```
 
 
@@ -80,8 +79,8 @@ labsplit mylab, word(2) gen(newlab3)
 
 ```
 
-<img src="/figures/labsplit0.png" width="100%"><img src="/figures/labsplit1.png" width="100%">
-<img src="/figures/labsplit2.png" width="100%"><img src="/figures/labsplit3.png" width="100%">
+<img src="/figures/labsplit0.png" width="50%"><img src="/figures/labsplit1.png" width="50%">
+<img src="/figures/labsplit2.png" width="50%"><img src="/figures/labsplit3.png" width="50%">
 
 
 
