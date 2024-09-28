@@ -1,7 +1,7 @@
-*! labsplit v1.0 (27 Sep 2024)
+*! labsplit v1.0 (28 Sep 2024)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
-* v1.0 (27 Sep 2024): first release
+* v1.0 (28 Sep 2024): first release.
 
 
 cap program drop labsplit
@@ -26,7 +26,6 @@ version 11
 
 quietly {	
 	
-
 	if "`generate'" != "" {
 		gen `generate' = ""
 		local _myvar `generate'
@@ -44,7 +43,7 @@ quietly {
 			summ `_length', meanonly
 			local _wraprounds = floor(`r(max)' / `wrap')
 			
-			replace `_myvar' = `varlist' // duplicate
+			replace `_myvar' = `varlist' // copy
 
 			forval i = 1 / `_wraprounds' {
 				local wraptag = `wrap' * `i'
@@ -87,16 +86,23 @@ quietly {
 	}
 	
 	if "`word'" != "" {
-		tempvar _part1 _part2
-		gen `_part1' = ""
-		gen `_part2' = `varlist'
+		tempvar _part1 _part2 _words
+
+		gen `_words' = wordcount(`varlist')	
 		
+		gen `_part1' = "" 			if `_words' > `word' 
+		gen `_part2' = `varlist'	if `_words' > `word'
+		
+
 		forval i = 1 /`word' {
-			replace `_part1' = `_part1' + word(`varlist', `i') + " "
+			replace `_part1' = `_part1' + word(`varlist', `i') + " " 				 if `_words' > `word'
+			replace `_part2' = trim(ustrregexrf(`_part2', word(`varlist', `i'), "", .)) if `_words' > `word'
 		}	
 		
-		replace `_part2' = subinstr(`_part2', `_part1', "", .)
-		replace `_myvar' = `_part1' + "`=char(10)'" + `_part2'
+		replace `_myvar' = `_part1' + "`=char(10)'" + `_part2' if `_words' >  `word'
+		replace `_myvar' = trim(`varlist')                     if `_words' <=  `word'
+		
+		
 	}
 }	
 	
