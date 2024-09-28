@@ -56,7 +56,12 @@ graph set window fontface "Arial Narrow"
 *(v1.0: 28 Sep 2024)*
 
 
-Set up the data
+Syntax:
+```stata
+labsplit variable, [ wrap(int) word(int) strict generate(newvar) ]
+```
+
+Set up the data:
 
 ```stata
 clear
