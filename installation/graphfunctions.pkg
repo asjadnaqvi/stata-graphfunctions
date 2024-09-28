@@ -1,0 +1,19 @@
+v 1.0
+d {bf:GRAPHFUNCTIONS}: A collection of functions to extend graph functionality in Stata
+d
+d Requires: Stata version 11 or higher.
+d
+d KW: Stata
+d KW: graphs
+d KW: figures
+d KW: label wrap
+d KW: word wrap
+d
+d Distribution-Date: 20240928
+d License: MIT
+d
+d Author: Asjad Naqvi (asjadnaqvi@gmail.com)
+d
+f graphfunctions.sthlp
+f labsplit.ado
+f labsplit.sthlp
