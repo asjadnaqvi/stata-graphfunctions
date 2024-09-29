@@ -8,7 +8,7 @@
 
 
 # graphfunctions v1.0
-*(28 Sep 2025)*
+*(28 Sep 2024)*
 
 A suite of programs to help enhance figures in Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope of each program, see the relevant help files.
 
