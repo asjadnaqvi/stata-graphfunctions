@@ -19,7 +19,7 @@ Currently, this package contains:
 |--- labsplit.ado
 ```
 
-The programs here are designed/upgraded/bug-fixed on a needs basis to support the other packages. If you have specific requests, or find major bugs, then please open up an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
+The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
 
 ## Installation
 
@@ -40,10 +40,7 @@ net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/s
 See the help file `help graphfunctions` for details. 
 
 
-If you want to make a clean figure, then it is advisable to load a clean scheme. These are several available and I personally use the following:
-
-
-Additional options used in the examples below:
+If you want to make a clean figure, then it is advisable to load a clean scheme, especially if you are not using newer Stata versions. My own setting is the following:
 
 ```stata
 ssc install schemepack, replace
@@ -54,7 +51,6 @@ graph set window fontface "Arial Narrow"
 
 ## labsplit 
 *(v1.0: 28 Sep 2024)*
-
 
 Syntax:
 ```stata
