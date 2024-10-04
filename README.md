@@ -14,8 +14,12 @@ A suite of programs to help enhance figures in Stata. The program is designed to
 
 Currently, this package contains:
 
-*   [labsplit](#labsplit) *(v1.0 - 28 Sep 2024)*
-*   [catspline](#catspline) *(v1.0 - 04 Oct 2024)*
+
+|Program|Version|Updated|Description|
+|----| ---- | ---- | ----- |
+| labsplit | 1.0 | 28 Sep 2024 | Text wrapping |
+| catspline | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
+
 
 
 The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
