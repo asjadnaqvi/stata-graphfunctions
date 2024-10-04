@@ -5,15 +5,15 @@
 
 {hline}
 
-{title:labsplit}: A program for text wrapping. 
+{title:labsplit}: A program for text and word wrapping. 
 
-This function is still {it:beta} so please test and report bugs.
+
 
 {marker syntax}{title:Syntax}
 
 {p 8 15 2}
-
 {cmd:labsplit} {it:variable}, {cmd:[} {cmd:wrap}({it:int}) {cmd:word}({it:int}) {cmd:strict} {cmdab:gen:erate}({it:newvar}) {cmd:]}
+
 
 {synoptset 36 tabbed}{...}
 {synopthdr}
@@ -42,7 +42,7 @@ See {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}.
 
 {title:Package details}
 
-Version      : {bf:labsplit} v1.0
+Version      : {bf:labsplit} v1.0 in {stata help graphfunctions:graphfunctions} v1.1
 This release : 28 Sep 2024
 First release: 28 Sep 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
@@ -62,17 +62,8 @@ Please submit bugs, errors, feature requests on {browse "https://github.com/asja
 
 {title:Citation guidelines}
 
-Suggested citation guidlines for this package:
+See {stata help graphfunctions:graphfunctions}.
 
-Naqvi, A. (2024). Stata package "graphfunctions" version 1.0. Release date 28 September 2024. https://github.com/asjadnaqvi/stata-graphfunctions.
-
-@software{graphfunctions,
-   author = {Naqvi, Asjad},
-   title = {Stata package ``graphfunctions''},
-   url = {https://github.com/asjadnaqvi/stata-graphfunctions},
-   version = {1.0},
-   date = {2024-09-28}
-}
 
 {title:Other packages}
 

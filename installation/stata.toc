@@ -1,6 +1,6 @@
-v 1.0
+v 1.1
 d GRAPHFUNCTIONS: Added functionality for graphs.
-d Distribution-Date: 20240927
+d Distribution-Date: 20241004
 d
 d Asjad Naqvi
 d asjadnaqvi@gmail.com

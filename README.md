@@ -7,8 +7,8 @@
 
 
 
-# graphfunctions v1.0
-*(28 Sep 2024)*
+# graphfunctions v1.1
+*(04 Oct 2024)*
 
 A suite of programs to help enhance figures in Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope of each program, see the relevant help files.
 
@@ -17,6 +17,7 @@ Currently, this package contains:
 ```
 |
 |--- labsplit.ado
+|--- catspline.ado
 ```
 
 The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
@@ -31,7 +32,7 @@ SSC (**v1.0**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.0**):
+GitHub (**v1.1**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -51,6 +52,8 @@ graph set window fontface "Arial Narrow"
 
 ## labsplit 
 *(v1.0: 28 Sep 2024)*
+
+The program allows users to split text labels based on flexible or fixed character length or word positions.
 
 Syntax:
 ```stata
@@ -96,6 +99,47 @@ twoway (scatter y x, mlabel(newlab3) mlabsize(3)), title("Word wrap")
 <img src="/figures/labsplit0.png" width="50%"><img src="/figures/labsplit1.png" width="50%">
 <img src="/figures/labsplit2.png" width="50%"><img src="/figures/labsplit3.png" width="50%">
 
+## catspline
+*(v1.0: 04 Oct 2024)*
+
+
+The program allows users to generate splines based on the [Catmull-Rom algorithm](https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline).
+
+Syntax:
+```stata
+catspline y x, [ rho(num [0,1]) obs(int) close genx(newvar) geny(newvar) ]
+```
+
+Example:
+
+```stata
+clear
+set obs 5
+set seed 2021
+
+gen x = runiformint(1,5)
+gen y = runiformint(1,5)
+
+
+catspline y x
+
+twoway ///
+	(scatter y x) ///
+	(line _y _x,  cmissing(n))
+```
+
+<img src="/figures/catspline1.png" width="75%">
+
+```stata
+cap drop _id _x _y
+catspline y x, close 
+
+twoway ///
+	(scatter y x) ///
+	(line _y _x,  cmissing(n))
+```
+
+<img src="/figures/catspline2.png" width="75%">
 
 
 ## Feedback
@@ -106,9 +150,12 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues
 ## Change log
 
 
+**v1.1 (04 Oct 2024)**
+- `catspline` added.
+
 **v1.0 (28 Sep 2024)**
+- `labsplit` added.
 - Public release.
-- `labsplit()` added.
 
 
 
