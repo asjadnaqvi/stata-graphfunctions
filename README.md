@@ -17,8 +17,8 @@ Currently, this package contains:
 
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
-| labsplit | 1.0 | 28 Sep 2024 | Text wrapping |
-| catspline | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
+| [labsplit](#labsplit) | 1.0 | 28 Sep 2024 | Text wrapping |
+| [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
 
 
 
