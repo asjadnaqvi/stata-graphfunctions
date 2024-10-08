@@ -214,6 +214,9 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues
 
 ## Change log
 
+**v1.2 (08 Oct 2024)**
+- `arc` added.
+- Minor fixes to programs with additional checks. Version numbers stay the same.
 
 **v1.1 (04 Oct 2024)**
 - `catspline` added.
