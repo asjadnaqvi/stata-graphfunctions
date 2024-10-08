@@ -1,7 +1,7 @@
 {smcl}
 {* 04Oct2024}{...}
 {hi:help catspline}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.1 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions (GitHub)}}
 
 {hline}
 

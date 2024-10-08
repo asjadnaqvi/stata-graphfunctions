@@ -1,7 +1,7 @@
 {smcl}
 {* 08Oct2024}{...}
 {hi:help arc}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.2 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions (GitHub)}}
 
 {hline}
 

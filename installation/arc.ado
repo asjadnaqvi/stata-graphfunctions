@@ -8,6 +8,8 @@ cap program drop arc
 
 program define arc, rclass
  
+version 11
+ 
 	syntax, ///
 		x1(numlist max=1) y1(numlist max=1) ///  //  from
 		x2(numlist max=1) y2(numlist max=1) ///  //  to
@@ -39,7 +41,6 @@ program define arc, rclass
 	}
 	
 	
-
     // Check that radius is valid
     if `radius' <= `L'/2 {
 		local mychord = `L' / 2
@@ -47,7 +48,7 @@ program define arc, rclass
         exit
     }	
 	
-	return local chord `L'
+	return local chord  `L'
 	return local radius `radius'
 	
     // Distance from midpoint to center
@@ -97,21 +98,21 @@ program define arc, rclass
 	
 	if "`swap'"!= ""  {
 		if "`major'" != "" {
-			if (`angle_end' - `angle_start') < _pi local angle_end = `angle_end' + 2 * _pi
+			if (`angle_end' - `angle_start') < _pi     local angle_end = `angle_end' + 2 * _pi
 		}
 		else {
-			if (`angle_end' - `angle_start') > _pi local angle_end = `angle_end' - 2 * _pi
+			if (`angle_end' - `angle_start') > _pi     local angle_end = `angle_end' - 2 * _pi
 		}		
 	}
 	else {
 		if "`major'" != "" {
-			if (`angle_end' - `angle_start') > _pi 	 local angle_end = `angle_end' - 2 * _pi
+			if (`angle_end' - `angle_start') > _pi 	   local angle_end = `angle_end' - 2 * _pi
 			if (`angle_end' - `angle_start') > 2 * _pi local angle_end = `angle_end' - 2 * _pi			
 
 		}
 		else {
-			if (`angle_end' - `angle_start') < _pi 		local angle_end = `angle_end' + 2 * _pi	
-			if (`angle_end' - `angle_start') > 2 * _pi 	local angle_end = `angle_end' - 2 * _pi
+			if (`angle_end' - `angle_start') < _pi 	   local angle_end = `angle_end' + 2 * _pi	
+			if (`angle_end' - `angle_start') > 2 * _pi local angle_end = `angle_end' - 2 * _pi
 		}
 	}
 	
@@ -119,17 +120,13 @@ program define arc, rclass
     // angle segments
     local delta_theta = (`angle_end' - `angle_start') / (`n' - 1)
     
-    
-	if _N < `n' set obs `n'
-    
-    // Calculate coordinates
-    
 	tempvar theta
 	gen double `theta' = `angle_start' + (_n - 1) * `delta_theta'
 	
-	
+	if _N < `n' set obs `n'
 	local xvar _x
 	local yvar _y
+	
 	
 	if "`genx'" != "" local xvar `genx'
 	if "`geny'" != "" local yvar `geny'		

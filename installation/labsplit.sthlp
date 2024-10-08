@@ -1,12 +1,11 @@
 {smcl}
 {* 28Sep2024}{...}
 {hi:help labsplit}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.0 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions (GitHub)}}
 
 {hline}
 
 {title:labsplit}: A program for text and word wrapping. 
-
 
 
 {marker syntax}{title:Syntax}
