@@ -149,6 +149,9 @@ twoway ///
 ### arc
 *(v1.0: 08 Oct 2024)*
 
+Draw minor or major arcs between two points. The arc orientation and be switched using `swap`, and major arcs can be drawn using `major`.
+
+
 ```stata
 arc, y1(-2) x1(-4) y2(4) x2(2) rad(6) replace
 
