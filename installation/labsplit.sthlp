@@ -41,8 +41,8 @@ See {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}.
 
 {title:Package details}
 
-Version      : {bf:labsplit} v1.0 in {stata help graphfunctions:graphfunctions}
-This release : 28 Sep 2024
+Version      : {bf:labsplit} v1.1 in {stata help graphfunctions:graphfunctions}
+This release : 08 Oct 2024
 First release: 28 Sep 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
 Keywords     : Stata, graph, label wrap, text wrap, word wrap

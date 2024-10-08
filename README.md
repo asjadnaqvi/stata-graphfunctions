@@ -17,7 +17,7 @@ Currently, this package contains:
 
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
-| [labsplit](#labsplit) | 1.0 | 28 Sep 2024 | Text wrapping |
+| [labsplit](#labsplit) | 1.1 | 28 Sep 2024 | Text wrapping |
 | [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
 | [arc](#arc) | 1.0 | 08 Oct 2024 | Arcs between two points |
 
@@ -55,7 +55,7 @@ graph set window fontface "Arial Narrow"
 ## Examples
 
 ### labsplit 
-*(v1.0: 28 Sep 2024)*
+*(v1.1: 08 Oct 2024)*
 
 The program allows users to split text labels based on flexible or fixed character length or word positions.
 
@@ -216,7 +216,8 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues
 
 **v1.2 (08 Oct 2024)**
 - `arc` added.
-- Minor fixes to programs with additional checks. Version numbers stay the same.
+- Bug fixes in `labsplit`.
+- Additional checks in programs.
 
 **v1.1 (04 Oct 2024)**
 - `catspline` added.

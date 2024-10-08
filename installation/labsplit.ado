@@ -1,6 +1,7 @@
-*! labsplit v1.0 (28 Sep 2024)
+*! labsplit v1.1 (08 Oct 2024)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
+* v1.1 (08 Oct 2024): bug fixes
 * v1.0 (28 Sep 2024): first release.
 
 
@@ -63,12 +64,11 @@ quietly {
 			summ `_words', meanonly
 			local items = `r(max)'	
 
-			
-			
 			forval i = 2/`items' {
 
 				cap drop `_tempword'
 				gen `_tempword' = word(`varlist', `i')  		if !missing(`varlist')
+
 				
 				replace `length0' = length(`current_line')  	if !missing(`varlist')
 				replace `length1' = length(`_tempword')      	if !missing(`varlist')
@@ -82,6 +82,7 @@ quietly {
 
 			replace `_myvar' = `_myvar' + `current_line' if !missing(`current_line') & `_myvar' != ""
 			replace `_myvar' = word(`varlist', 1) if `_words'==1
+			replace `_myvar' = `varlist' if missing(`_myvar')
 		}
 	}
 	
