@@ -14,7 +14,7 @@ The {it:_id} variable represents the drawing sequence and {it:_x, _y} contains c
 {marker syntax}{title:Syntax}
 
 {p 8 15 2}
-{cmd:catspline} {it:y x}, {cmd:[} {cmd:rho}({it:num [0,1]}) {cmd:obs}({it:int}) {cmd:close} {cmdab:genx}({it:newvar}) {cmdab:geny}({it:newvar}) {cmd:]}
+{cmd:catspline} {it:y x}, {cmd:[} {cmd:rho}({it:num [0,1]}) {cmd:n}({it:int}) {cmd:close} {cmdab:genx}({it:newvar}) {cmdab:geny}({it:newvar}) {cmd:]}
 
 
 {synoptset 36 tabbed}{...}
@@ -25,7 +25,7 @@ The {it:_id} variable represents the drawing sequence and {it:_x, _y} contains c
 
 {p2coldent : {opt rho(num)}}Smoothing parameter bounded between 0 and 1. Default is {opt rho(0.5)}.{p_end}
 
-{p2coldent : {opt obs(int)}}Number of points to generate for each spline. Default is {opt obs(40)}.{p_end}
+{p2coldent : {opt n(int)}}Number of points to generate for each spline. Default is {opt n(40)}.{p_end}
 
 {p2coldent : {opt close}}Close the loop between the starting and the ending points.{p_end}
 
@@ -56,7 +56,7 @@ More examples on {browse "https://github.com/asjadnaqvi/stata-graphfunctions":Gi
 
 {title:Package details}
 
-Version      : {bf:catspline} v1.0 in {stata help graphfunctions:graphfunctions} v1.1
+Version      : {bf:catspline} v1.0 in {stata help graphfunctions:graphfunctions}
 This release : 04 Oct 2024
 First release: 04 Oct 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}

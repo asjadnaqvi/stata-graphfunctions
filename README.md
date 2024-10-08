@@ -7,8 +7,8 @@
 
 
 
-# graphfunctions v1.1
-*(04 Oct 2024)*
+# graphfunctions v1.2
+*(08 Oct 2024)*
 
 A suite of programs to help enhance figures in Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope of each program, see the relevant help files.
 
@@ -19,6 +19,7 @@ Currently, this package contains:
 |----| ---- | ---- | ----- |
 | [labsplit](#labsplit) | 1.0 | 28 Sep 2024 | Text wrapping |
 | [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
+| [arc](#arc) | 1.0 | 08 Oct 2024 | Arcs between two points |
 
 
 
@@ -34,7 +35,7 @@ SSC (**v1.0**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.1**):
+GitHub (**v1.2**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -143,6 +144,67 @@ twoway ///
 ```
 
 <img src="/figures/catspline2.png" width="75%">
+
+
+### arc
+*(v1.0: 08 Oct 2024)*
+
+```stata
+arc, y1(-2) x1(-4) y2(4) x2(2) rad(6) replace
+
+twoway ///
+	(scatteri -2 -4)  (scatteri 4 2) ///
+	(scatteri `r(ycirc)' `r(xcirc)') ///
+	(line _y _x)  ///
+	, legend(order(1 "Point 1" 2 "Point 2" 3 "Circumcenter" 4 "Arc") pos(6) row(1)) ///
+	xlabel(-10(2)10) ylabel(-10(2)10) aspect(1) xsize(1) ysize(1) ///
+	title("Right of starting point - minor")
+```
+
+<img src="/figures/arc1.png" width="75%">
+
+```stata
+arc, y1(-2) x1(-4) y2(4) x2(2) rad(6) major replace		
+
+twoway ///
+	(scatteri -2 -4)  (scatteri 4 2) ///
+	(scatteri `r(ycirc)' `r(xcirc)') ///
+	(line _y _x)  ///
+	, legend(order(1 "Point 1" 2 "Point 2" 3 "Circumcenter" 4 "Arc") pos(6) row(1)) ///
+	xlabel(-10(2)10) ylabel(-10(2)10) aspect(1) xsize(1) ysize(1) ///
+	title("Right of starting point - major")	
+	
+```
+
+<img src="/figures/arc2.png" width="75%">
+
+```stata
+arc, y1(-2) x1(-4) y2(4) x2(2) rad(6) swap replace		
+
+twoway ///
+	(scatteri -2 -4)  (scatteri 4 2) ///
+	(scatteri `r(ycirc)' `r(xcirc)') ///
+	(line _y _x)  ///
+	, legend(order(1 "Point 1" 2 "Point 2" 3 "Circumcenter" 4 "Arc") pos(6) row(1)) ///
+	xlabel(-10(2)10) ylabel(-10(2)10) aspect(1) xsize(1) ysize(1) ///
+	title("Left of starting point - minor")
+```
+
+<img src="/figures/arc3.png" width="75%">
+
+```stata
+arc, y1(-2) x1(-4) y2(4) x2(2) rad(6) swap major replace
+
+twoway ///
+	(scatteri -2 -4)  (scatteri 4 2) ///
+	(scatteri `r(ycirc)' `r(xcirc)') ///
+	(line _y _x)  ///
+	, legend(order(1 "Point 1" 2 "Point 2" 3 "Circumcenter" 4 "Arc") pos(6) row(1)) ///
+	xlabel(-10(2)10) ylabel(-10(2)10) aspect(1) xsize(1) ysize(1) ///
+	title("Left of starting point - Major")
+```
+
+<img src="/figures/arc4.png" width="75%">
 
 
 ## Feedback

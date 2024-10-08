@@ -10,7 +10,7 @@ program catspline, sortpreserve
 
 version 11
  
-	syntax varlist(numeric min=2 max=2) [if] [in], [ rho(numlist max=1 >=0 <=1) obs(real 40) close noid genx(string) geny(string) ] 
+	syntax varlist(numeric min=2 max=2) [if] [in], [ rho(numlist max=1 >=0 <=1) n(real 40) close noid genx(string) geny(string) ] 
  
 	tokenize `varlist'
 	local vary `1'
@@ -37,7 +37,13 @@ preserve
  
 	if "`rho'" == "" local rho 0.5
  
-	set obs `obs'
+    if `n' < 5 {
+        display as error "The number of points n() must be greater than 5."
+        exit
+    }
+ 
+	if _N < `n' set obs `n'
+	
 	gen id = _n - 1
  
 	levelsof pts, local(points)
@@ -84,7 +90,7 @@ preserve
 		gen double `t2' = (((`x2' - `x1')^2 + (`y2' - `y1')^2)^`rho') + `t1'
 		gen double `t3' = (((`x3' - `x2')^2 + (`y3' - `y2')^2)^`rho') + `t2'	
 		
-		local diff = abs(`t2' - `t1') / (`obs' - 1)
+		local diff = abs(`t2' - `t1') / (`n' - 1)
 		gen double t`x' = `t1' + (`diff' * id)
 		
 		
@@ -120,7 +126,7 @@ preserve
  
 	cap drop `varlist' pts id
  
-	set obs `=`obs'+ 1'	 // add an empty row
+	set obs `=`n'+ 1'	 // add an empty row
 
 	gen id = _n
 	reshape long _x _y t, i(id) j(spline)
