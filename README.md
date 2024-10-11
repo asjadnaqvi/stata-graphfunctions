@@ -19,7 +19,7 @@ Currently, this package contains:
 |----| ---- | ---- | ----- |
 | [labsplit](#labsplit) | 1.1 | 28 Sep 2024 | Text wrapping |
 | [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
-| [arc](#arc) | 1.1 | 11 Oct 2024 | Arcs between two points |
+| [arc](#arc) | 1.1 | 11 Oct 2024 | Draw arcs between two points |
 | [shapes](#shapes) | 1.0 | 11 Oct 2024 | Draw shapes |
 
 
