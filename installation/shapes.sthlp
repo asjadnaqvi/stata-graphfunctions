@@ -14,7 +14,7 @@
 Generic syntax:
 
 {p 8 15 2}
-{cmd:shapes} circle, {cmd:[} {cmd:n}({it:int}) {cmd:n}({it:int}) {cmdab:ro:tate}({it:degrees}) {cmdab:rad:ius}({it:num}) {cmd:]} 
+{cmd:shapes} circle, {cmd:[} {cmd:n}({it:int}) {cmd:n}({it:int}) {cmdab:ro:tate}({it:degrees}) {cmdab:rad:ius}({it:num}) {cmdab:genx}({it:newvar}) {cmdab:geny}({it:newvar}) {cmd:replace} {cmd:]} 
 
 Generates three variables {it:_id}, {it:_x}, {it:_y}.
 
@@ -28,6 +28,10 @@ Generates three variables {it:_id}, {it:_x}, {it:_y}.
 {p2coldent : {opt n(int)}}Number of equi distant points in a circle. Default is {opt n(6)} which generate a hexagon. Option {opt n(4)} will yield a square.{p_end}
 
 {p2coldent : {opt ro:tate(degrees)}}Rotate the shape by {it:degrees}. Default is {opt ro(0)}.{p_end}
+
+{p2coldent : {opt genx(newvar)} {opt geny(newvar)}}Custom names for the generated coordinates. Defaults are {it: _x, _y}.{p_end}
+
+{p2coldent : {opt replace}}Overwrite the generated variables if they exist. Use carefully.{p_end}
 
 {synoptline}
 {p2colreset}{...}

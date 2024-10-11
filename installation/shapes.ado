@@ -22,7 +22,7 @@ end
 program define _circle 
  version 11
 
- 	syntax [,  n(real 6) ROtate(real 0) RADius(real 10) ]
+ 	syntax [,  n(real 6) ROtate(real 0) RADius(real 10) genx(string) geny(string) replace ]
 
 	
 quietly {	
@@ -35,8 +35,23 @@ quietly {
 		gen `_seq' = _n
 		gen double `_angle' = (`_seq' * 2 * _pi / `n') + `rotate'
 
-		gen double _x = `radius' * cos(`_angle')	
-		gen double _y = `radius' * sin(`_angle')	
+		
+		
+	local xvar _x
+	local yvar _y
+	
+	if "`genx'" != "" local xvar `genx'
+	if "`geny'" != "" local yvar `geny'				
+	
+	if "`replace'" != "" {
+		cap drop `xvar'
+		cap drop `yvar'
+		cap drop _id
+	}
+	
+		
+	gen double `xvar' = `radius' * cos(`_angle')	
+	gen double `yvar' = `radius' * sin(`_angle')	
 
 
 	expand 2 if `_seq'== 1

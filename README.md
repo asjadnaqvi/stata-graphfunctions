@@ -213,6 +213,61 @@ twoway ///
 ### shapes
 *(v1.0: 11 Oct 2024)*
 
+Draw a shape.
+
+
+```stata
+shapes circle  // defaults: n = 6 points, radius = 10, rotation = 0
+
+twoway /// 
+		(connected _y _x, mlabel(_id)) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
+```
+
+<img src="/figures/shapes1.png" width="75%">
+
+Rotate the shape by 30 degrees:
+
+```stata
+shapes circle, rotate(30) replace
+
+twoway /// 
+		(connected _y _x, mlabel(_id)) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
+```
+
+<img src="/figures/shapes2.png" width="75%">
+
+
+Draw a square:
+
+```stata
+shapes circle, rotate(45) rad(8) n(4) replace	
+
+twoway /// 
+		(connected _y _x, mlabel(_id)) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
+```
+
+<img src="/figures/shapes3.png" width="75%">
+
+Draw a full circle:
+
+
+```stata
+shapes circle, n(100) replace	
+
+twoway /// 
+		(connected _y _x, mlabel(_id)) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
+```
+
+<img src="/figures/shapes4.png" width="75%">
+
 
 
 ## Feedback

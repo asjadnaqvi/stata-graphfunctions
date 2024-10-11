@@ -31,8 +31,7 @@ Or the arc circumcenter is to the left of the line.{p_end}
 
 {p2coldent : {opt major}}Draw a major arc around the circumcenter rather than the default minor arc.{p_end}
 
-{p2coldent : {opt genx(newvar)} {opt geny(newvar)}}Custom names for the generated {it:x,y} variables.
-Defaults are {it: _x, _y}.{p_end}
+{p2coldent : {opt genx(newvar)} {opt geny(newvar)}}Custom names for the generated coordinates. Defaults are {it: _x, _y}.{p_end}
 
 {p2coldent : {opt replace}}Overwrite the generated variables if they exist. Use carefully.{p_end}
 
