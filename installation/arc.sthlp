@@ -1,5 +1,5 @@
 {smcl}
-{* 08Oct2024}{...}
+{* 11Oct2024}{...}
 {hi:help arc}{...}
 {right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions (GitHub)}}
 
@@ -53,8 +53,8 @@ More examples on {browse "https://github.com/asjadnaqvi/stata-graphfunctions":Gi
 
 {title:Package details}
 
-Version      : {bf:arc} v1.0 in {stata help graphfunctions:graphfunctions}
-This release : 08 Oct 2024
+Version      : {bf:arc} v1.1 in {stata help graphfunctions:graphfunctions}
+This release : 11 Oct 2024
 First release: 08 Oct 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
 Keywords     : Stata, graph, arcs

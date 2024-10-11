@@ -1,4 +1,4 @@
-v 1.2
+v 1.3
 d {bf:GRAPHFUNCTIONS}: A collection of functions to extend graph functionality in Stata
 d
 d Requires: Stata version 11 or higher.
@@ -8,8 +8,9 @@ d KW: graphs
 d KW: figures
 d KW: text wrap
 d KW: splines
+d KW: shapes
 d
-d Distribution-Date: 20241008
+d Distribution-Date: 20241011
 d License: MIT
 d
 d Author: Asjad Naqvi (asjadnaqvi@gmail.com)
@@ -21,3 +22,5 @@ f catspline.ado
 f catspline.sthlp
 f arc.ado
 f arc.sthlp
+f shapes.ado
+f shapes.sthlp

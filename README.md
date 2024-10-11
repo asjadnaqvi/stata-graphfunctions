@@ -7,8 +7,8 @@
 
 
 
-# graphfunctions v1.2
-*(08 Oct 2024)*
+# graphfunctions v1.3
+*(11 Oct 2024)*
 
 A suite of programs to help enhance figures in Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope of each program, see the relevant help files.
 
@@ -19,8 +19,8 @@ Currently, this package contains:
 |----| ---- | ---- | ----- |
 | [labsplit](#labsplit) | 1.1 | 28 Sep 2024 | Text wrapping |
 | [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
-| [arc](#arc) | 1.0 | 08 Oct 2024 | Arcs between two points |
-
+| [arc](#arc) | 1.1 | 11 Oct 2024 | Arcs between two points |
+| [shapes](#shapes) | 1.0 | 11 Oct 2024 | Draw shapes |
 
 
 The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
@@ -35,7 +35,7 @@ SSC (**v1.0**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.2**):
+GitHub (**v1.3**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -147,7 +147,7 @@ twoway ///
 
 
 ### arc
-*(v1.0: 08 Oct 2024)*
+*(v1.1: 11 Oct 2024)*
 
 Draw minor or major arcs between two points. The arc orientation and be switched using `swap`, and major arcs can be drawn using `major`.
 
@@ -210,12 +210,21 @@ twoway ///
 <img src="/figures/arc4.png" width="75%">
 
 
+### shapes
+*(v1.0: 11 Oct 2024)*
+
+
+
 ## Feedback
 
 Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues) to report errors, feature enhancements, and/or other requests.
 
 
 ## Change log
+
+**v1.3 (11 Oct 2024)**
+- `shapes` added.
+- `arc` bug fixes plus code cleanup.
 
 **v1.2 (08 Oct 2024)**
 - `arc` added.
