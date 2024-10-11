@@ -26,17 +26,7 @@ program define _circle
 
 	
 quietly {	
-	if _N < `n' set obs `n'
-
-		local rotate = `rotate' * _pi / 180  	
-		
-		tempvar _seq _angle
-		
-		gen `_seq' = _n
-		gen double `_angle' = (`_seq' * 2 * _pi / `n') + `rotate'
-
-		
-		
+	
 	local xvar _x
 	local yvar _y
 	
@@ -47,12 +37,25 @@ quietly {
 		cap drop `xvar'
 		cap drop `yvar'
 		cap drop _id
-	}
+	}		
 	
-		
-	gen double `xvar' = `radius' * cos(`_angle')	
-	gen double `yvar' = `radius' * sin(`_angle')	
+	cap gen double `xvar' = .
+	cap gen double `yvar' = .
+	
+	drop if missing(`xvar')
+	
+	
+	if _N < `n' set obs `n'
 
+	local rotate = `rotate' * _pi / 180  	
+		
+	tempvar _seq _angle
+		
+	gen `_seq' = _n in 1/`n'
+	gen double `_angle' = (`_seq' * 2 * _pi / `n') + `rotate' in 1/`n'
+
+	replace `xvar' = `radius' * cos(`_angle') in 1/`n'	 
+	replace `yvar' = `radius' * sin(`_angle') in 1/`n'	
 
 	expand 2 if `_seq'== 1
 	set obs `=_N+1'  // pad a row in case more rows are added.
