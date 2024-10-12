@@ -14,9 +14,10 @@
 Generic syntax:
 
 {p 8 15 2}
-{cmd:shapes} circle, {cmd:[} {cmd:n}({it:int}) {cmd:n}({it:int}) {cmdab:ro:tate}({it:degrees}) {cmdab:rad:ius}({it:num}) {cmdab:genx}({it:newvar}) {cmdab:geny}({it:newvar}) {cmd:replace} {cmd:]} 
+{cmd:shapes} circle, {cmd:[} {cmd:n}({it:int}) {cmd:n}({it:int}) {cmdab:ro:tate}({it:degrees}) {cmdab:rad:ius}({it:num}) 
+        {cmdab:genx}({it:newvar}) {cmdab:geny}({it:newvar}) {cmdab:genorder}({it:newvar}) {cmdab:genid}({it:newvar}) {cmd:replace} {cmd:stack} {cmd:]} 
 
-Generates three variables {it:_id}, {it:_x}, {it:_y}.
+Generates four variables {it:_order}, {it:_id}, {it:_x}, {it:_y}.
 
 
 {synoptset 36 tabbed}{...}
@@ -29,9 +30,13 @@ Generates three variables {it:_id}, {it:_x}, {it:_y}.
 
 {p2coldent : {opt ro:tate(degrees)}}Rotate the shape by {it:degrees}. Default is {opt ro(0)}.{p_end}
 
-{p2coldent : {opt genx(newvar)} {opt geny(newvar)}}Custom names for the generated coordinates. Defaults are {it: _x, _y}.{p_end}
+{p2coldent : {opt genx(newvar)}, {opt geny(newvar)}}Custom names for {it: _x, _y} variables.{p_end}
 
-{p2coldent : {opt replace}}Overwrite the generated variables if they exist. Use carefully.{p_end}
+{p2coldent : {opt genorder(newvar)}, {opt genid(newvar)}}Custom names for {it: _order, _id} variables.{p_end}
+
+{p2coldent : {opt replace}}Replace the dataset.{p_end}
+
+{p2coldent : {opt stack}}Stack the shapes. Can be used for generating a set of shapes.{p_end}
 
 {synoptline}
 {p2colreset}{...}

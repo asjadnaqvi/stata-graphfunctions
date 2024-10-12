@@ -64,7 +64,7 @@ Syntax:
 labsplit variable, [ wrap(int) word(int) strict generate(newvar) ]
 ```
 
-Set up the data:
+Examples:
 
 ```stata
 clear
@@ -114,7 +114,7 @@ Syntax:
 catspline y x, [ rho(num [0,1]) obs(int) close genx(newvar) geny(newvar) ]
 ```
 
-Example:
+Examples:
 
 ```stata
 clear
@@ -150,6 +150,14 @@ twoway ///
 *(v1.1: 11 Oct 2024)*
 
 Draw minor or major arcs between two points. The arc orientation and be switched using `swap`, and major arcs can be drawn using `major`.
+
+Syntax:
+
+```stata
+arc, x1(num) y1(num) x2(num) y2(num) [ radius(num) n(int) swap major genx(newvar) geny(newvar) replace ]
+```
+
+Examples:
 
 
 ```stata
@@ -213,7 +221,15 @@ twoway ///
 ### shapes
 *(v1.0: 11 Oct 2024)*
 
-Draw a shape.
+Draw shapes
+
+Syntax:
+
+```stata
+shapes circle, [ n(int) n(int) rotate(degrees) radius(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
+```
+
+Examples:
 
 
 ```stata
@@ -269,6 +285,24 @@ twoway ///
 <img src="/figures/shapes4.png" width="75%">
 
 
+Test stacking:
+
+```stata
+shapes circle, replace 
+shapes circle, rotate(30) rad(8) stack 
+shapes circle, rotate(30) n(3) rad(3) stack 
+```
+
+
+and plot these in one go:
+
+```stata
+twoway (connected _y _x, cmissing(n)), aspect(1)
+```
+
+<img src="/figures/shapes5.png" width="75%">
+
+This can be used to generate a group of shapes.
 
 ## Feedback
 
