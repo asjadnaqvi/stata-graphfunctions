@@ -1,6 +1,7 @@
-*! shapes v1.0 (11 Oct 2024)
+*! shapes v1.1 (13 Oct 2024)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
+* v1.1 (13 Oct 2024): Fixed a bug where an existing _N was resulting in additional rows being added below. This version tracks indices much better.
 * v1.0 (11 Oct 2024): first release.
 
 
@@ -22,7 +23,7 @@ end
 program define _circle 
  version 11
 
- 	syntax [,  n(real 6) ROtate(real 0) RADius(real 10) genx(string) geny(string) genid(string) genorder(string) replace stack  ] // order noid
+ 	syntax [, n(real 6) ROtate(real 0) RADius(real 10) genx(string) geny(string) genid(string) genorder(string) replace stack  ] // order noid
 
 	
 quietly {	
@@ -33,6 +34,7 @@ quietly {
 	local yvar _y
 	local idvar _id
 	local ordervar _order
+
 	
 	if "`genx'" 	!= "" local xvar 	 `genx'
 	if "`geny'" 	!= "" local yvar 	 `geny'				
@@ -44,35 +46,52 @@ quietly {
 		cap drop `yvar'
 		cap drop `idvar'
 		cap drop `ordervar'
+		
 	}		
-	
 
-	if "`stack'" != "" {
-		set obs `=_N+`n'+2'
+		cap generate double `xvar' = .
+		cap generate double `yvar' = .
+		cap generate double `idvar' = .
+		cap generate double `ordervar' = .
+	
+	
+	if "`stack'" != ""  {
+		
+		tempvar temp
+		gen `temp' = _n if !missing(`idvar')
+		summ `temp', meanonly
+		
+		if r(N)!= 0 {			
+			local start = `=`r(max)' + 1'
+			local end   = `=`r(max)' + `n' + 2'
+			
+			if _N < `=`r(max)'+`n'+2' set obs `end'
+		}
+		else {
+			local start = 1
+			local end = `=`n' + 2'
+			if _N < `n' set obs `end'			
+		}
+		
 	} 
 	else {
-		if _N < `n' set obs `=`n'+2'
+		local start = 1
+		local end = `=`n' + 2'
+		if _N < `n' set obs `end'
 	}
 	
-
-	capture confirm variable `ordervar'
-	if _rc!=0 { 
+	summ `ordervar', meanonly
+		
+	if `r(N)'==0 {
 		local k = 1
-		gen `ordervar' = 1
 	}
-	else { 
-	 	summ `ordervar', meanonly
+	else {
 		local k = `r(max)' + 1
-		replace `ordervar' = `k' if missing(`ordervar')
-	}	
+	}
+	
+	summ `idvar', meanonly
+	replace `ordervar' = `k' in  `start'/`end' 
 
-		
-	capture confirm variable `idvar'
-	if _rc!=0 gen `idvar' = _n
-		
-	cap gen double `xvar' = .
-	cap gen double `yvar' = .
-			
 		
 	// generate the indices
 	tempvar _temp _temp2 _seq _angle
@@ -80,15 +99,14 @@ quietly {
 	replace `idvar' = sum(`_temp') if `ordervar'==`k'	
 	
 	gen `_temp2' = _n
-	summ `_temp2' if `ordervar'==`k', meanonly
 	
-	local start = 	`r(min)'
-	local end = 	`r(max)' - 2
+	
+	summ `_temp2' if `ordervar'==`k', meanonly
+	local end = `end' - 2
  
 	// add shape
 	local rotate = `rotate' * _pi / 180  	
 		
-
 	gen double `_angle' = (`idvar' * 2 * _pi / `n') + `rotate' in `start'/`end'
 
 	replace `xvar' = `radius' * cos(`_angle') in  `start'/`end' 

@@ -1,5 +1,5 @@
 {smcl}
-{* 11Oct2024}{...}
+{* 13Oct2024}{...}
 {hi:help graphfunctions}{...}
 {right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.3 (GitHub)}}
 
@@ -33,21 +33,21 @@ Please submit bugs, errors, feature requests on {browse "https://github.com/asja
 
 Suggested citation guidlines for this package:
 
-Naqvi, A. (2024). Stata package "graphfunctions" version 1.3. Release date 11 October 2024. https://github.com/asjadnaqvi/stata-graphfunctions.
+Naqvi, A. (2024). Stata package "graphfunctions" version 1.3. Release date 13 October 2024. https://github.com/asjadnaqvi/stata-graphfunctions.
 
 @software{graphfunctions,
    author = {Naqvi, Asjad},
    title = {Stata package ``graphfunctions''},
    url = {https://github.com/asjadnaqvi/stata-graphfunctions},
    version = {1.3},
-   date = {2024-10-11}
+   date = {2024-10-13}
 }
 
 
 {title:Package details}
 
 Version      : {bf:graphfunctions} v1.3
-This release : 11 Oct 2024
+This release : 13 Oct 2024
 First release: 28 Sep 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
 License      : {browse "https://opensource.org/licenses/MIT":MIT}
