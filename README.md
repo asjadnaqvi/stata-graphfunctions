@@ -7,8 +7,8 @@
 
 
 
-# graphfunctions v1.3
-*(13 Oct 2024)*
+# graphfunctions v1.4
+*(15 Oct 2024)*
 
 A suite of programs to help enhance figures in Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope of each program, see the relevant help files.
 
@@ -20,7 +20,7 @@ Currently, this package contains:
 | [labsplit](#labsplit) | 1.1 | 28 Sep 2024 | Text wrapping |
 | [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
 | [arc](#arc) | 1.1 | 11 Oct 2024 | Draw arcs between two points |
-| [shapes](#shapes) | 1.1 | 13 Oct 2024 | Draw shapes |
+| [shapes](#shapes) | 1.2 | 15 Oct 2024 | Draw shapes |
 
 
 The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
@@ -35,7 +35,7 @@ SSC (**v1.0**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.3**):
+GitHub (**v1.4**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -219,14 +219,18 @@ twoway ///
 
 
 ### shapes
-*(v1.0: 11 Oct 2024)*
+*(v1.2: 15 Oct 2024)*
 
-Draw shapes
-
-Syntax:
+Draw *circles*:
 
 ```stata
-shapes circle, [ n(int) n(int) rotate(degrees) radius(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
+shapes circle, [ n(int) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
+```
+
+Draw *pies*:
+
+```stata
+shapes circle, [ n(int) start(degrees) end(degrees) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
 ```
 
 Examples:
@@ -235,10 +239,8 @@ Examples:
 ```stata
 shapes circle  // defaults: n = 6 points, radius = 10, rotation = 0
 
-twoway /// 
-		(connected _y _x, mlabel(_id)) ///
-		, xsize(1) ysize(1) aspect(1)	///
-		xlabel(-10 10) ylabel(-10 10)
+twoway (connected _y _x, mlabel(_id)) ///
+		, xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)
 ```
 
 <img src="/figures/shapes1.png" width="75%">
@@ -248,10 +250,8 @@ Rotate the shape by 30 degrees:
 ```stata
 shapes circle, rotate(30) replace
 
-twoway /// 
-		(connected _y _x, mlabel(_id)) ///
-		, xsize(1) ysize(1) aspect(1)	///
-		xlabel(-10 10) ylabel(-10 10)
+twoway (connected _y _x, mlabel(_id)) ///
+		, xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)
 ```
 
 <img src="/figures/shapes2.png" width="75%">
@@ -262,10 +262,8 @@ Draw a square:
 ```stata
 shapes circle, rotate(45) rad(8) n(4) replace	
 
-twoway /// 
-		(connected _y _x, mlabel(_id)) ///
-		, xsize(1) ysize(1) aspect(1)	///
-		xlabel(-10 10) ylabel(-10 10)
+twoway (connected _y _x, mlabel(_id)) ///
+		, xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)
 ```
 
 <img src="/figures/shapes3.png" width="75%">
@@ -276,10 +274,8 @@ Draw a full circle:
 ```stata
 shapes circle, n(100) replace	
 
-twoway /// 
-		(connected _y _x, mlabel(_id)) ///
-		, xsize(1) ysize(1) aspect(1)	///
-		xlabel(-10 10) ylabel(-10 10)
+twoway (connected _y _x, mlabel(_id)) ///
+		, xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)
 ```
 
 <img src="/figures/shapes4.png" width="75%">
@@ -290,13 +286,9 @@ Test stacking:
 ```stata
 shapes circle, replace 
 shapes circle, rotate(30) rad(8) stack 
-shapes circle, rotate(30) n(3) rad(3) stack 
-```
+shapes circle, rotate(30) n(4) rad(3)  x0(1) y0(1) stack 
 
 
-and plot these in one go:
-
-```stata
 twoway (connected _y _x, cmissing(n)), aspect(1)
 ```
 
@@ -304,12 +296,55 @@ twoway (connected _y _x, cmissing(n)), aspect(1)
 
 This can be used to generate a group of shapes.
 
+
+**Pies**
+
+```stata
+shapes pie, end(60) replace
+
+twoway (area _y _x), xlabel(-10 10) ylabel(-10 10) xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/pie1.png" width="75%">
+
+
+```stata
+shapes pie, start(0) end(270) n(200) replace
+
+twoway (area _y _x), xlabel(-10 10) ylabel(-10 10) xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/pie2.png" width="75%">
+
+```stata
+clear
+shapes pie, start(0) end(45) ro(0)		rad(5) 	replace
+shapes pie, start(0) end(45) ro(30) 	rad(6)  stack
+shapes pie, start(0) end(45) ro(60) 	rad(7)  stack
+shapes pie, start(0) end(45) ro(90) 	rad(8)  stack
+shapes pie, start(0) end(45) ro(120) 	rad(9)  stack
+shapes pie, start(0) end(45) ro(150) 	rad(10) stack
+
+
+twoway (area _y _x, fcolor(%90) cmissing(n) nodropbase)	///
+	, xlabel(-10 10) ylabel(-10 10) xsize(1) ysize(1) aspect(1)
+
+```
+
+<img src="/figures/pie3.png" width="75%">
+
+
 ## Feedback
 
 Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues) to report errors, feature enhancements, and/or other requests.
 
 
 ## Change log
+
+**v1.4 (15 Oct 2024)**
+- `shapes` is now also mirrored as `shape`.
+- `shape circle` updates, and `shape arc` added.
+- More controls and checks.
 
 **v1.3 (13 Oct 2024)**
 - `shapes` added. Minor fixes to index tracking.
