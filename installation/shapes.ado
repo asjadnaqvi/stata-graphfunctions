@@ -139,7 +139,7 @@ program define _pie
  version 11
  
     syntax, [ x0(real 0) y0(real 0) RADius(real 10) start(real 0) end(real 30) n(real 30) ROtate(real 0) ] ///
-			[ genx(string) geny(string) genid(string) genorder(string) replace stack  ]
+			[ genx(string) geny(string) genid(string) genorder(string) replace stack dropbase  ]
 
     
 	// prepare the variables
@@ -233,17 +233,21 @@ quietly {
 	replace `xvar' = `x0' + `radius' * cos(`theta')  in `start'/`end'
 	replace `yvar' = `y0' + `radius' * sin(`theta')  in `start'/`end'
 		
-	// pad the centers
-	replace `xvar' = `x0' in `=`end'+1'
-	replace `yvar' = `y0' in `=`end'+1'
 	
-	
-	// pad the starting value
-	sum `xvar' if `ordervar'==1 & `idvar'==`k', meanonly
-	replace `xvar' = `r(min)' in `=`end'+2'
+	if "`dropbase'" == "" {
+		// pad the centers
+		replace `xvar' = `x0' in `=`end'+1'
+		replace `yvar' = `y0' in `=`end'+1'
 		
-	sum `yvar' if `ordervar'==1 & `idvar'==`k', meanonly
-	replace `yvar' = `r(min)' in `=`end'+2'
+		
+		// pad the starting value
+		sum `xvar' if `ordervar'==1 & `idvar'==`k', meanonly
+		replace `xvar' = `r(min)' in `=`end'+2'
+			
+		sum `yvar' if `ordervar'==1 & `idvar'==`k', meanonly
+		replace `yvar' = `r(min)' in `=`end'+2'
+	}
+	
 		
 		*/
 

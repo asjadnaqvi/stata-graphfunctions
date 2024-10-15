@@ -43,9 +43,9 @@ Currently two shapes are available:
 
 {p2coldent : {opt genorder(newvar)}, {opt genid(newvar)}}Custom names for {it: _order, _id} variables.{p_end}
 
-{p2coldent : {opt replace}}Replace the dataset.{p_end}
-
 {p2coldent : {opt stack}}Stack the shapes. Can be used for generating a set of shapes.{p_end}
+
+{p2coldent : {opt replace}}Replace the dataset.{p_end}
 
 {synoptline}
 
@@ -71,9 +71,12 @@ Currently two shapes are available:
 
 {p2coldent : {opt genorder(newvar)}, {opt genid(newvar)}}Custom names for {it: _order, _id} variables.{p_end}
 
-{p2coldent : {opt replace}}Replace the dataset.{p_end}
+{p2coldent : {opt dropbase}}Drop the pie base, or in other words, just generate an arc.{p_end}
 
 {p2coldent : {opt stack}}Stack the shapes. Can be used for generating a set of shapes.{p_end}
+
+{p2coldent : {opt replace}}Replace the dataset.{p_end}
+
 
 {synoptline}
 {p2colreset}{...}

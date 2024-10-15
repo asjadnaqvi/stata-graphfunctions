@@ -289,7 +289,7 @@ This can be used to generate a group of shapes.
 Syntax:
 
 ```stata
-shape pie, [ n(int) start(degrees) end(degrees) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
+shape pie, [ n(int) start(degrees) end(degrees) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) dropbase replace stack ]
 ```
 
 Examples:
@@ -327,6 +327,21 @@ twoway (area _y _x, fcolor(%90) cmissing(n) nodropbase)	///
 
 <img src="/figures/pie3.png" width="75%">
 
+
+without base:
+
+```stata
+shapes pie, start(0) end(250) rad(10) rotate(90) n(200) dropbase replace
+shapes pie, start(0) end(230) rad(9)  rotate(90) n(200) dropbase stack
+shapes pie, start(0) end(200) rad(8)  rotate(90) n(200) dropbase stack
+shapes pie, start(0) end(180) rad(7)  rotate(90) n(200) dropbase stack
+shapes pie, start(0) end(160) rad(6)  rotate(90) n(200) dropbase stack
+
+twoway (line _y _x, cmissing(n) nodropbase)	///
+	, xlabel(-10 10) ylabel(-10 10) xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/pie4.png" width="75%">
 
 ## Feedback
 
