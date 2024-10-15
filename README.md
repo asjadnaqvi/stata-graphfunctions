@@ -337,8 +337,8 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues
 
 **v1.4 (15 Oct 2024)**
 - `shapes` is now also mirrored as `shape`.
-- `shape circle` updated, and `shape arc` added.
-- for `shapes` users can now also define an origin using `x0()` and `y0()` options.
+- `shape circle` updated, and `shape pie` added.
+- In `shapes`, users can now also define an origin using `x0()` and `y0()` options.
 - More controls and checks.
 
 **v1.3 (13 Oct 2024)**
