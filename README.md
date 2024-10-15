@@ -20,7 +20,7 @@ Currently, this package contains:
 | [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapping |
 | [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
 | [arc](#arc) | 1.1 | 11 Oct 2024 | Draw arcs between two points |
-| [shapes](#shapes) | 1.2 | 15 Oct 2024 | Draw shapes: circles, pies |
+| [shapes](#shapes) | 1.2 | 15 Oct 2024 | Draw shapes: circle, pie, arc |
 
 
 The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
