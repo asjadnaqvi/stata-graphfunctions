@@ -20,7 +20,7 @@ Currently, this package contains:
 | [labsplit](#labsplit) | 1.1 | 28 Sep 2024 | Text wrapping |
 | [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
 | [arc](#arc) | 1.1 | 11 Oct 2024 | Draw arcs between two points |
-| [shapes](#shapes) | 1.2 | 15 Oct 2024 | Draw shapes |
+| [shapes](#shapes) | 1.2 | 15 Oct 2024 | Draw shapes: circles, pies |
 
 
 The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
@@ -221,21 +221,16 @@ twoway ///
 ### shapes
 *(v1.2: 15 Oct 2024)*
 
-Draw *circles*:
+**Circles**
 
+
+Syntax: 
 ```stata
-shapes circle, [ n(int) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
+shape circle, [ n(int) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
 ```
 
-Draw *pies*:
-
-```stata
-shapes circle, [ n(int) start(degrees) end(degrees) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
-```
 
 Examples:
-
-
 ```stata
 shapes circle  // defaults: n = 6 points, radius = 10, rotation = 0
 
@@ -244,8 +239,6 @@ twoway (connected _y _x, mlabel(_id)) ///
 ```
 
 <img src="/figures/shapes1.png" width="75%">
-
-Rotate the shape by 30 degrees:
 
 ```stata
 shapes circle, rotate(30) replace
@@ -257,8 +250,6 @@ twoway (connected _y _x, mlabel(_id)) ///
 <img src="/figures/shapes2.png" width="75%">
 
 
-Draw a square:
-
 ```stata
 shapes circle, rotate(45) rad(8) n(4) replace	
 
@@ -267,8 +258,6 @@ twoway (connected _y _x, mlabel(_id)) ///
 ```
 
 <img src="/figures/shapes3.png" width="75%">
-
-Draw a full circle:
 
 
 ```stata
@@ -280,8 +269,6 @@ twoway (connected _y _x, mlabel(_id)) ///
 
 <img src="/figures/shapes4.png" width="75%">
 
-
-Test stacking:
 
 ```stata
 shapes circle, replace 
@@ -299,6 +286,13 @@ This can be used to generate a group of shapes.
 
 **Pies**
 
+Syntax:
+
+```stata
+shape pie, [ n(int) start(degrees) end(degrees) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
+```
+
+Examples:
 ```stata
 shapes pie, end(60) replace
 
