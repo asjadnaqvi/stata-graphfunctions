@@ -10,7 +10,7 @@
 # graphfunctions v1.4
 *(15 Oct 2024)*
 
-A suite of programs to help enhance figures in Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope of each program, see the relevant help files.
+A suite of graph functions for Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope, see the relevant help files.
 
 Currently, this package contains:
 
