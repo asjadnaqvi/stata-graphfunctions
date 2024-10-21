@@ -29,7 +29,7 @@ The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to su
 
 The package can be installed via SSC or GitHub. The GitHub version, *might* be more recent due to bug fixes, feature updates etc, and *may* contain syntax improvements and changes in *default* values. See version numbers below. Eventually the GitHub version is published on SSC.
 
-SSC (**v1.0**):
+SSC (**v1.4**):
 
 ```stata
 ssc install graphfunctions, replace
