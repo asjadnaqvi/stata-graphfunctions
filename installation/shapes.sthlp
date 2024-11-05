@@ -1,30 +1,51 @@
 {smcl}
-{* 15Oct2024}{...}
+{* 05Nov2024}{...}
 {hi:help shapes}{...}
 {right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions (GitHub)}}
 
 {hline}
 
-{title:shapes}: A program for generating shapes. 
+{title:shapes}: A program for generating, transforming, and calculating features of shapes.
 
 {it:Notes:}
-1. Users can also use {cmd:shape} as a substitute for {cmd:shapes}.
-2. All shapes start at the 3 o' clock position (Stata default) relative to the origin of the shape.
-3. The default origin ({it:x0,y0}) is (0,0).
-4. Rotation is around the origin.
-5. Positive rotations values will result in counter-clockwise adjustments (Stata default).
+1. {cmd:shape} can also be used as a substitute for {cmd:shapes}.
+2. All shapes start at the 3 o' clock position (Stata default) relative to the origin.
+3. All shapes are drawn counter-clockwise. Option {opt flip} can be used to change the drawing orientation in some cases.
+4. The default origin is {cmd:(0,0)}.
+5. Rotation is always around the origin.
+6. Positive rotation values will result in counter-clockwise adjustments (Stata default). Negative angles are therefore clockwise.
+7. Each shape will generate four variables {cmd:_x}, {cmd:_y}, {cmd:_order}, and {cmd:_id}. These represent the coordinates, point order, and shape identifier respectively.
 
+This program is currenly {it:beta} and does not have all the checks.
 
 {marker syntax}{title:Syntax}
 
 {pstd}
-Currently two shapes are available:
+Generating shapes:
 
 {p 8 15 2}
-{cmd:shape} circle, {cmd:[} {help shapes##circle:{it:circle_options}} {cmd:]} 
+{cmd:shapes} circle, {cmd:[} {help shapes##circle:{it:circle_options}} {help shapes##common:{it:common_options}} {cmd:]} 
 
 {p 8 15 2}
-{cmd:shape} pie, {cmd:[} {help shapes##pie:{it:pie_options}} {cmd:]} 
+{cmd:shapes} pie,    {cmd:[} {help shapes##pie:{it:pie_options}} {help shapes##common:{it:common_options}} {cmd:]} 
+
+{p 8 15 2}
+{cmd:shapes} square, {cmd:[} {help shapes##square:{it:square_options}} {help shapes##common:{it:common_options}} {cmd:]} 
+
+
+{pstd}
+Transforming shapes:
+
+{p 8 15 2}
+{cmd:shapes} rotate y x, {opt ro:tate(degrees)} {cmd:[} {help shapes##rotate:{it:rotate_options}} {cmd:]} 
+
+
+{pstd}
+Calculating shape features:
+
+{p 8 15 2}
+{cmd:shapes} area y x, {opt by(variable)} {cmd:[} {help shapes##area:{it:area_options}} {cmd:]} 
+
 
 
 {synoptset 36 tabbed}{...}
@@ -33,19 +54,11 @@ Currently two shapes are available:
 
 {p2coldent : {opt rad:ius(num)}}Specify the radius length. Default is {opt rad(10)}.{p_end}
 
-{p2coldent : {opt n(int)}}Number of points to evaluate for the shape. Default is {opt n(6)} which generate a hexagon. Option {opt n(4)} will yield a square.{p_end}
+{p2coldent : {opt n(int)}}Number of points to evaluate for the shape. Default is {opt n(100)}. Smaller values, e.g. {opt n(6)} will generate a hexagon.{p_end}
 
 {p2coldent : {opt ro:tate(degrees)}}Rotate the shape counter-clockwise by {it:degrees}. Default is {opt ro(0)}.{p_end}
 
-{p2coldent : {opt x0(num)}, {opt y0(num)}}Center points. Defaults are {opt x0(0)}, {opt y0(0)}.{p_end}
-
-{p2coldent : {opt genx(newvar)}, {opt geny(newvar)}}Custom names for {it: _x, _y} variables.{p_end}
-
-{p2coldent : {opt genorder(newvar)}, {opt genid(newvar)}}Custom names for {it: _order, _id} variables.{p_end}
-
-{p2coldent : {opt stack}}Stack the shapes. Can be used for generating a set of shapes.{p_end}
-
-{p2coldent : {opt replace}}Replace the dataset.{p_end}
+{p2coldent : {opt x0(num)}, {opt y0(num)}}Center points. Defaults are {opt x0(0)} and {opt y0(0)}.{p_end}
 
 {synoptline}
 
@@ -65,30 +78,88 @@ Currently two shapes are available:
 
 {p2coldent : {opt ro:tate(degrees)}}Rotate the shape by {it:degrees}. Default is {opt ro(0)}.{p_end}
 
-{p2coldent : {opt x0(num)}, {opt y0(num)}}Center points. Defaults are {opt x0(0)}, {opt y0(0)}.{p_end}
+{p2coldent : {opt x0(num)}, {opt y0(num)}}Points of the arc origin. Defaults are {opt x0(0)} and {opt y0(0)}.{p_end}
 
-{p2coldent : {opt genx(newvar)}, {opt geny(newvar)}}Custom names for {it: _x, _y} variables.{p_end}
+{p2coldent : {opt dropbase}}Drop the pie starting values (x0,y0), or, just generate an arc.{p_end}
 
-{p2coldent : {opt genorder(newvar)}, {opt genid(newvar)}}Custom names for {it: _order, _id} variables.{p_end}
-
-{p2coldent : {opt dropbase}}Drop the pie base, or in other words, just generate an arc.{p_end}
-
-{p2coldent : {opt stack}}Stack the shapes. Can be used for generating a set of shapes.{p_end}
-
-{p2coldent : {opt replace}}Replace the dataset.{p_end}
-
+{p2coldent : {opt flip}}Flips the drawing direction to clockwise.{p_end}
 
 {synoptline}
+
+
+
+{synoptset 36 tabbed}{...}
+{marker square}{synopthdr:square_options}
+{synoptline}
+
+{p2coldent : {opt x0(num)}, {opt y0(num)}}Center points. Defaults are {opt x0(0)} and {opt y0(0)}.{p_end}
+
+{p2coldent : {opt len:gth(num)}}Specify the square edge length. Default is {opt len(10)}.{p_end}
+
+{p2coldent : {opt ro:tate(degrees)}}Rotate the shape by {it:degrees} at the center. Default is {opt ro(0)}.{p_end}
+
+{synoptline}
+
+
+
+{synoptset 36 tabbed}{...}
+{marker common}{synopthdr:common_options}
+{synoptline}
+
+{p2coldent : {opt genx(newvar)}, {opt geny(newvar)}}Custom names for the {cmd:_x} and {cmd:_y} variables.{p_end}
+
+{p2coldent : {opt genorder(newvar)}}Custom name for the {cmd:_order} variable.{p_end}
+
+{p2coldent : {opt genid(newvar)}}Custom name for the {cmd:_id} variable.{p_end}
+
+{p2coldent : {opt stack} {it:or} {opt append}}Append the shape variables. Can be used for generating a set of shapes.{p_end}
+
+{p2coldent : {opt replace}}Replace the variables.{p_end}
+
+{synoptline}
+
 {p2colreset}{...}
 
 
-{pstd}
-Both commands generates four variables {it:_order}, {it:_id}, {it:_x}, {it:_y}.
+
+{synoptset 36 tabbed}{...}
+{marker rotate}{synopthdr:rotate_options}
+{synoptline}
+
+{p2coldent : {opt shapes rotate y x, rotate(degrees)}}Minimum required syntax.{p_end}
+
+{p2coldent : {opt ro:tate(degrees)}}Rotate the shape by {it:degrees} at the center. Default is {opt ro(30)}.{p_end}
+
+{p2coldent : {opt x0(num)}, {opt y0(num)}}Rotation points. Defaults are {opt x0(0)} and {opt y0(0)}.{p_end}
+
+{p2coldent : {opt center}}Rotate on the mean of {varlist} variables.{p_end}
+
+{p2coldent : {opt by(variable)}}Rotate each {opt by()} level individual. Can only be combined with {opt center}.{p_end}
+
+{p2coldent : {opt genx(newvar)}, {opt geny(newvar)}}Custom names for the {cmd:_x} and {cmd:_y} variables.{p_end}
+
+{synoptline}
+
+
+
+{synoptset 36 tabbed}{...}
+{marker area}{synopthdr:area_options}
+{synoptline}
+
+{p2coldent : {opt shapes area y x, by(var)}}Minimum required syntax.{p_end}
+
+{p2coldent : {opt by(variable)}}Generate areas using {by()}. For default variable names, this is the {opt by(_id)} variable.{p_end}
+
+{p2coldent : {opt gen:erate(newvar)}}Custom name for the {cmd:_area} variable.{p_end}
+
+{synoptline}
 
 
 
 
 {title:Examples}
+
+Please see {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub} for a comprehensive set of examples.
 
 Circles:
 {stata shape circle, n(8) ro(22.5) rad(8) replace}
@@ -98,13 +169,12 @@ Pies:
 {stata shape pie, start(0) end(60) ro(30) rad(8) replace}
 {stata twoway (area _y _x, fcolor(%90) cmissing(n) nodropbase), xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)}
 
-More examples on {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}.
 
 
 {title:Package details}
 
-Version      : {bf:shapes} v1.2 in {stata help graphfunctions:graphfunctions}
-This release : 15 Oct 2024
+Version      : {bf:shapes} v1.3 in {stata help graphfunctions:graphfunctions}
+This release : 05 Nov 2024
 First release: 11 Oct 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
 Keywords     : Stata, graph, shapes

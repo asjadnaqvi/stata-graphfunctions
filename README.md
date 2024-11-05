@@ -7,8 +7,8 @@
 
 
 
-# graphfunctions v1.4
-*(15 Oct 2024)*
+# graphfunctions v1.5
+*(05 Nov 2024)*
 
 A suite of graph functions for Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope, see the relevant help files.
 
@@ -20,7 +20,7 @@ Currently, this package contains:
 | [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapping |
 | [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
 | [arc](#arc) | 1.1 | 11 Oct 2024 | Draw arcs between two points |
-| [shapes](#shapes) | 1.2 | 15 Oct 2024 | Draw shapes: circle, pie, arc |
+| [shapes](#shapes) | 1.3 | 05 Nov 2024 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area` |
 
 
 The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
@@ -35,7 +35,7 @@ SSC (**v1.4**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.4**):
+GitHub (**v1.5**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -219,77 +219,94 @@ twoway ///
 
 
 ### shapes
-*(v1.2: 15 Oct 2024)*
+*(v1.3: 15 Oct 2024)*
 
 **Circles**
 
 
 Syntax: 
 ```stata
-shape circle, [ n(int) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack ]
+shape circle, [ n(int) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack/append ]
 ```
 
 
 Examples:
 ```stata
-shapes circle  // defaults: n = 6 points, radius = 10, rotation = 0
+shapes circle, replace
 
-twoway (connected _y _x, mlabel(_id)) ///
-		, xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)
+twoway /// 
+		(connected _y _x, mlabel(_order)) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
 ```
 
-<img src="/figures/shapes1.png" width="75%">
+<img src="/figures/circle1.png" width="75%">
 
 ```stata
-shapes circle, rotate(30) replace
+shapes circle, n(6) replace
 
-twoway (connected _y _x, mlabel(_id)) ///
-		, xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)
+
+twoway /// 
+		(connected _y _x, mlabel(_order)) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
 ```
 
-<img src="/figures/shapes2.png" width="75%">
+<img src="/figures/circle2.png" width="75%">
 
 
 ```stata
-shapes circle, rotate(45) rad(8) n(4) replace	
+shapes circle, n(6) rotate(30) replace
 
-twoway (connected _y _x, mlabel(_id)) ///
-		, xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)
+twoway /// 
+		(connected _y _x, mlabel(_order)) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
 ```
 
-<img src="/figures/shapes3.png" width="75%">
+<img src="/figures/circle3.png" width="75%">
+
+
+```stata
+shapes circle, rotate(45) rad(8) n(4) replace		
+
+twoway /// 
+		(connected _y _x, mlabel(_order)) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
+```
+
+<img src="/figures/circle4.png" width="75%">
 
 
 ```stata
 shapes circle, n(100) replace	
 
-twoway (connected _y _x, mlabel(_id)) ///
-		, xsize(1) ysize(1) aspect(1) xlabel(-10 10) ylabel(-10 10)
+twoway /// 
+		(line _y _x) ///
+		, xsize(1) ysize(1) aspect(1)	///
+		xlabel(-10 10) ylabel(-10 10)
 ```
 
-<img src="/figures/shapes4.png" width="75%">
+<img src="/figures/circle5.png" width="75%">
 
 
 ```stata
-shapes circle, replace 
-shapes circle, rotate(30) rad(8) stack 
-shapes circle, rotate(30) n(4) rad(3)  x0(1) y0(1) stack 
-
+shapes circle,    	      n(8) replace
+shapes circle, rotate(30) n(6) rad(8) append 
+shapes circle, rotate(60) n(4) rad(3)  x0(1) y0(1) append
 
 twoway (connected _y _x, cmissing(n)), aspect(1)
 ```
 
-<img src="/figures/shapes5.png" width="75%">
-
-This can be used to generate a group of shapes.
-
+<img src="/figures/circle6.png" width="75%">
 
 **Pies**
 
 Syntax:
 
 ```stata
-shape pie, [ n(int) start(degrees) end(degrees) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) dropbase replace stack ]
+shape pie, [ n(int) start(degrees) end(degrees) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) dropbase replace stack/append ]
 ```
 
 Examples:
@@ -322,7 +339,6 @@ shapes pie, start(0) end(45) ro(150) 	rad(10) stack
 
 twoway (area _y _x, fcolor(%90) cmissing(n) nodropbase)	///
 	, xlabel(-10 10) ylabel(-10 10) xsize(1) ysize(1) aspect(1)
-
 ```
 
 <img src="/figures/pie3.png" width="75%">
@@ -331,11 +347,11 @@ twoway (area _y _x, fcolor(%90) cmissing(n) nodropbase)	///
 without base:
 
 ```stata
-shapes pie, start(0) end(250) rad(10) rotate(90) n(200) dropbase replace
-shapes pie, start(0) end(230) rad(9)  rotate(90) n(200) dropbase stack
-shapes pie, start(0) end(200) rad(8)  rotate(90) n(200) dropbase stack
-shapes pie, start(0) end(180) rad(7)  rotate(90) n(200) dropbase stack
-shapes pie, start(0) end(160) rad(6)  rotate(90) n(200) dropbase stack
+shapes pie, start(0) end(230) rad(10) rotate(90) n(200) dropbase replace
+shapes pie, start(0) end(230) rad(9)  rotate(90) n(200) dropbase append
+shapes pie, start(0) end(200) rad(8)  rotate(90) n(200) dropbase append
+shapes pie, start(0) end(180) rad(7)  rotate(90) n(200) dropbase append
+shapes pie, start(0) end(160) rad(6)  rotate(90) n(200) dropbase append
 
 twoway (line _y _x, cmissing(n) nodropbase)	///
 	, xlabel(-10 10) ylabel(-10 10) xsize(1) ysize(1) aspect(1)
@@ -343,12 +359,205 @@ twoway (line _y _x, cmissing(n) nodropbase)	///
 
 <img src="/figures/pie4.png" width="75%">
 
+without base flipped direction:
+
+```stata
+shapes pie, start(0) end(350) rad(10) rotate(90) n(200) dropbase flip replace
+shapes pie, start(0) end(150) rad(9)  rotate(90) n(200) dropbase flip append
+shapes pie, start(0) end(130) rad(8)  rotate(90) n(200) dropbase flip append
+shapes pie, start(0) end(80) rad(7)  rotate(90) n(200) dropbase flip append
+shapes pie, start(0) end(60) rad(6)  rotate(90) n(200) dropbase flip append
+
+twoway (line _y _x, cmissing(n) nodropbase)	///
+	, xlabel(-10 10) ylabel(-10 10) xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/pie5.png" width="75%">
+
+
+**Square**
+
+```stata
+shapes square, len(8) rotate(90) replace
+
+twoway ///
+	(area _y _x, nodropbase fcolor(%50))	///
+	(scatter _y _x, mlab(_order))	///
+		, ///
+		legend(off) ///
+		xlabel(-10(2)10) ylabel(-10(2)10) xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/square1.png" width="75%">
+
+
+```stata
+shapes square, x0(1) y0(1) len(10) rotate(40) replace
+shapes square, x0(1) y0(1) len(9) rotate(30) append
+shapes square, x0(1) y0(1) len(8) rotate(20) append
+shapes square, x0(1) y0(1) len(7) rotate(10) append
+shapes square, x0(1) y0(1) len(6) rotate(0)  append		
+
+
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%100) lw(0.1) lc(white))	///
+		, ///
+		legend(off) ///
+		xlabel(-10(2)10) ylabel(-10(2)10) xsize(1) ysize(1) aspect(1)
+```		
+
+<img src="/figures/square2.png" width="75%">
+
+
+
+**Rotate**
+
+Let's generate a basic shape:
+
+```stata
+shapes square, x0( 5) y0(0) len(5) replace
+shapes square, x0(-5) y0(0) len(5) append
+
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(scatteri 0 0) ///
+		, ///
+		legend(off) ///
+		xlabel(-10(2)10) ylabel(-10(2)10) xsize(1) ysize(1) aspect(1)	
+```
+
+<img src="/figures/rotate1.png" width="75%">
+
+
+
+```stata
+shapes rotate _y _x, rotate(30)
+
+
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(area ynew  xnew, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(scatteri 0 0) ///
+		, ///
+		legend(off) ///
+		xlabel(-10(2)10) ylabel(-10(2)10) xsize(1) ysize(1) aspect(1)	
+```
+
+<img src="/figures/rotate2.png" width="75%">
+
+
+```stata
+shapes rotate _y _x, rotate(30) x0(5) y0(5) genx(xnew) geny(ynew)
+
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(area ynew  xnew, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(scatteri 0 0) ///
+		, ///
+		legend(off) ///
+		xlabel(-10(2)10) ylabel(-10(2)10) xsize(1) ysize(1) aspect(1)	
+```
+
+<img src="/figures/rotate2_1.png" width="75%">
+
+
+```stata
+shapes rotate _y _x, rotate(60) center genx(xnew2) geny(ynew2)		
+
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(area ynew2  xnew2, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(scatteri 0 0) ///
+		, ///
+		legend(off) ///
+		xlabel(-10(2)10) ylabel(-10(2)10) xsize(1) ysize(1) aspect(1)	
+```
+
+<img src="/figures/rotate3.png" width="75%">
+
+
+```stata
+shapes rotate _y _x, rotate(30) center by(_id) genx(xnew3) geny(ynew3)			
+	
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(area ynew3  xnew3, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(scatteri 0 0) ///
+		, ///
+		legend(off) ///
+		xlabel(-10(2)10) ylabel(-10(2)10) xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/rotate4.png" width="75%">
+
+
+
+**Area**
+
+```stata
+clear
+shapes pie, start(0) end(45) ro(0)		rad(5) 	replace
+shapes pie, start(0) end(45) ro(30) 	rad(6)  stack
+shapes pie, start(0) end(45) ro(60) 	rad(7)  stack
+shapes pie, start(0) end(45) ro(90) 	rad(8)  stack
+shapes pie, start(0) end(45) ro(120) 	rad(9)  stack
+shapes pie, start(0) end(45) ro(150) 	rad(10) stack
+
+
+twoway (area _y _x, fcolor(%90) cmissing(n) nodropbase)	///
+	, xlabel(-10 10) ylabel(-10 10) xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/area1.png" width="75%">
+
+
+calculate the areas
+
+```stata
+shapes area _y _x, by(_id) 
+```
+
+Generate some ranking of areas and plot
+
+
+```stata
+xtile grps = _area, n(4)	
+
+levelsof _id, local(lvls)
+
+foreach x of local lvls {
+	colorpalette reds, nograph
+	local myarea `myarea' (area _y _x if _id==`x', fcolor("`r(p`x')'%90") lc("`r(p`x')'") cmissing(n) nodropbase)	
+}
+
+
+
+twoway ///
+	`myarea'	///
+	, ///
+		xlabel(-10 10) ylabel(-10 10) ///
+		legend(off) ///
+		xsize(1) ysize(1) aspect(1)
+```
+
+
+<img src="/figures/area2.png" width="75%">
+
 ## Feedback
 
 Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues) to report errors, feature enhancements, and/or other requests.
 
 
 ## Change log
+
+**v1.5 (05 Nov 2024)**
+- `shapes square` added for squares. Note that `shapes circle, n(4)` also returns a square but here the center-to-corner length id defined by the radius, where as `shapes square` generates a side length. Hence area of `shapes circle, n(4) rad(5)` > `shapes circle, len(5)`.
+- `shapes rotate` added for generation rotations at specific points or center of shapes. Note that this is a more advanced rotation than what each individual function provides.
+- `shapes area` added for calculating the areas (currently in undefined units) using [Meister's shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula). 
+- Option `append` added as a substitute for `stack`. This is more in line with standard Stata syntax.
+- Option `flip` added to change the drawing direction. This flips from counter-clockwise (Stata default) to clockwise.
+- Better information added for rotations, orientations, and starting points.
+- Cleanup of helpfiles.
 
 **v1.4 (15 Oct 2024)**
 - `shapes` is now also mirrored as `shape`.

@@ -1,7 +1,7 @@
 {smcl}
-{* 15Oct2024}{...}
+{* 1Nov2024}{...}
 {hi:help graphfunctions}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.4 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.5 (GitHub)}}
 
 
 {title:GRAPH FUNCTIONS}: 
@@ -14,7 +14,7 @@ This package contains the following program(s):
 {stata help labsplit:labsplit}   Various options for wrapping labels.
 {stata help catspline:catspline}  Generate Catmull-Rom splines.
 {stata help arc:arc}        Draw an arc between two points.
-{stata help shapes:shapes}     Draw shapes. Users can also use {stata help shape:shape}.
+{stata help shapes:shapes}     Draw shapes. Contains a host of sub-functions. See {stata help shapes:shapes} for details.
 
 {hline}
 
@@ -46,8 +46,8 @@ Naqvi, A. (2024). Stata package "graphfunctions" version 1.4. Release date 14 Oc
 
 {title:Package details}
 
-Version      : {bf:graphfunctions} v1.4
-This release : 15 Oct 2024
+Version      : {bf:graphfunctions} v1.5
+This release : 05 Nov 2024
 First release: 28 Sep 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
 License      : {browse "https://opensource.org/licenses/MIT":MIT}
