@@ -551,7 +551,7 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues
 ## Change log
 
 **v1.5 (05 Nov 2024)**
-- `shapes square` added for squares. Note that `shapes circle, n(4)` also returns a square but here the center-to-corner length id defined by the radius, where as `shapes square` generates a side length. Hence area of `shapes circle, n(4) rad(5)` > `shapes circle, len(5)`.
+- `shapes square` added for squares. Note that `shapes circle, n(4)` also returns a square but here we define the center-to-corner length using the radius, where as `shapes square` generates a side with a predefined length. Hence the area of `shapes circle, n(4) rad(5)` > `shapes circle, len(5)`.
 - `shapes rotate` added for generation rotations at specific points or center of shapes. Note that this is a more advanced rotation than what each individual function provides.
 - `shapes area` added for calculating the areas (currently in undefined units) using [Meister's shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula). 
 - Option `append` added as a substitute for `stack`. This is more in line with standard Stata syntax.
