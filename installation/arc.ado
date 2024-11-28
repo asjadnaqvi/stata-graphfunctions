@@ -1,6 +1,7 @@
-*! arc v1.1 (11 Oct 2024)
+*! arc v1.2 (20 Nov 2024)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
+* v1.2 (20 Nov 2024): append/stack added
 * v1.1 (11 Oct 2024): Minor bug fixes.
 * v1.0 (08 Oct 2024): first release.
 
@@ -15,14 +16,88 @@ version 11
 		x1(numlist max=1) y1(numlist max=1) ///  //  from
 		x2(numlist max=1) y2(numlist max=1) ///  //  to
 		[ n(real 40) RADius(numlist max=1 >0) major swap ]	///
-		[ genx(string) geny(string)	replace ]
+		[ genx(string) geny(string) genid(string) genorder(string) ] ///
+		[ replace append stack ]
 	
 
     if `n' < 5 {
-        display in red "The number of points n() must be greater than 5."
+        display in red "The number of points n() must be greater or equal to 5."
         exit
     }
 
+	
+quietly {	
+	
+	// prepare the variables
+	local xvar _x
+	local yvar _y
+	local idvar _id
+	local ordervar _order
+
+	
+	if "`genx'" 	!= "" local xvar 	 `genx'
+	if "`geny'" 	!= "" local yvar 	 `geny'				
+	if "`genid'" 	!= "" local idvar 	 `genid'				
+	if "`genorder'" != "" local ordervar `genorder'				
+	
+	if "`replace'" != "" {
+		cap drop `xvar'
+		cap drop `yvar'
+		cap drop `idvar'
+		cap drop `ordervar'
+	}		
+
+	cap generate double `xvar' = .
+	cap generate double `yvar' = .
+	cap generate `idvar' = .
+	cap generate `ordervar' = .	
+	
+	
+	if "`stack'" != "" | "`append'" !="" {
+		
+		tempvar temp
+		gen `temp' = _n if !missing(`ordervar')
+		summ `temp', meanonly
+		
+		if r(N)!= 0 {			
+			local start = `=`r(max)' + 1'
+			local end   = `=`r(max)' + `n' + 1'
+			
+			if _N < `=`r(max)'+`n'+1' set obs `end'
+		}
+		else {
+			local start = 1
+			local end = `=`n' + 1'
+			if _N < `n' set obs `end'			
+		}
+		
+	} 
+	else {
+		local start = 1
+		local end = `=`n' + 1'
+		if _N < `n' set obs `end'
+	}	
+	
+	
+	summ `idvar', meanonly
+		
+	if `r(N)'==0 {
+		local k = 1
+	}
+	else {
+		local k = `r(max)' + 1
+	}	
+	
+	// id
+	summ `ordervar', meanonly
+	replace `idvar' = `k' in  `start'/`end' 
+	
+	// order
+	tempvar _temp _temp2 _seq _angle
+	gen `_temp' = 1
+	replace `ordervar' = sum(`_temp') if `idvar'==`k'		
+	
+	**** core routines below ****
 	
 	// mid points
     local xm = (`x1' + `x2') / 2
@@ -31,8 +106,9 @@ version 11
     // slope
     local dx = `x2' - `x1'
     local dy = `y2' - `y1'
-	local L = sqrt(`dx'^2 + `dy'^2)
+	local L = sqrt(abs(`dx')^2 + abs(`dy')^2) // check why this square is not working without abs()
     
+	*noisily display "`dx', `dy', `L'"
     
     // radius
 	if "`radius'" == "" {
@@ -46,10 +122,7 @@ version 11
         di as error "Radius must be greater than half the chord length. Half chord length for given coordinates = `mychord'"
         exit
     }	
-	
-	return local chord  `L'
-	return local radius `radius'
-	
+
     // distance from midpoint to center
     local h_dist = sqrt(`radius'^2 - (`L'/2)^2)	
 	
@@ -92,10 +165,10 @@ version 11
 	}
 	else {
 		if "`major'" != "" {
-			if (`angle_end' - `angle_start') > _pi 		local angle_end = `angle_end' - 2 * _pi
+			if (`angle_end' - `angle_start') > _pi 	local angle_end = `angle_end' - 2 * _pi
 		}
 		else {
-			if (`angle_end' - `angle_start') < _pi 		local angle_end = `angle_end' + 2 * _pi	
+			if (`angle_end' - `angle_start') < _pi 	local angle_end = `angle_end' + 2 * _pi	
 		}
 		if (`angle_end' - `angle_start') > 2 * _pi 	local angle_end = `angle_end' - 2 * _pi		
 	}
@@ -105,24 +178,18 @@ version 11
 	if _N < `n' set obs `n'
 	
 	tempvar theta
-	gen double `theta' = `angle_start' + (_n - 1) * `delta_theta'
-	
-	local xvar _x
-	local yvar _y
-	
-	if "`genx'" != "" local xvar `genx'
-	if "`geny'" != "" local yvar `geny'		
-	
-	if "`replace'" != "" {
-		capture drop `xvar'
-		capture drop `yvar'
-	}
-		
-	gen double `xvar' = `h' + `radius' * cos(`theta')
-	gen double `yvar' = `k' + `radius' * sin(`theta') 
+	gen double `theta' = `angle_start' + (`ordervar' - 1) * `delta_theta' in `start'/`=`end'-1'
 
-	return local xcirc = `h'
-	return local ycirc = `k'
+	
+	replace `xvar' = `h' + `radius' * cos(`theta') in  `start'/`=`end'-1'
+	replace `yvar' = `k' + `radius' * sin(`theta') in  `start'/`=`end'-1'		
+
+}		
+		
+	return local chord  = `L'
+	return local radius = `radius'
+	return local xcirc  = `h'
+	return local ycirc  = `k'
 	
 end
 

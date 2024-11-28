@@ -1,7 +1,7 @@
 {smcl}
-{* 1Nov2024}{...}
+{* 28Nov2024}{...}
 {hi:help graphfunctions}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.5 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.51 (GitHub)}}
 
 
 {title:GRAPH FUNCTIONS}: 
@@ -11,10 +11,10 @@ This package contains the following program(s):
 
 {hline}
 
-{stata help labsplit:labsplit}   Various options for wrapping labels.
-{stata help catspline:catspline}  Generate Catmull-Rom splines.
-{stata help arc:arc}        Draw an arc between two points.
-{stata help shapes:shapes}     Draw shapes. Contains a host of sub-functions. See {stata help shapes:shapes} for details.
+{stata help labsplit:labsplit}  v1.1 (08 Oct 2024)  Various options for wrapping labels.
+{stata help catspline:catspline} v1.1 (28 Nov 2024)  Generate Catmull-Rom splines.
+{stata help arc:arc}       v1.2 (20 Nov 2024)  Draw an arc between two points.
+{stata help shapes:shapes}    v1.3 (28 Oct 2024)  Draw shapes. Contains several sub programs.
 
 {hline}
 
@@ -33,21 +33,21 @@ Please submit bugs, errors, feature requests on {browse "https://github.com/asja
 
 Suggested citation guidlines for this package:
 
-Naqvi, A. (2024). Stata package "graphfunctions" version 1.4. Release date 14 October 2024. https://github.com/asjadnaqvi/stata-graphfunctions.
+Naqvi, A. (2024). Stata package "graphfunctions" version 1.51. Release date 28 November 2024. https://github.com/asjadnaqvi/stata-graphfunctions.
 
 @software{graphfunctions,
    author = {Naqvi, Asjad},
    title = {Stata package ``graphfunctions''},
    url = {https://github.com/asjadnaqvi/stata-graphfunctions},
-   version = {1.4},
-   date = {2024-10-15}
+   version = {1.51},
+   date = {2024-11-28}
 }
 
 
 {title:Package details}
 
-Version      : {bf:graphfunctions} v1.5
-This release : 05 Nov 2024
+Version      : {bf:graphfunctions} v1.51
+This release : 28 Nov 2024
 First release: 28 Sep 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
 License      : {browse "https://opensource.org/licenses/MIT":MIT}

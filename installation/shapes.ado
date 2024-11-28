@@ -1,7 +1,7 @@
 *! shapes v1.3 (28 Oct 2024)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
-* v1.3 (28 Oct 2024): add append as sub for stack. Add square.
+* v1.3 (28 Oct 2024): add append as sub for stack. Added square.
 * v1.2 (15 Oct 2024): added support for generating pies. added x0,y0 to control center points.
 * v1.1 (13 Oct 2024): Fixed a bug where an existing _N was resulting in additional rows being added below. This version tracks indices much better.
 * v1.0 (11 Oct 2024): first release.
@@ -472,7 +472,7 @@ cap program drop _area
 program _area, sortpreserve
 
 
-// apply the Meister's showlace formula (shoelace formula: https://en.wikipedia.org/wiki/Shoelace_formula)
+// apply the Meister's shoelace formula (shoelace formula: https://en.wikipedia.org/wiki/Shoelace_formula)
 
 version 11
 	syntax varlist(numeric min=2 max=2), by(varname) [ replace GENerate(string) ] 

@@ -1,5 +1,5 @@
 {smcl}
-{* 04Oct2024}{...}
+{* 28Nov2024}{...}
 {hi:help catspline}{...}
 {right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions (GitHub)}}
 
@@ -7,14 +7,14 @@
 
 {title:catspline}: A program for generating {browse "https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline":Catmull-Rom splines}.
 
-The program inputs ({it:x, y}) numeric variables and outputs three variables ({it:_id, _x, _y}).
-The {it:_id} variable represents the drawing sequence and {it:_x, _y} contains coordinates for pair-wise spline segments.
+The program inputs two numeric variables and outputs four variables ({it:_id, _order, _x, _y}).
+
 
 
 {marker syntax}{title:Syntax}
 
 {p 8 15 2}
-{cmd:catspline} {it:y x}, {cmd:[} {cmd:rho}({it:num [0,1]}) {cmd:n}({it:int}) {cmd:close} {cmdab:genx}({it:newvar}) {cmdab:geny}({it:newvar}) {cmd:]}
+{cmd:catspline} {it:y x}, {cmd:[} {cmd:rho}({it:num [0,1]}) {cmd:n}({it:int}) {cmd:close} {cmd:sort}({it:var}) {cmdab:genx}({it:newvar}) {cmdab:geny}({it:newvar}) {cmd:replace}  {cmd:]}
 
 
 {synoptset 36 tabbed}{...}
@@ -27,10 +27,17 @@ The {it:_id} variable represents the drawing sequence and {it:_x, _y} contains c
 
 {p2coldent : {opt n(int)}}Number of points to generate for each spline. Default is {opt n(40)}.{p_end}
 
+{p2coldent : {opt sort(var)}}Sort the drawing order defined by the {opt sort()} variable.{p_end}
+
 {p2coldent : {opt close}}Close the loop between the starting and the ending points.{p_end}
 
-{p2coldent : {opt genx(newvar)} {opt geny(newvar)}}Custom names for the generated {it:x,y} variables.
-Defaults are {it: _x, _y}.{p_end}
+{p2coldent : {opt genx(newvar)}, {opt geny(newvar)}}Custom names for the {cmd:_x} and {cmd:_y} variables.{p_end}
+
+{p2coldent : {opt genorder(newvar)}}Custom name for the {cmd:_order} variable.{p_end}
+
+{p2coldent : {opt genid(newvar)}}Custom name for the {cmd:_id} variable.{p_end}
+
+{p2coldent : {opt replace}}Replace the variables.{p_end}
 
 {synoptline}
 {p2colreset}{...}
@@ -56,8 +63,8 @@ More examples on {browse "https://github.com/asjadnaqvi/stata-graphfunctions":Gi
 
 {title:Package details}
 
-Version      : {bf:catspline} v1.0 in {stata help graphfunctions:graphfunctions}
-This release : 04 Oct 2024
+Version      : {bf:catspline} v1.1 in {stata help graphfunctions:graphfunctions}
+This release : 28 Nov 2024
 First release: 04 Oct 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
 Keywords     : Stata, graph, splines, catmull rom function
