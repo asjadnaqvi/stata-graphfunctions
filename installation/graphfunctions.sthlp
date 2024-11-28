@@ -14,7 +14,7 @@ This package contains the following program(s):
 {stata help labsplit:labsplit}  v1.1 (08 Oct 2024)  Various options for wrapping labels.
 {stata help catspline:catspline} v1.1 (28 Nov 2024)  Generate Catmull-Rom splines.
 {stata help arc:arc}       v1.2 (20 Nov 2024)  Draw an arc between two points.
-{stata help shapes:shapes}    v1.3 (28 Oct 2024)  Draw shapes. Contains several sub programs.
+{stata help shapes:shapes}    v1.3 (05 Nov 2024)  Draw shapes. Contains several sub programs.
 
 {hline}
 

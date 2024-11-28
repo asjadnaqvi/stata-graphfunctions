@@ -7,8 +7,8 @@
 
 
 
-# graphfunctions v1.5
-*(05 Nov 2024)*
+# graphfunctions v1.51
+*(28 Nov 2024)*
 
 A suite of graph functions for Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope, see the relevant help files.
 
@@ -18,8 +18,8 @@ Currently, this package contains:
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
 | [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapping |
-| [catspline](#catspline) | 1.0 | 04 Oct 2024 | Catmull-Rom splines |
-| [arc](#arc) | 1.1 | 11 Oct 2024 | Draw arcs between two points |
+| [catspline](#catspline) | 1.1 | 28 Nov 2024 | Catmull-Rom splines |
+| [arc](#arc) | 1.2 | 20 Nov 2024 | Draw arcs between two points |
 | [shapes](#shapes) | 1.3 | 05 Nov 2024 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area` |
 
 
@@ -35,7 +35,7 @@ SSC (**v1.4**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.5**):
+GitHub (**v1.51**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -147,7 +147,7 @@ twoway ///
 
 
 ### arc
-*(v1.1: 11 Oct 2024)*
+*(v1.1)*
 
 Draw minor or major arcs between two points. The arc orientation and be switched using `swap`, and major arcs can be drawn using `major`.
 
@@ -219,7 +219,7 @@ twoway ///
 
 
 ### shapes
-*(v1.3: 15 Oct 2024)*
+*(v1.3)*
 
 **Circles**
 
@@ -549,6 +549,12 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues
 
 
 ## Change log
+
+**v1.51 (28 Nov 2024)**
+- Fixed `catspline` to correct generate splines. Added options to replace variables. Change in routine to make it more efficient in computations.
+- Added `replace`, `append` to `arc`. Various bug fixes.
+- Added `append` as a substitute for `stack` in `shapes`. 
+- Added `square` in `shapes.
 
 **v1.5 (05 Nov 2024)**
 - `shapes square` added for squares. Note that `shapes circle, n(4)` also returns a square but here we define the center-to-corner length using the radius, where as `shapes square` generates a side with a predefined length. Hence the area of `shapes circle, n(4) rad(5)` > `shapes square, len(5)`.
