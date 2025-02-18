@@ -18,7 +18,7 @@ Currently, this package contains:
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
 | [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapping |
-| [catspline](#catspline) | 1.2 | 18 Feb 2024 | Catmull-Rom splines |
+| [catspline](#catspline) | 1.2 | 18 Feb 2025 | Catmull-Rom splines |
 | [arc](#arc) | 1.2 | 20 Nov 2024 | Draw arcs between two points |
 | [shapes](#shapes) | 1.3 | 05 Nov 2024 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area` |
 
