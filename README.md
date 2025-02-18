@@ -7,8 +7,8 @@
 
 
 
-# graphfunctions v1.51
-*(28 Nov 2024)*
+# graphfunctions v1.52
+*(18 Feb 2025)*
 
 A suite of graph functions for Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope, see the relevant help files.
 
@@ -18,7 +18,7 @@ Currently, this package contains:
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
 | [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapping |
-| [catspline](#catspline) | 1.1 | 28 Nov 2024 | Catmull-Rom splines |
+| [catspline](#catspline) | 1.2 | 18 Feb 2024 | Catmull-Rom splines |
 | [arc](#arc) | 1.2 | 20 Nov 2024 | Draw arcs between two points |
 | [shapes](#shapes) | 1.3 | 05 Nov 2024 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area` |
 
@@ -35,7 +35,7 @@ SSC (**v1.51**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.51**):
+GitHub (**v1.52**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -104,7 +104,7 @@ twoway (scatter y x, mlabel(newlab3) mlabsize(3)), title("Word wrap")
 <img src="/figures/labsplit2.png" width="50%"><img src="/figures/labsplit3.png" width="50%">
 
 ### catspline
-*(v1.0: 04 Oct 2024)*
+*(v1.2: 18 Feb 2025)*
 
 
 The program allows users to generate splines based on the [Catmull-Rom algorithm](https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline).
@@ -549,6 +549,11 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues
 
 
 ## Change log
+
+**v1.52 (18 Feb 2025)**
+- `catspline` now generate the stated number of points.
+- `catspline` now respects `if/in` conditions.
+- Minor corrections and bug fixes.
 
 **v1.51 (28 Nov 2024)**
 - Fixed `catspline` to correct generate splines. Added options to replace variables. Change in routine to make it more efficient in computations.

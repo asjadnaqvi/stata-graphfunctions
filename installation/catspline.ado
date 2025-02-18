@@ -1,28 +1,25 @@
-*! catspline v1.1 (28 Nov 2024)
+*! catspline v1.2 (18 Feb 2025): Fixed marksample bug.
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
+* v1.2 (18 Feb 2025): Fixed marksample bug.
 * v1.1 (28 Nov 2024): Fix an issue with observations stacking. Fixed a minor bug in sort. Added a sort(), replace variable.
 * v1.0 (04 Oct 2024): first release.
 
 
 /*
-to do: add option "replace", add option `sort()'.
-
+to do: add option `sort()'.
 
 */
 
 
 cap program drop catspline
 
-program catspline, // sortpreserve
+program catspline, sortpreserve
 
 version 11
  
 	syntax varlist(numeric min=2 max=2) [if] [in], [ rho(numlist max=1 >=0 <=1) n(real 40) close noid genx(string) geny(string) genid(string) genorder(string) sort(varlist max=1) replace ] 
  
-	tokenize `varlist'
-	local vary `1'
-	local varx `2'
 	
 	// prepare the variables
 	local xvar _x
@@ -46,27 +43,36 @@ version 11
 
 	cap confirm var _id
 	if !_rc {
-			display as error "Variable {it:_id} already exists."
+			display as error "Variable {it:_id} already exists. Option {it:replace} can be used to overwrite."
 			exit
 	} 	
+	
+	
+	marksample touse, strok
 	
 quietly {
 preserve	
  
+	keep if `touse'
 	
-		
+	keep `varlist' `sort'	
+	
+	tokenize `varlist'
+	local vary `1'
+	local varx `2'
+	
 
-	keep `varlist' `sort'
+	
 	drop if missing(`varx')
 	drop if missing(`vary')
-	
+
+
 	if "`sort'" != "" sort `sort'
 	
 	gen pts = _n
 	order pts
  
 
- 
 	if "`rho'" == "" local rho 0.5
  
     if `n' < 5 {
@@ -77,7 +83,12 @@ preserve
  
 	if _N < `n' set obs `n'
 	
+	
+	
 	gen id = _n - 1
+ 
+ 
+	
  
 	levelsof pts, local(points)
 	local last = r(r)
@@ -114,7 +125,10 @@ preserve
 		gen double `t3' = (((`x3' - `x2')^2 + (`y3' - `y2')^2)^`rho') + `t2'	
 		
 		local diff = abs(`t2' - `t1') / (`n' - 1)
-		gen double t`x' = `t1' + (`diff' * id)
+		
+		*local diff = abs(`n') / (`n' - 1)
+		
+		gen double t`x' = `t1' + (`diff' * id) in 1/`n'
 		
 		
 		**** calculate the As	
@@ -146,22 +160,34 @@ preserve
 			
 	}	
  
-
+	
 	cap drop `varlist' pts id
 
-	local obs2 = `n'+ 1
-	if _N < `obs2' set obs `obs2'	 // add an empty row
+	drop if t1==.
+	
+	
+	
+	set obs `= `n'+ 1'	 // add an empty row
 
 
 	gen `ordervar' = _n
+	
+	
+	
+	
 	reshape long `xvar' `yvar' t, i(`ordervar') j(`idvar')
 	
- 
-	if "`close'" == "" drop if `idvar'==`last' - 1
- 
-	drop t
 	order `idvar' `ordervar'
 	sort `idvar' `ordervar'
+	
+	
+	if "`close'" == "" {
+		summ `idvar'
+		drop if `idvar'==r(max)
+	}
+ 
+	drop t
+
 	
 	tempfile mysplines
 	save `mysplines', replace
@@ -183,7 +209,7 @@ restore
 	merge m:1 `idvar' `ordervar' using `mysplines'	
 	drop _merge
 	
-
+*/
 	
 }	
 	

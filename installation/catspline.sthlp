@@ -1,5 +1,5 @@
 {smcl}
-{* 28Nov2024}{...}
+{* 18Feb2025}{...}
 {hi:help catspline}{...}
 {right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions (GitHub)}}
 
@@ -63,8 +63,8 @@ More examples on {browse "https://github.com/asjadnaqvi/stata-graphfunctions":Gi
 
 {title:Package details}
 
-Version      : {bf:catspline} v1.1 in {stata help graphfunctions:graphfunctions}
-This release : 28 Nov 2024
+Version      : {bf:catspline} v1.2 in {stata help graphfunctions:graphfunctions}
+This release : 18 Feb 2025
 First release: 04 Oct 2024
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
 Keywords     : Stata, graph, splines, catmull rom function
