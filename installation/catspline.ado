@@ -183,7 +183,7 @@ preserve
 	
 	if "`close'" == "" {
 		summ `idvar'
-		drop if `idvar'==r(max)
+		drop if `idvar'==r(max)-1
 	}
  
 	drop t
