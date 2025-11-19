@@ -1,10 +1,17 @@
-*! shapes v1.3 (05 Nov 2024)
+*! shapes v1.4 (18 Nov 2025)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
+* v1.4 (18 Nov 2025): major upgrades to various functions. translate, dilate, stretch, round added.
 * v1.3 (05 Nov 2024): add append as sub for stack. Added square.
 * v1.2 (15 Oct 2024): added support for generating pies. added x0,y0 to control center points.
 * v1.1 (13 Oct 2024): Fixed a bug where an existing _N was resulting in additional rows being added below. This version tracks indices much better.
 * v1.0 (11 Oct 2024): first release.
+
+
+
+
+**** shapes available
+
 
 
 cap program drop shapes
@@ -14,27 +21,32 @@ program define shapes
 version 11
 	gettoken subcmd 0: 0, parse(", ")
 
-	// draw
-	if "`subcmd'" == "circle" 	_circle `0'
-	if "`subcmd'" == "pie" 		_pie 	`0'
-	if "`subcmd'" == "square" 	_square `0'
+	// draw //
+	if "`subcmd'" == "circle" 		_circle  `0'
+	if "`subcmd'" == "pie" 			_pie 	 `0'
+	if "`subcmd'" == "square" 		_square  `0'
 	
-	// modify
-	if "`subcmd'" == "rotate" 	_rotate `0'
+	// modify //
+	if "`subcmd'" == "rotate" 		_rotate  	`0'
+	if "`subcmd'" == "stretch" 		_stretch	`0'	
+	if "`subcmd'" == "round" 		_round 	 	`0'
+	if "`subcmd'" == "translate" 	_translate 	`0'
+	if "`subcmd'" == "dilate" 		_dilate 	`0'
 	
-	// generate
-	if "`subcmd'" == "area" 	_area `0'			
+	// calculate //
+	if "`subcmd'" == "area" 		_area 	 `0'			
 	
 end
+
 
 **************
 *** circle ***
 **************
 
 program define _circle 
- version 11
+version 11
 
- 	syntax [, x0(real 0) y0(real 0) n(real 100) ROtate(real 0) RADius(real 10) genx(string) geny(string) genid(string) genorder(string) replace stack append  ] 
+ 	syntax, RADius(numlist max=1 >0) [ x0(real 0) y0(real 0) n(real 100) ROtate(real 0) genx(string) geny(string) genid(string) genorder(string) replace stack append  ] 
 
 	
 quietly {	
@@ -62,8 +74,8 @@ quietly {
 
 	cap generate double `xvar' = .
 	cap generate double `yvar' = .
-	cap generate `idvar' = .
-	cap generate `ordervar' = .
+	cap generate 		`idvar' = .
+	cap generate 		`ordervar' = .
 	
 	
 	if "`stack'" != "" | "`append'" !="" {
@@ -146,8 +158,8 @@ end
 program define _pie
  version 11
  
-    syntax, [ x0(real 0) y0(real 0) RADius(real 10) start(real 0) end(real 30) n(real 30) ROtate(real 0) ] ///
-			[ genx(string) geny(string) genid(string) genorder(string) replace stack dropbase append flip  ]
+    syntax, RADius(numlist max=1 >0) end(numlist max=1) [ x0(real 0) y0(real 0) n(real 30) ROtate(real 0) ] ///
+			[ start(numlist max=1)  genx(string) geny(string) genid(string) genorder(string) replace stack dropbase append flip  ]
 
     
 	// prepare the variables
@@ -256,7 +268,6 @@ quietly {
 		replace `xvar' = `x0' in `=`end'+1'
 		replace `yvar' = `y0' in `=`end'+1'
 		
-		
 		// pad the starting value
 		sum `xvar' if `ordervar'==1 & `idvar'==`k', meanonly
 		replace `xvar' = `r(min)' in `=`end'+2'
@@ -274,11 +285,13 @@ end
 *****************
 
 
+** rotation taken out. do it this in the second step.
+
 program define _square
  version 11
 
-     syntax, [ x0(real 0) y0(real 0) LENgth(real 10) ROtate(real 0) ] ///
-			[ genx(string) geny(string) genid(string) genorder(string) replace stack append flip  ]
+     syntax, [ x0(numlist max=1) y0(numlist max=1) LENgth(real 10) ROtate(real 0)  ] ///
+			[ genx(string) geny(string) genid(string) genorder(string) replace stack append  ]
  
  
  	// prepare the variables
@@ -287,6 +300,10 @@ program define _square
 	local idvar _id
 	local ordervar _order
 	local n = 4
+	
+	// recenter 
+	if "`x0'" == "" local x0 = `length' / 2
+	if "`y0'" == "" local y0 = `length' / 2	
 
 quietly {	
 	if "`genx'" 	!= "" local xvar 	 `genx'
@@ -301,7 +318,7 @@ quietly {
 		cap drop `ordervar'
 	}		
 	
-	
+
 	cap generate double `xvar' = .
 	cap generate double `yvar' = .
 	cap generate `idvar' = .
@@ -363,7 +380,11 @@ quietly {
 	replace `xvar' = ( `length' / 2) in `=`start' + 4' // duplicate of the first row
 	replace `yvar' = ( `length' / 2) in `=`start' + 4' 		
 	
-	// rotation
+	
+	replace _y = _y  + `y0' in `start' / `=`start' + 4'
+	replace _x = _x  + `x0' in `start' / `=`start' + 4' 
+ 
+ 	// rotation
 	
 	tempvar _mymod _angle
 	
@@ -377,11 +398,19 @@ quietly {
 	
 	replace `xvar' = `x0' + `_radius' * cos(`_angle')  in `start'/`=`start' + 4'
 	replace `yvar' = `y0' + `_radius' * sin(`_angle')  in `start'/`=`start' + 4'	
-	
+ 
  
 }
 end 
 
+
+
+//////// tranformation functions //////
+
+
+*****************
+***  _rotate  ***
+*****************
 
 
 cap program drop _rotate
@@ -390,11 +419,13 @@ program _rotate, sortpreserve
 
 version 11
 	
-	syntax varlist(numeric min=2 max=2),  [ ROtate(real 0) by(varname) x0(real 0) y0(real 0) replace genx(string) geny(string) center ] 
+	syntax varlist(numeric min=2 max=2) [if] [in],  [ ROtate(real 0) by(varname) x0(real 0) y0(real 0) replace genx(string) geny(string) center ] 
  
 	tokenize `varlist'
 	local vary `1'
 	local varx `2'
+	
+	marksample touse, strok novarlist
 	
 quietly {
 
@@ -410,14 +441,14 @@ quietly {
 			tempvar _meanx _meany _minx _miny _maxx _maxy
 			sort `by' _id _order
 			
-			by `by': egen `_minx' = min(`varx')
-			by `by': egen `_miny' = min(`vary')
+			by `by': egen double `_minx' = min(`varx') if `touse'
+			by `by': egen double `_miny' = min(`vary') if `touse'
 			
-			by `by': egen `_maxx' = max(`varx')
-			by `by': egen `_maxy' = max(`vary')
+			by `by': egen double `_maxx' = max(`varx') if `touse'
+			by `by': egen double `_maxy' = max(`vary') if `touse'
 			
-			gen double `_meanx' = (`_minx' + `_maxx') / 2
-			gen double `_meany' = (`_miny' + `_maxy') / 2
+			gen double `_meanx' = (`_minx' + `_maxx') / 2 if `touse'
+			gen double `_meany' = (`_miny' + `_maxy') / 2 if `touse'
 
 		}
 	
@@ -442,22 +473,22 @@ quietly {
 	}
 	
 		
-	gen double `_x0' = `varx' - `x0'
-	gen double `_y0' = `vary' - `y0'
+	gen double `_x0' = `varx' - `x0' if `touse'
+	gen double `_y0' = `vary' - `y0' if `touse'
 		
-	gen double `x_rot_t' = `_x0' * cos(`angle') - `_y0' * sin(`angle')
-	gen double `y_rot_t' = `_x0' * sin(`angle') + `_y0' * cos(`angle')
+	gen double `x_rot_t' = `_x0' * cos(`angle') - `_y0' * sin(`angle') if `touse'
+	gen double `y_rot_t' = `_x0' * sin(`angle') + `_y0' * cos(`angle') if `touse'
 		
 	if "`replace'" != "" {  // here replace is replacing the original variables. use carefully.
-		replace `varx' = `x_rot_t' + `x0' 
-		replace `vary' = `y_rot_t' + `y0' 
+		replace `varx' = `x_rot_t' + `x0' if `touse'
+		replace `vary' = `y_rot_t' + `y0' if `touse'
 	}
 	else {
-		cap drop `xvar'
-		cap drop `yvar'
+		*cap drop `xvar'
+		*cap drop `yvar'
 		
-		generate `xvar' = `x_rot_t' + `x0' 
-		generate `yvar' = `y_rot_t' + `y0'
+		generate double `xvar' = `x_rot_t' + `x0' if `touse'
+		generate double `yvar' = `y_rot_t' + `y0' if `touse'
 	}
 	
 
@@ -467,15 +498,50 @@ end
 
 
 
+******************
+***  _stretch  ***
+******************
+
+
+cap program drop _stretch
+
+program _stretch, sortpreserve
+
+version 11
+
+	
+	syntax varlist(numeric min=2 max=2) [if] [in],  [ x(numlist max=1 >0) y(numlist max=1 >0) replace ] 
+ 
+ 
+	marksample touse, strok novarlist
+ 
+ 
+ quietly {
+	tokenize `varlist'
+	local vary `1'
+	local varx `2'
+	
+	if "`x'" == "" local x = 1
+	if "`y'" == "" local y = 1
+
+	replace `vary' = `vary' * (`y') if `touse'
+	replace `varx' = `varx' * (`x') if `touse'
+}
+	
+
+end
+
+*****************
+***   _area   ***  // apply the Meister's shoelace formula (shoelace formula: https://en.wikipedia.org/wiki/Shoelace_formula)
+*****************
+
 cap program drop _area
 
 program _area, sortpreserve
 
 
-// apply the Meister's shoelace formula (shoelace formula: https://en.wikipedia.org/wiki/Shoelace_formula)
-
 version 11
-	syntax varlist(numeric min=2 max=2), by(varname) [ replace GENerate(string) ] 
+	syntax varlist(numeric min=2 max=2),  [ by(varname) replace GENerate(string) ] 
 	
 	tokenize `varlist'
 	local y `1'
@@ -496,6 +562,312 @@ quietly {
 }
 	
 end
+
+
+******************
+***   _round   *** edge rounding
+******************
+
+cap program drop _round
+
+
+program _round, sortpreserve
+
+	version 11
+	syntax varlist(numeric min=2 max=2) [if] [in], Roundness(numlist max=1 >0) [ n(real 20) Factor(real 1.3) genx(string) geny(string) genid(string) genorder(string) gensegvar(string) replace stack append  ] 
+
+	tokenize `varlist'
+	local vary `1'
+	local varx `2'		
+	
+	local xvar 		_rx
+	local yvar 		_ry
+	local idvar 	_rid
+	local ordervar 	_rorder
+	local segvar	_segvar
+	
+	if "`genx'" 		!= "" local xvar 	 `genx'
+	if "`geny'" 		!= "" local yvar 	 `geny'				
+	if "`genid'" 		!= "" local idvar 	 `genid'				
+	if "`genorder'" 	!= "" local ordervar `genorder'				
+	if "`gensegvar'" 	!= "" local segvar 	 `segorder'	
+	
+quietly {	
+	
+	if "`replace'" != "" {
+		cap drop `xvar'
+		cap drop `yvar'
+		cap drop `idvar'
+		cap drop `ordervar'
+		cap drop `segvar'
+	}	
+
+	cap generate double 	 `xvar' = .
+	cap generate double 	 `yvar' = .
+	cap generate 			`idvar' = .
+	cap generate		   `segvar' = .
+	cap generate 		 `ordervar' = .
+	
+	
+	marksample touse, strok novarlist
+	
+
+	// segmentize and shorten
+	count if !missing(`varx') & `touse'==1
+	local last = `r(N)' - 1
+	
+	count if !missing(`idvar')
+	
+	capture set obs `=`r(N)' + `last' * 3'
+	
+	local counter = 1 
+	
+	cap drop _ones
+	cap drop _counter
+	
+	gen _ones = 1 if `touse'==1
+	gen _counter = sum(_ones) if `touse'==1
+	drop _ones
+	
+	
+	forval i = 1/`last' {
+	
+	
+		*** ending point of segment1 ***
+		local start = `=`i'+0'
+		local end 	= `=`i'+1'	
+		
+		// seg start //
+		summ `vary' if _counter == `start', meanonly
+		local y0 = r(min)
+		summ `varx' if _counter == `start', meanonly
+		local x0 = r(min)
+		
+
+		// seg end //
+		summ `vary' if _counter == `end', meanonly
+		local y1 = r(min)
+		summ `varx' if _counter == `end', meanonly
+		local x1 = r(min)
+		
+		
+		// segment //
+		local dx = `x1' - `x0'
+		local dy = `y1' - `y0'
+		local L  = sqrt((`dx')^2 + (`dy')^2)
+		local s  = abs(`roundness') / `L'
+		
+		local arcx0 = `x1' - (`s' * `dx')
+		local arcy0 = `y1' - (`s' * `dy')
+		
+		if `i' == 1 {
+			local startx = `arcx0'
+			local starty = `arcy0'
+		}		
+		
+		
+		*** starting point of segment1 ***
+		local start = `=`i'+1'
+		local end 	= `=`i'+2'	
+		
+		if `i' == `last' {
+			local start = 1
+			local end 	= 2
+		}
+		
+	
+		// seg start //
+		summ `vary' if _counter == `start', meanonly
+		local y0 = r(min)
+		summ `varx' if _counter == `start', meanonly
+		local x0 = r(min)
+		
+
+		// seg end //
+		summ `vary' if _counter == `end', meanonly
+		local y1 = r(min)
+		summ `varx' if _counter == `end', meanonly
+		local x1 = r(min)
+		
+		
+		// segment //
+		local dx = `x1' - `x0'
+		local dy = `y1' - `y0'
+		local L  = sqrt((`dx')^2 + (`dy')^2)
+		local s  = abs(`roundness') / `L'
+		
+		local arcx1 = `x0' + (`s' * `dx')
+		local arcy1 = `y0' + (`s' * `dy')		
+		
+	
+	// generate arc segments
+	
+	*** arc start ***
+	
+		local rad = sqrt((`arcx1' - `arcx0')^2 + (`arcy1' - `arcy0')^2) / `factor'
+
+		// get the mid point
+		summ `vary', meanonly
+		local midy = r(mean)
+		
+		summ `varx', meanonly
+		local midx = r(mean)
+		
+
+		// mark the orientation
+		local side = (`arcx1' - `arcx0') * (`midy' - `arcy0') - (`arcy1' - `arcy0') * (`midx' - `arcx0')
+		
+		// orientation is now always assumed convex
+		arc, x1(`arcx0') y1(`arcy0') x2(`arcx1') y2(`arcy1') n(`n') rad(`rad') genx(`xvar') geny(`yvar') genid(`segvar') genorder(`ordervar') append dropbase
+
+		
+		*/
+		
+	}
+	
+	
+	// append last segment with base
+		
+	qui count if !missing(`ordervar')
+	local maxobs = r(N)
+	cap set obs `=`maxobs' + 2'
+	
+	replace `xvar'     = `startx'   in `=`maxobs' + 1' 
+	replace `yvar'     = `starty'   in `=`maxobs' + 1'
+	
+	summ `segvar', meanonly
+	local lastval = `r(max)' + 1
+	
+	replace `segvar'   = `lastval'	 	in `=`maxobs' + 1' 
+	replace `segvar'   = `lastval' 	 	in `=`maxobs' + 2'
+	replace `ordervar' = 1 				in `=`maxobs' + 1'
+	replace `ordervar' = 2 				in `=`maxobs' + 2'
+	
+	
+	cap drop _ones 
+	cap drop _counter
+
+	
+	summ `idvar', meanonly
+	if r(N) == 0 {
+		replace `idvar' = 1 if missing(`idvar') & !missing(`segvar')
+	}
+	else {
+		replace `idvar' = r(max) + 1 if missing(`idvar')  & !missing(`segvar') 
+	}
+	
+
+}
+	
+end
+
+**********************
+***   _translate   *** 
+**********************
+
+cap program drop _translate
+
+program _translate, sortpreserve
+
+	version 11
+	syntax varlist(numeric min=2 max=2) [if] [in], [ x(numlist max=1) y(numlist max=1) genx(string) geny(string) replace   ] 
+
+	tokenize `varlist'
+	local vary `1'
+	local varx `2'		
+	
+	local xvar 		_x
+	local yvar 		_y
+	local idvar 	_id
+	local ordervar 	_order
+
+	
+	if "`genx'" 	!= "" local xvar 	 `genx'
+	if "`geny'" 	!= "" local yvar 	 `geny'				
+	if "`genid'" 	!= "" local idvar 	 `genid'				
+	if "`genorder'" != "" local ordervar `genorder'				
+	
+
+quietly {	
+	if "`replace'" != "" {
+		local xvar `varx'
+		local yvar `vary'
+	}	
+	else {
+		cap generate double `xvar' 	= .
+		cap generate double `yvar' 	= .
+		cap generate `idvar' 		= .
+		cap generate `ordervar' 	= .
+	}
+	
+	
+	
+	marksample touse, strok novarlist
+	
+	// translate x
+	if "`x'" != "" {
+		replace `xvar' = `varx' + `x'	if `touse'
+	}
+	else {
+		replace `xvar' = `varx'			if `touse'
+	}
+	
+	// translate y
+	if "`y'" != "" {
+		replace `yvar' = `vary' + `y'  	if `touse'
+	}
+	else {
+		replace `yvar' = `vary'			if `touse'
+	}
+		
+}		
+	
+
+end
+
+*******************
+***   _dilate   *** 
+*******************
+
+capture program drop _dilate
+
+program define _dilate
+
+    syntax varlist(min=2 max=2 numeric) [if] [in], [ Factor(numlist max=1) genx(string) geny(string)  replace]
+
+    // Parse inputs
+	tokenize `varlist'
+	local vary `1'
+	local varx `2'		
+	
+	local xvar 	_dx
+	local yvar 	_dy
+
+quietly {	
+	if "`genx'" 	!= "" local xvar 	 `genx'
+	if "`geny'" 	!= "" local yvar 	 `geny'				
+	
+	
+	if "`replace'" != "" {
+		local xvar `varx'
+		local yvar `vary'
+	}	
+	else {
+		cap generate double `xvar' = .
+		cap generate double `yvar' = .
+	}	
+	
+	
+	marksample touse, strok novarlist
+
+	replace `xvar' = `varx' * `factor' 	if `touse'
+	replace `yvar' = `vary' * `factor' 	if `touse'
+}		
+       
+end
+
+
+
 
 *********************************
 ******** END OF PROGRAM *********

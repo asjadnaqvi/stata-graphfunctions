@@ -1,5 +1,5 @@
-v 1.52
-d {bf:GRAPHFUNCTIONS}: A collection of functions to extend graph functionality in Stata
+v 1.6
+d {bf:GRAPHFUNCTIONS}: A suite of data visualizations tools.
 d
 d Requires: Stata version 11 or higher.
 d
@@ -10,7 +10,7 @@ d KW: text wrap
 d KW: splines
 d KW: shapes
 d
-d Distribution-Date: 20250218
+d Distribution-Date: 20251119
 d License: MIT
 d
 d Author: Asjad Naqvi (asjadnaqvi@gmail.com)
@@ -26,3 +26,5 @@ f shape.ado
 f shape.sthlp
 f shapes.ado
 f shapes.sthlp
+f radscatter.ado
+f radscatter.sthlp

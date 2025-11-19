@@ -1,6 +1,6 @@
-v 1.51
-d GRAPHFUNCTIONS: Added functionality for graphs.
-d Distribution-Date: 20241128
+v 1.6
+d GRAPHFUNCTIONS: A suite of data visualizations tools.
+d Distribution-Date: 20251119
 d
 d Asjad Naqvi
 d asjadnaqvi@gmail.com

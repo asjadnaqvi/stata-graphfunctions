@@ -1,6 +1,7 @@
-*! labsplit v1.1 (08 Oct 2024)
+*! labsplit v1.2 (03 Mar 2025)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
+* v1.2 (03 Mar 2025): lapsplit now allows replace. also allows n() as a substitute for wrap()
 * v1.1 (08 Oct 2024): bug fixes
 * v1.0 (28 Sep 2024): first release.
 
@@ -10,12 +11,20 @@ cap program drop labsplit
 program labsplit
 version 11
 
-	syntax varlist(max=1) [if] [in], [ wrap(numlist max=1 >0 integer) word(numlist max=1 >0 integer) strict GENerate(string) ]
+	syntax varlist(max=1) [if] [in], [ wrap(numlist max=1 >0 integer) n(numlist max=1 >0 integer) word(numlist max=1 >0 integer) strict GENerate(string) replace ]
 	
 	// error checks
 	
+
+	if "`wrap'" != "" & "`n'" != "" {
+		display as error "Please specify either one of {ul:wrap()} or {ul:n()}. See {stata help labsplit}."
+		exit
+	}		
+	
+	if "`n'" != "" local wrap `n'
+	
 	if "`wrap'" == "" & "`word'" == "" {
-		display as error "Please specify one of {ul:wrap()} or {ul:word}. See {stata help labsplit}."
+		display as error "Please specify either one of {ul:wrap()} or {ul:word()}. See {stata help labsplit}."
 		exit
 	}	
 	
@@ -23,18 +32,20 @@ version 11
 		display as error "Both {ul:wrap()} and {ul:word()} cannot be specified together."
 		exit
 	}
+	
 
 
 quietly {	
+
+	local _myvar _labsplit
+
+	if "`generate'" != "" local _myvar `generate'
+
+	if "`replace'" != "" capture drop `_myvar'	
 	
-	if "`generate'" != "" {
-		gen `generate' = ""
-		local _myvar `generate'
-	}
-	else {
-		gen _labsplit = ""
-		local _myvar _labsplit
-	}
+
+	generate `_myvar' = ""
+	
 	
 	if "`wrap'" != "" {
 	
@@ -103,8 +114,15 @@ quietly {
 		replace `_myvar' = `_part1' + "`=char(10)'" + `_part2' if `_words' >  `word'
 		replace `_myvar' = trim(`varlist')                     if `_words' <=  `word'
 		
-		
 	}
+	
+	*if "`generate'"=="" & "`replace'"!="" {
+	*	replace `varlist' = `_myvar'
+	*	drop _labsplit
+	*}
+	
+	
+	
 }	
 	
 end

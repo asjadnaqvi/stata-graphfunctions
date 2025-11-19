@@ -1,6 +1,7 @@
-*! arc v1.2 (20 Nov 2024)
+*! arc v1.3 (18 Nov 2025)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
+* v1.3 (18 Nov 2025): dropbase added. clean ups
 * v1.2 (20 Nov 2024): append/stack added
 * v1.1 (11 Oct 2024): Minor bug fixes.
 * v1.0 (08 Oct 2024): first release.
@@ -8,7 +9,7 @@
 
 cap program drop arc
 
-program define arc, rclass
+program define arc, rclass sortpreserve
  
 version 11
  
@@ -17,7 +18,7 @@ version 11
 		x2(numlist max=1) y2(numlist max=1) ///  //  to
 		[ n(real 40) RADius(numlist max=1 >0) major swap ]	///
 		[ genx(string) geny(string) genid(string) genorder(string) ] ///
-		[ replace append stack ]
+		[ replace append stack dropbase ]
 	
 
     if `n' < 5 {
@@ -26,7 +27,7 @@ version 11
     }
 
 	
-quietly {	
+*quietly {	
 	
 	// prepare the variables
 	local xvar _x
@@ -53,30 +54,48 @@ quietly {
 	cap generate `ordervar' = .	
 	
 	
+	// observations to add
+	if "`dropbase'" != "" {
+		local base = `n'		
+	}
+	else {
+		local base = `n' + 1
+	}	
+	
+
+	
 	if "`stack'" != "" | "`append'" !="" {
 		
 		tempvar temp
-		gen `temp' = _n if !missing(`ordervar')
+		gen `temp' = _n if !missing(`idvar')
+		
 		summ `temp', meanonly
 		
-		if r(N)!= 0 {			
-			local start = `=`r(max)' + 1'
-			local end   = `=`r(max)' + `n' + 1'
 			
-			if _N < `=`r(max)'+`n'+1' set obs `end'
+		if r(N)!= 0 {			
+			local start = `r(max)' + 1
+			local end   = `r(max)' + `base'
+			
+			
+			if _N < `end' set obs `end'
 		}
 		else {
 			local start = 1
-			local end = `=`n' + 1'
+			local end 	= `base'
 			if _N < `n' set obs `end'			
 		}
 		
 	} 
 	else {
 		local start = 1
-		local end = `=`n' + 1'
+		local end 	= `base'
 		if _N < `n' set obs `end'
 	}	
+	
+	// last point for estimation = base if dropbase specified
+	local last = `start' + `n' - 1
+	
+	*noisily di "Base = `base', Last = `last', Start = `start', End = `end'"
 	
 	
 	summ `idvar', meanonly
@@ -88,8 +107,10 @@ quietly {
 		local k = `r(max)' + 1
 	}	
 	
+	*noi di "Arc: start = `start', end = `end'"
+	
 	// id
-	summ `ordervar', meanonly
+	*summ `ordervar', meanonly
 	replace `idvar' = `k' in  `start'/`end' 
 	
 	// order
@@ -178,13 +199,15 @@ quietly {
 	if _N < `n' set obs `n'
 	
 	tempvar theta
-	gen double `theta' = `angle_start' + (`ordervar' - 1) * `delta_theta' in `start'/`=`end'-1'
+	gen double `theta' = `angle_start' + (`ordervar' - 1) * `delta_theta' in `start'/`last'
 
 	
-	replace `xvar' = `h' + `radius' * cos(`theta') in  `start'/`=`end'-1'
-	replace `yvar' = `k' + `radius' * sin(`theta') in  `start'/`=`end'-1'		
+	replace `xvar' = `h' + `radius' * cos(`theta') in  `start'/`last'
+	replace `yvar' = `k' + `radius' * sin(`theta') in  `start'/`last'		
 
-}		
+*}		
+		
+	*if "`dropbase'" != "" drop if `xvar'==.	
 		
 	return local chord  = `L'
 	return local radius = `radius'

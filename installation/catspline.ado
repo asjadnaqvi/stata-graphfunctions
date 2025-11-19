@@ -1,9 +1,10 @@
-*! catspline v1.2 (18 Feb 2025): Fixed marksample bug.
+*! catspline v1.21 (25 Aug 2025): Fixed marksample bug.
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
-* v1.2 (18 Feb 2025): Fixed marksample bug.
-* v1.1 (28 Nov 2024): Fix an issue with observations stacking. Fixed a minor bug in sort. Added a sort(), replace variable.
-* v1.0 (04 Oct 2024): first release.
+* v1.21 (25 Aug 2025): Fixed _id bug which was not correct set to the local.
+* v1.2  (18 Feb 2025): Fixed marksample bug.
+* v1.1  (28 Nov 2024): Fix an issue with observations stacking. Fixed a minor bug in sort. Added a sort(), replace variable.
+* v1.0  (04 Oct 2024): first release.
 
 
 /*
@@ -41,9 +42,9 @@ version 11
 	}		
 	
 
-	cap confirm var _id
+	cap confirm var `idvar'
 	if !_rc {
-			display as error "Variable {it:_id} already exists. Option {it:replace} can be used to overwrite."
+			display as error "Variable {it:`idvar'} already exists. Use {it:replace} to overwrite."
 			exit
 	} 	
 	
