@@ -7,8 +7,8 @@
 
 
 
-# graphfunctions v1.52
-*(18 Feb 2025)*
+# graphfunctions v1.6
+*(19 Nov 2025)*
 
 A suite of graph functions for Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope, see the relevant help files.
 
@@ -17,10 +17,12 @@ Currently, this package contains:
 
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
+| [shapes](#shapes) | 1.4 | 19 Nov 2025 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area` |
+| [arc](#arc) | 1.3 | 19 Nov 2025 | Draw arcs between two points |
+| [radscatter](#radscatter) | 1.0 | 19 Nov 2025 | Generate scatter points on a circle |
 | [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapping |
 | [catspline](#catspline) | 1.2 | 18 Feb 2025 | Catmull-Rom splines |
-| [arc](#arc) | 1.2 | 20 Nov 2024 | Draw arcs between two points |
-| [shapes](#shapes) | 1.3 | 05 Nov 2024 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area` |
+
 
 
 The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
@@ -35,7 +37,7 @@ SSC (**v1.52**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.52**):
+GitHub (**v1.6**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -147,7 +149,7 @@ twoway ///
 
 
 ### arc
-*(v1.1)*
+*(v1.3: 19 Nov 2025)*
 
 Draw minor or major arcs between two points. The arc orientation and be switched using `swap`, and major arcs can be drawn using `major`.
 
@@ -219,14 +221,14 @@ twoway ///
 
 
 ### shapes
-*(v1.3)*
+*(v1.4: 19 Nov 2025)*
 
-**Circles**
+**circles**
 
 
 Syntax: 
 ```stata
-shape circle, [ n(int) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) replace stack/append ]
+shapes circle, radius(num) [ x0(num) y0(num) n(int) rotate(degrees) genx(var) geny(var) genid(var) genorder(var) replace append ]
 ```
 
 
@@ -306,7 +308,7 @@ twoway (connected _y _x, cmissing(n)), aspect(1)
 Syntax:
 
 ```stata
-shape pie, [ n(int) start(degrees) end(degrees) rotate(degrees) radius(num) x0(num) y0(num) genx(newvar) geny(newvar) genorder(newvar) genid(newvar) dropbase replace stack/append ]
+shapes pie, radius(num) end(degrees) [ start(degrees) x0(num) y0(num) n(int) rotate(degrees) dropbase flip genx(var) geny(var) genid(var) genorder(var) replace append ]
 ```
 
 Examples:
@@ -377,6 +379,14 @@ twoway (line _y _x, cmissing(n) nodropbase)	///
 
 **Square**
 
+Syntax:
+
+```stata
+shapes square, [ length(num) x0(num) y0(num) rotate(degrees) genx(var) geny(var) genid(var) genorder(var) replace append ]
+```
+
+
+
 ```stata
 shapes square, len(8) rotate(90) replace
 
@@ -409,8 +419,40 @@ twoway ///
 <img src="/figures/square2.png" width="75%">
 
 
+**Translate**
+
+Syntax:
+
+```stata
+shapes translate <yvar> <xvar> [if] [in], [ x(num) y(num) genx(var) geny(var) replace ]
+```
+
+**Dilate**
+
+Syntax:
+
+```stata
+shapes dilate <yvar> <xvar> [if] [in], [ factor(num) genx(var) geny(var) replace ]
+```
+
+
+**Stretch**
+
+Syntax:
+
+```stata
+shapes stretch <yvar> <xvar> [if] [in], [ x(num) y(num) replace ]
+```
+
 
 **Rotate**
+
+Syntax:
+
+```stata
+shapes rotate <yvar> <xvar> [if] [in], [ rotate(degrees) x0(num) y0(num) center genx(var) geny(var) replace ]
+```
+
 
 Let's generate a basic shape:
 
@@ -491,8 +533,24 @@ twoway ///
 <img src="/figures/rotate4.png" width="75%">
 
 
+**Round**
+
+Syntax:
+
+```stata
+shapes round <yvar> <xvar> [if] [in], roundness(num) [ n(num) factor(num) genx(var) geny(var) genid(var) genorder(var) gensegvar(var) replace append ]
+```
+
+
 
 **Area**
+
+Syntax:
+
+```stata
+shapes area <yvar> <xvar>, [ {opt by(var} generate(var) replace ]
+```
+
 
 ```stata
 clear
@@ -543,12 +601,32 @@ twoway ///
 
 <img src="/figures/area2.png" width="75%">
 
+## radscatter
+*(v1.0: 19 Nov 2025)*
+
+Syntax:
+
+```stata
+radscatter [ numvar ] [if] [in], [ rotate(angle) radius(num) flip displace(num) genx(str) geny(str) genangle(var) genheight(var) replace ]
+
+```
+
+
+
 ## Feedback
 
 Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues) to report errors, feature enhancements, and/or other requests.
 
 
 ## Change log
+
+
+**v1.6 (19 Nov 2025)**
+- `shapes` updated to v1.4 to include better options for `shapes square`, `shapes pie`, `shapes cirle`, and `shapes rotate`. New commands include `shapes translate`, `shapes dilate`, `shapes stretch`, `shapes round`.
+- `arc` updated with better options. `dropbase` added to ensure continuity across stacked arcs.
+- New command `radscatter` added.
+- Major rehaul of base routines, various bug fixes, better scripts that stack variables.
+
 
 **v1.52 (18 Feb 2025)**
 - `catspline` now generate the stated number of points.
