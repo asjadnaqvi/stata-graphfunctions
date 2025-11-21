@@ -18,9 +18,9 @@ Currently, this package contains:
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
 | [shapes](#shapes) | 1.4 | 19 Nov 2025 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area`, `shapes translate`, `shapes dilate`, `shapes stretch`, `shapes round` |
-| [arc](#arc) | 1.3 | 19 Nov 2025 | Draw arcs between two points |
-| [radscatter](#radscatter) | 1.0 | 19 Nov 2025 | Generate scatter points on a circle |
-| [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapping |
+| [arc](#arc) | 1.3 | 19 Nov 2025 | Draw major and minor arcs between two points |
+| [radscatter](#radscatter) | 1.0 | 19 Nov 2025 | Generate scatter points on arcs |
+| [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Generic text wrapper |
 | [catspline](#catspline) | 1.2 | 18 Feb 2025 | Catmull-Rom splines |
 
 
