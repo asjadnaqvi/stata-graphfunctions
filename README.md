@@ -17,7 +17,7 @@ Currently, this package contains:
 
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
-| [shapes](#shapes) | 1.4 | 19 Nov 2025 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area` |
+| [shapes](#shapes) | 1.4 | 19 Nov 2025 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area`, `shapes translate`, `shapes dilate`, `shapes stretch`, `shapes round` |
 | [arc](#arc) | 1.3 | 19 Nov 2025 | Draw arcs between two points |
 | [radscatter](#radscatter) | 1.0 | 19 Nov 2025 | Generate scatter points on a circle |
 | [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapping |
@@ -54,9 +54,8 @@ set scheme white_tableau
 graph set window fontface "Arial Narrow"
 ```
 
-## Examples
 
-### labsplit 
+## labsplit 
 *(v1.1: 08 Oct 2024)*
 
 The program allows users to split text labels based on flexible or fixed character length or word positions.
@@ -105,7 +104,7 @@ twoway (scatter y x, mlabel(newlab3) mlabsize(3)), title("Word wrap")
 <img src="/figures/labsplit0.png" width="50%"><img src="/figures/labsplit1.png" width="50%">
 <img src="/figures/labsplit2.png" width="50%"><img src="/figures/labsplit3.png" width="50%">
 
-### catspline
+## catspline
 *(v1.2: 18 Feb 2025)*
 
 
@@ -148,7 +147,7 @@ twoway ///
 <img src="/figures/catspline2.png" width="75%">
 
 
-### arc
+## arc
 *(v1.3: 19 Nov 2025)*
 
 Draw minor or major arcs between two points. The arc orientation and be switched using `swap`, and major arcs can be drawn using `major`.
@@ -220,10 +219,10 @@ twoway ///
 <img src="/figures/arc4.png" width="75%">
 
 
-### shapes
+## shapes
 *(v1.4: 19 Nov 2025)*
 
-**circles**
+### circles
 
 
 Syntax: 
@@ -303,7 +302,7 @@ twoway (connected _y _x, cmissing(n)), aspect(1)
 
 <img src="/figures/circle6.png" width="75%">
 
-**Pies**
+### Pies
 
 Syntax:
 
@@ -377,7 +376,7 @@ twoway (line _y _x, cmissing(n) nodropbase)	///
 <img src="/figures/pie5.png" width="75%">
 
 
-**Square**
+### Square
 
 Syntax:
 
@@ -385,7 +384,7 @@ Syntax:
 shapes square, [ length(num) x0(num) y0(num) rotate(degrees) genx(var) geny(var) genid(var) genorder(var) replace append ]
 ```
 
-
+Examples:
 
 ```stata
 shapes square, len(8) rotate(90) replace
@@ -419,7 +418,7 @@ twoway ///
 <img src="/figures/square2.png" width="75%">
 
 
-**Translate**
+### translate
 
 Syntax:
 
@@ -427,7 +426,7 @@ Syntax:
 shapes translate <yvar> <xvar> [if] [in], [ x(num) y(num) genx(var) geny(var) replace ]
 ```
 
-**Dilate**
+### dilate
 
 Syntax:
 
@@ -436,7 +435,7 @@ shapes dilate <yvar> <xvar> [if] [in], [ factor(num) genx(var) geny(var) replace
 ```
 
 
-**Stretch**
+### Stretch
 
 Syntax:
 
@@ -445,7 +444,7 @@ shapes stretch <yvar> <xvar> [if] [in], [ x(num) y(num) replace ]
 ```
 
 
-**Rotate**
+### Rotate
 
 Syntax:
 
@@ -533,7 +532,7 @@ twoway ///
 <img src="/figures/rotate4.png" width="75%">
 
 
-**Round**
+### Round
 
 Syntax:
 
@@ -543,7 +542,7 @@ shapes round <yvar> <xvar> [if] [in], roundness(num) [ n(num) factor(num) genx(v
 
 
 
-**Area**
+### Area
 
 Syntax:
 
