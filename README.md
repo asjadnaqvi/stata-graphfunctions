@@ -222,7 +222,7 @@ twoway ///
 ## shapes
 *(v1.4: 19 Nov 2025)*
 
-### circles
+### shapes circle
 
 
 Syntax: 
@@ -302,7 +302,7 @@ twoway (connected _y _x, cmissing(n)), aspect(1)
 
 <img src="/figures/circle6.png" width="75%">
 
-### Pies
+### shapes pie
 
 Syntax:
 
@@ -376,7 +376,7 @@ twoway (line _y _x, cmissing(n) nodropbase)	///
 <img src="/figures/pie5.png" width="75%">
 
 
-### Square
+### shapes square
 
 Syntax:
 
@@ -418,7 +418,7 @@ twoway ///
 <img src="/figures/square2.png" width="75%">
 
 
-### translate
+### shapes translate
 
 Syntax:
 
@@ -426,7 +426,7 @@ Syntax:
 shapes translate <yvar> <xvar> [if] [in], [ x(num) y(num) genx(var) geny(var) replace ]
 ```
 
-### dilate
+### shapes dilate
 
 Syntax:
 
@@ -435,7 +435,7 @@ shapes dilate <yvar> <xvar> [if] [in], [ factor(num) genx(var) geny(var) replace
 ```
 
 
-### Stretch
+### shapes stretch
 
 Syntax:
 
@@ -444,7 +444,7 @@ shapes stretch <yvar> <xvar> [if] [in], [ x(num) y(num) replace ]
 ```
 
 
-### Rotate
+### shapes rotate
 
 Syntax:
 
@@ -532,7 +532,7 @@ twoway ///
 <img src="/figures/rotate4.png" width="75%">
 
 
-### Round
+### shapes round
 
 Syntax:
 
@@ -541,8 +541,7 @@ shapes round <yvar> <xvar> [if] [in], roundness(num) [ n(num) factor(num) genx(v
 ```
 
 
-
-### Area
+### shapes area
 
 Syntax:
 
@@ -550,7 +549,7 @@ Syntax:
 shapes area <yvar> <xvar>, [ {opt by(var} generate(var) replace ]
 ```
 
-
+Examples:
 ```stata
 clear
 shapes pie, start(0) end(45) ro(0)		rad(5) 	replace
