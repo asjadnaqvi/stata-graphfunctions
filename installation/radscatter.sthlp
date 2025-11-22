@@ -5,6 +5,8 @@
 
 {hline}
 
+{it:(Back to {stata help graphfunctions})}
+
 {title:radscatter}: A program for radial scatter points. 
 
 

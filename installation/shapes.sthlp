@@ -5,6 +5,8 @@
 
 {hline}
 
+{it:(Back to {stata help graphfunctions})}
+
 {title:shapes}: A program for generating, transforming, and calculating features of shapes.
 
 {it:Notes:}
@@ -58,7 +60,7 @@ Transforming shapes:
 Calculating shape features:
 
 {p 8 15 2}
-{cmd:shapes} area y x, {opt by(variable)} {cmd:[} {help shapes##area:{it:area_options}} {cmd:]} 
+{cmd:shapes} area y x, {opt by(variable)} {cmd:[} {help shapes##area:{it:area options}} {cmd:]} 
 
 
 {marker circle}{title:circle}

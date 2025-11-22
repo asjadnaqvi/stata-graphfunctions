@@ -117,7 +117,7 @@ The program allows users to generate splines based on the [Catmull-Rom algorithm
 
 Syntax:
 ```stata
-catspline y x, [ rho(num [0,1]) obs(int) close genx(newvar) geny(newvar) ]
+catspline y x, [ rho(num [0,1]) n(int) close sort(var) genx(str) geny(str) genid(str) genorder(str) replace ]
 ```
 
 Examples:

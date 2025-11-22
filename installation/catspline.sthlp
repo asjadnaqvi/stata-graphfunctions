@@ -5,7 +5,9 @@
 
 {hline}
 
-{title:catspline}: A program for generating {browse "https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline":Catmull-Rom splines}.
+{it:(Back to {stata help graphfunctions})}
+
+{title:catspline}: A program for generating {browse "https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline":Catmull-Rom splines} for a set of points.
 
 The program inputs two numeric variables and outputs four variables ({it:_id, _order, _x, _y}).
 
@@ -14,7 +16,7 @@ The program inputs two numeric variables and outputs four variables ({it:_id, _o
 {marker syntax}{title:Syntax}
 
 {p 8 15 2}
-{cmd:catspline} {it:y x}, {cmd:[} {cmd:rho}({it:num [0,1]}) {cmd:n}({it:int}) {cmd:close} {cmd:sort}({it:var}) {cmdab:genx}({it:newvar}) {cmdab:geny}({it:newvar}) {cmd:replace}  {cmd:]}
+{cmd:catspline} {it:y x}, {opt [} {opt rho(num [0,1])} {opt n(int)} {opt close} {opt sort(var)} {opt genx(str)} {opt geny(str)} {opt genid(str)} {opt genorder(str)} {opt replace} {opt ]}
 
 
 {synoptset 36 tabbed}{...}
@@ -31,11 +33,11 @@ The program inputs two numeric variables and outputs four variables ({it:_id, _o
 
 {p2coldent : {opt close}}Close the loop between the starting and the ending points.{p_end}
 
-{p2coldent : {opt genx(newvar)}, {opt geny(newvar)}}Custom names for the {cmd:_x} and {cmd:_y} variables.{p_end}
+{p2coldent : {opt genx(str)}, {opt geny(str)}}Custom names for the {cmd:_x} and {cmd:_y} variables.{p_end}
 
-{p2coldent : {opt genorder(newvar)}}Custom name for the {cmd:_order} variable.{p_end}
+{p2coldent : {opt genorder(str)}}Custom name for the {cmd:_order} variable.{p_end}
 
-{p2coldent : {opt genid(newvar)}}Custom name for the {cmd:_id} variable.{p_end}
+{p2coldent : {opt genid(str)}}Custom name for the {cmd:_id} variable.{p_end}
 
 {p2coldent : {opt replace}}Replace the variables.{p_end}
 
@@ -82,7 +84,8 @@ Please submit bugs, errors, feature requests on {browse "https://github.com/asja
 
 {title:Citation guidelines}
 
-See {stata help graphfunctions:graphfunctions}.
+Visit {browse "https://ideas.repec.org/c/boc/bocode/s459379.html"} for the official SSC citation. 
+Please note that the GitHub version might be newer than the SSC version.
 
 
 {title:Other packages}

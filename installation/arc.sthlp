@@ -5,6 +5,8 @@
 
 {hline}
 
+{it:(Back to {stata help graphfunctions})}
+
 {title:arc}: A program for generating arcs between two points. 
 
 The program inputs two pairs of coordinates ({it:x1, y1}) and ({it:x2, y2}) and outputs points for the arc segment in variables {it:_x, _y}.
