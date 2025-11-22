@@ -426,7 +426,6 @@ twoway ///
 
 ### shapes translate
 
-<img src="/figures/_translate.png" width="50%">
 
 Syntax:
 
@@ -434,10 +433,14 @@ Syntax:
 shapes translate <yvar> <xvar> [if] [in], [ x(num) y(num) genx(var) geny(var) replace ]
 ```
 
+<img src="/figures/_translate.png" width="30%">
+
+
 Move the object by `x(a)` and `y(b)` points:
 
 $$ 
 x = x + a
+
 y = y + b
 $$
 
@@ -445,7 +448,6 @@ $$
 
 ### shapes dilate
 
-<img src="/figures/_dilate.png" width="50%">
 
 
 Syntax:
@@ -454,11 +456,15 @@ Syntax:
 shapes dilate <yvar> <xvar> [if] [in], [ factor(num) genx(var) geny(var) replace ]
 ```
 
-Expand or reduce the object by `x(a)` and `y(b)` points:
+<img src="/figures/_dilate.png" width="30%">
+
+
+Expand or reduce the object by factor `factor(a)`:
 
 $$ 
 x = x * a
-y = y * b
+
+y = y * a
 $$
 
 
@@ -466,7 +472,6 @@ $$
 
 ### shapes stretch
 
-<img src="/figures/_stretch.png" width="50%">
 
 
 Syntax:
@@ -475,17 +480,18 @@ Syntax:
 shapes stretch <yvar> <xvar> [if] [in], [ x(num) y(num) replace ]
 ```
 
+<img src="/figures/_stretch.png" width="30%">
 
-Stretch the object by `x(a)` and `y(b)` points:
+
+Stretch the object by factors `x(a)` and `y(b)`:
 
 $$ 
 x = x * (1 + a)
+
 y = y * (1 + b)
 $$
 
 ### shapes rotate
-
-<img src="/figures/_rotate.png" width="50%">
 
 
 
@@ -496,11 +502,14 @@ shapes rotate <yvar> <xvar> [if] [in], [ rotate(degrees) x0(num) y0(num) center 
 ```
 
 
-Rotate the shape by `rot(angle)` at points `x0(a)` and `y0(b)` points:
+<img src="/figures/_rotate.png" width="30%">
+
+
+Rotate the shape by `rot(angle)` at points `x0(a)` and `y0(b)`:
 
 $$ 
-x = (x - x0) * cos(angle) - (y - y0) * sin(angle)
-y = (x - x0) * sin(angle) + (y - y0) * cos(angle)
+x = (x - a) * cos(angle) - (y - b) * sin(angle)
+y = (x - a) * sin(angle) + (y - b) * cos(angle)
 $$
 
 By default $(a,b) = (0,0)$.
@@ -587,7 +596,6 @@ twoway ///
 
 ### shapes round
 
-<img src="/figures/_stretch.png" width="50%">
 
 
 Syntax:
@@ -596,9 +604,21 @@ Syntax:
 shapes round <yvar> <xvar> [if] [in], roundness(num) [ n(num) factor(num) genx(var) geny(var) genid(var) genorder(var) gensegvar(var) replace append ]
 ```
 
+<img src="/figures/_round.png" width="50%">
+
+This command will generate rounded edges with radius `roundness()`. The size of the rounding is determined by `factor()`. 
+
+NOTE: If `roundness()` is larger than the shape length, then usual edges might be drawn so calibrate carefully.
+
+The option `factor(1)` implies that center point of the arc is the exact middle of the edges. A larger factor moves the point away from the minor arc making it less curvy. If rounding is done on figures a large number of edges, e.g. hexagon, octagon, or higher, then reducing the rounding might fit better with the figure. So calibrate this option also carefully.
+
+
 This command will generate or overwrite five new variables: `_rx, _ry, _rid, _rorder, _segvar`, or their respective custom names.
 
 Each shape with rounded edges is assigned an `_rid` that is carried forward from the original shape `_id`. The shape is split into two segment types: lines and arcs, which are identitied by the `_segvar` variable, and `_rorder` is the drawing order of each segment variable. The `_rid`, `_segvar`, and `_rorder` give a unique sort and order that needs to be respected to draw the shapes correctly.
+
+
+TODO: Add examples.
 
 
 ### shapes area
