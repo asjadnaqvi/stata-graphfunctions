@@ -10,22 +10,27 @@
 # graphfunctions v1.6
 *(19 Nov 2025)*
 
-A suite of graph functions for Stata. The program is designed to be called by other programs, but it can be used as a standalone as well. The page will provide some minimum examples, but for the full scope, see the relevant help files.
+A suite of graph functions for Stata visualizations. The program modular blocks that allows users to build custom visualizations. Some examples on how to use these programs are defined below.
 
-Currently, this package contains:
+The package is currently *beta* and might still contains bugs and errors, and might still be missing all checks and balances. Please report these by opening an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
+
+This package contains the following programs:
 
 
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
 | [shapes](#shapes) | 1.4 | 19 Nov 2025 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area`, `shapes translate`, `shapes dilate`, `shapes stretch`, `shapes round` |
 | [arc](#arc) | 1.3 | 19 Nov 2025 | Draw major and minor arcs between two points |
-| [radscatter](#radscatter) | 1.0 | 19 Nov 2025 | Generate scatter points on arcs |
-| [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Generic text wrapper |
+| [radscatter](#radscatter) | 1.0 | 19 Nov 2025 | Generate scatter points and angles in polar coordinates |
+| [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapper for labels |
 | [catspline](#catspline) | 1.2 | 18 Feb 2025 | Catmull-Rom splines |
 
 
+In the pipeline:
 
-The programs here are designed/upgraded/bug-fixed on a needs basis, mostly to support other packages. If you have specific requests, or find major bugs, then please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
+- Options for frames, and temp frames.
+- Additional version control. Current program is v11 compatible but frames would imply v17 or higher.
+- More checks to individual programs.
 
 ## Installation
 
@@ -93,7 +98,7 @@ labsplit mylab, word(2) gen(newlab3)
 
 Code for figures:
 
-```
+```stata
 twoway (scatter y x, mlabel(mylab)   mlabsize(3)), title("Standard")
 twoway (scatter y x, mlabel(newlab1) mlabsize(3)), title("Wrapping")
 
@@ -119,7 +124,7 @@ Examples:
 
 ```stata
 clear
-set obs 5
+set obs 6
 set seed 2021
 
 gen x = runiformint(1,5)
@@ -155,7 +160,7 @@ Draw minor or major arcs between two points. The arc orientation and be switched
 Syntax:
 
 ```stata
-arc, x1(num) y1(num) x2(num) y2(num) [ radius(num) n(int) swap major genx(newvar) geny(newvar) replace ]
+arc, x1(num) y1(num) x2(num) y2(num) [ radius(num) n(int) swap major genx(newvar) geny(newvar) dropbase replace ]
 ```
 
 Examples:
@@ -226,6 +231,7 @@ twoway ///
 
 
 Syntax: 
+
 ```stata
 shapes circle, radius(num) [ x0(num) y0(num) n(int) rotate(degrees) genx(var) geny(var) genid(var) genorder(var) replace append ]
 ```
@@ -420,13 +426,27 @@ twoway ///
 
 ### shapes translate
 
+<img src="/figures/_translate.png" width="50%">
+
 Syntax:
 
 ```stata
 shapes translate <yvar> <xvar> [if] [in], [ x(num) y(num) genx(var) geny(var) replace ]
 ```
 
+Move the object by `x(a)` and `y(b)` points:
+
+$$ 
+x = x + a
+y = y + b
+$$
+
+
+
 ### shapes dilate
+
+<img src="/figures/_dilate.png" width="50%">
+
 
 Syntax:
 
@@ -434,8 +454,20 @@ Syntax:
 shapes dilate <yvar> <xvar> [if] [in], [ factor(num) genx(var) geny(var) replace ]
 ```
 
+Expand or reduce the object by `x(a)` and `y(b)` points:
+
+$$ 
+x = x * a
+y = y * b
+$$
+
+
+
 
 ### shapes stretch
+
+<img src="/figures/_stretch.png" width="50%">
+
 
 Syntax:
 
@@ -444,13 +476,34 @@ shapes stretch <yvar> <xvar> [if] [in], [ x(num) y(num) replace ]
 ```
 
 
+Stretch the object by `x(a)` and `y(b)` points:
+
+$$ 
+x = x * (1 + a)
+y = y * (1 + b)
+$$
+
 ### shapes rotate
+
+<img src="/figures/_rotate.png" width="50%">
+
+
 
 Syntax:
 
 ```stata
 shapes rotate <yvar> <xvar> [if] [in], [ rotate(degrees) x0(num) y0(num) center genx(var) geny(var) replace ]
 ```
+
+
+Rotate the shape by `rot(angle)` at points `x0(a)` and `y0(b)` points:
+
+$$ 
+x = (x - x0) * cos(angle) - (y - y0) * sin(angle)
+y = (x - x0) * sin(angle) + (y - y0) * cos(angle)
+$$
+
+By default $(a,b) = (0,0)$.
 
 
 Let's generate a basic shape:
@@ -534,11 +587,18 @@ twoway ///
 
 ### shapes round
 
+<img src="/figures/_stretch.png" width="50%">
+
+
 Syntax:
 
 ```stata
 shapes round <yvar> <xvar> [if] [in], roundness(num) [ n(num) factor(num) genx(var) geny(var) genid(var) genorder(var) gensegvar(var) replace append ]
 ```
+
+This command will generate or overwrite five new variables: `_rx, _ry, _rid, _rorder, _segvar`, or their respective custom names.
+
+Each shape with rounded edges is assigned an `_rid` that is carried forward from the original shape `_id`. The shape is split into two segment types: lines and arcs, which are identitied by the `_segvar` variable, and `_rorder` is the drawing order of each segment variable. The `_rid`, `_segvar`, and `_rorder` give a unique sort and order that needs to be respected to draw the shapes correctly.
 
 
 ### shapes area

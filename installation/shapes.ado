@@ -1,7 +1,7 @@
-*! shapes v1.4 (18 Nov 2025)
+*! shapes v1.4 (19 Nov 2025)
 *! Asjad Naqvi (asjadnaqvi@gmail.com)
 
-* v1.4 (18 Nov 2025): major upgrades to various functions. translate, dilate, stretch, round added.
+* v1.4 (19 Nov 2025): major upgrades to various functions. translate, dilate, stretch, round added.
 * v1.3 (05 Nov 2024): add append as sub for stack. Added square.
 * v1.2 (15 Oct 2024): added support for generating pies. added x0,y0 to control center points.
 * v1.1 (13 Oct 2024): Fixed a bug where an existing _N was resulting in additional rows being added below. This version tracks indices much better.
@@ -9,11 +9,7 @@
 
 
 
-
-**** shapes available
-
-
-
+// main rountine
 cap program drop shapes
 
 program define shapes
