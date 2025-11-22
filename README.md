@@ -140,6 +140,8 @@ twoway ///
 
 <img src="/figures/catspline1.png" width="75%">
 
+We can also close the loop by adding the `close` option:
+
 ```stata
 cap drop _id _x _y
 catspline y x, close 
@@ -151,6 +153,8 @@ twoway ///
 
 <img src="/figures/catspline2.png" width="75%">
 
+
+The Stata [spider](https://github.com/asjadnaqvi/stata-spider) package uses this function. 
 
 ## arc
 *(v1.3: 19 Nov 2025)*
@@ -222,6 +226,10 @@ twoway ///
 ```
 
 <img src="/figures/arc4.png" width="75%">
+
+
+The Stata [geoflow](https://github.com/asjadnaqvi/stata-geoflow) package uses this function. 
+
 
 
 ## shapes
