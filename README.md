@@ -690,6 +690,568 @@ radscatter [ numvar ] [if] [in], [ rotate(angle) radius(num) flip displace(num) 
 ```
 
 
+## Examples
+
+
+
+### Example 1: Custom radial bar plot with rounded edges and polar labels.
+
+This example was showcased in the Stata Switzerland 2025 conference (Bern, 21 Nov 2025).
+
+Load cleaned regional population file from Eurostat: 
+
+```stata
+use "https://github.com/asjadnaqvi/stata-spider/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+
+ren y2023 pop
+keep if nuts0=="CH"		// Keep Switzerland
+collapse (sum) pop, by(nuts2 nuts2_label) // keep NUTS2 regions 
+gsort -pop    	// reserve sort on population
+gen group = _n  // generate order variable
+```
+
+For each group generate a square of length 10, whose bottom-left point is at the origin (default):
+
+```stata
+levelsof nuts2
+local items = `r(r)'
+
+local i = 1
+
+while `i' <= `items' {
+	shapes square, len(10) append
+	local ++i
+}
+```
+
+Plot and check:
+
+```stata
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%80) lw(0.1) lc(white))	///
+	(scatteri 0 0) ///
+		, ///
+		legend(off) ///
+		xsize(1) ysize(1) aspect(1)		
+```
+
+<img src="/figures/example1_1.png" width="75%">
+
+Let's now stretch each square based on the population size:
+
+
+```stata
+summ pop, meanonly
+local mymax = r(max)	
+
+levelsof nuts2
+local items = `r(r)'
+	
+forval i = 1/`items' {
+	summ pop if group==`i', meanonly
+	local factor = r(max) / `mymax'
+	shapes stretch _y _x  if _id==`i', y(0.2) x(`factor') replace
+}
+```
+
+and plot it again:
+
+```stata
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%30) lw(0.1) lc(black))	///
+		, ///
+		legend(off) ///
+		xline(0) yline(0) ///
+		xlabel(-10 10) ylabel(-10 10) ///
+		xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/example1_2.png" width="75%">
+
+
+We can also move these blocks down by one point to center on the x-axis:
+
+```stata
+shapes translate _y _x, y(-1) replace	
+```
+
+We can also check this:
+
+```stata
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%30) lw(0.1) lc(black))	///
+		, ///
+		legend(off) ///
+		xline(0) yline(0) ///
+		xlabel(-10 10) ylabel(-10 10) ///
+		xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/example1_3.png" width="75%">
+
+
+We can now rotate and distribute the shapes on a circle:
+
+```stata
+levelsof nuts2
+local items = `r(r)'	
+	
+forval i = 1/`items' {	
+	local angle = (`i' - 1) / `items' * 360
+	shapes rotate _y _x if _id==`i', rotate(`angle') replace
+}	
+``` 
+
+Let's see what it looks like:
+
+```stata
+twoway ///
+	(area _y _x, cmissing(n) nodropbase fcolor(%30) lw(0.1) lc(black))	///
+		, ///
+		legend(off) ///
+		xline(0) yline(0) ///
+		xlabel(-10 10) ylabel(-10 10) ///
+		xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/example1_4.png" width="75%">
+
+
+
+We can now round the edges:
+
+```stata
+levelsof nuts2
+local items = `r(r)'	
+
+forval i = 1/`items' {
+	shapes round _y _x if _id==`i', r(0.5) n(20) append
+}	
+```
+
+```stata
+twoway ///
+	(area _ry _rx , cmissing(no) nodropbase fcolor(%40) lw(0.1) lc(black))	///
+		, ///
+		legend(off) ///
+		xline(0) yline(0) ///
+		xlabel(-10 10) ylabel(-10 10) ///
+		xsize(1) ysize(1) aspect(1)	
+```
+
+<img src="/figures/example1_5.png" width="75%">
+
+
+Let's add some colors:
+
+```stata
+levelsof group, local(lvls)
+local items = `r(r)'
+
+foreach x of local lvls {
+	
+	colorpalette CET L20, nograph n(`items') reverse
+	
+	local myarea `myarea' (area _ry _rx if _rid==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%80") lw(0.1) lc(black))
+		
+}
+
+
+twoway ///
+	`myarea'	///
+		, ///
+		legend(off) ///
+		xlabel(-10 10) ylabel(-10 10) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) ///
+				xsize(1) ysize(1) aspect(1)		
+```
+
+<img src="/figures/example1_6.png" width="75%">
+
+
+Which gives us a neat figure. But labels are missing. Since we don't want users to struggle with polar coordinates, we can use `radscatter` to generate the points:
+
+```stata
+radscatter pop, replace labangle rad(10) displace(2)
+```
+
+The option labangle gives us the angle that allows us to align the label to the ray from the original. Let's add this to our plot:
+
+```stata
+		
+levelsof group, local(lvls)
+local items = `r(r)'
+
+foreach x of local lvls {
+	
+	colorpalette CET L20, nograph n(`items') reverse
+		
+	local myarea `myarea' (area _ry _rx if _rid==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%80") lw(0.1) lc(black))
+	
+	summ _labangle if _radid==`x', meanonly
+	local myscatter `myscatter' (scatter _rady _radx if _radid==`x', mcolor(none) mlabel(nuts2_label) mlabangle(`r(mean)') mlabpos(0) mlabsize(2))
+	
+}
+
+
+twoway ///
+	`myarea'	///
+	`myscatter' ///
+		, ///
+		legend(off) ///
+		xlabel(-12 12) ylabel(-12 12) ///
+		xsize(1) ysize(1) aspect(1)		///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 
+```
+
+<img src="/figures/example1_7.png" width="75%">
+
+
+
+We can of course get rid of all the intermediate plots and do all the calculations and just plots the final figure. Or we can even create our own program that generate this plot type.
+
+
+### Example 2: Custom pie graph
+
+This example was showcased in the Stata Switzerland 2025 conference (Bern, 21 Nov 2025).
+
+
+Prepare the data (as above):
+
+
+```stata
+use "https://github.com/asjadnaqvi/stata-spider/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+
+ren y2023 pop
+keep if nuts0=="CH"		// Keep Switzerland
+collapse (sum) pop, by(nuts2 nuts2_label) // keep NUTS2 regions 
+gsort -pop    	// reserve sort on population
+gen group = _n  // generate order variable
+```
+
+
+Let's generate a pie for each NUTS2 where each pie has a fixed angle but the height is normalized to the `pop` variable and rotate by a certain angle:
+
+```stata		
+levelsof nuts2
+local items = `r(r)'
+						
+summ pop, meanonly
+local mymax = r(max)	
+	
+local shift = 0
+	
+forval i = 1/`items' {
+	
+	summ pop if group==`i', meanonly
+	local factor = (r(max) / `mymax') * 10
+	 			
+	shapes pie, start(0) end(60) rotate(`shift') n(30) rad(`factor') append
+
+	local _range = 270
+		
+	local shift = `shift' + `_range' / `=`items' - 1'
+	
+}
+```
+
+Test the plot:
+
+```stata
+twoway (area _y _x, cmissing(no) nodropbase fcolor(%30))	///
+	, ///
+	xsize(1) ysize(1) aspect(1)		///			
+		xlabel(-10 10) ylabel(-10 10) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 
+```
+
+<img src="/figures/example2_1.png" width="75%">
+
+
+Let's make it nicer:
+
+```stata
+local myarea
+
+levelsof _id, local(lvls) 
+local items = `r(r)'
+
+foreach x of local lvls {
+	colorpalette CET L20, nograph n(`items')
+	local myarea `myarea' (area _y _x if _id==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%100") lw(0.1) lc(black))
+		
+}
+			
+			
+twoway `myarea'	///
+	, ///
+	legend(off)	///
+	xsize(1) ysize(1) aspect(1)		///			
+		xlabel(-10 10) ylabel(-10 10) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 
+			
+```
+
+<img src="/figures/example2_2.png" width="75%">
+
+
+### Example 3: Custom radial race plot
+
+Prepare the data as above:
+
+```stata
+use "https://github.com/asjadnaqvi/stata-spider/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+
+ren y2023 pop
+keep if nuts0=="CH"		// Keep Switzerland
+collapse (sum) pop, by(nuts2 nuts2_label) // keep NUTS2 regions 
+gsort -pop    	// reserve sort on population
+gen group = _n  // generate order variable
+```
+
+Now we generate arcs whose radii decrease in size by a value of one. The maximum length of the arcs is capped till the 3rd quadrant, or 270 degrees:
+
+
+```stata
+summ pop, meanonly
+local mymax = r(max)	
+	
+
+levelsof nuts2
+local items = `r(r)'
+
+	
+forval i = 1/`items' {
+	
+	summ pop if group==`i', meanonly
+	local factor = (r(max) / `mymax') * 270
+	
+	local myradius = `items' + 5 - `i' 
+	
+	shapes pie, start(0) end(`factor') n(50) rad(`myradius') append dropbase flip rotate(90)
+
+}
+```
+
+Test what we have:
+
+```stata
+twoway (line _y _x, cmissing(no) nodropbase fcolor(%30))	///
+	, xsize(1) ysize(1) aspect(1)					
+```
+
+<img src="/figures/example3_1.png" width="75%">
+
+
+Add scatter points at the starting line:
+
+```stata
+levelsof group, local(lvls) 
+local items = `r(r)'
+		
+cap drop _sy _sx
+gen _sy = `items' + 5 - group 	if !missing(group)
+gen _sx = -0.2 					if !missing(group)
+
+cap drop _mylab
+gen _mylab = nuts2_label + " (" + string(pop, "%15.0fc") + ")" if !missing(group)
+```
+
+Make it epic:
+
+```stata
+summ pop, meanonly
+local mymax = r(max)	
+
+levelsof _id, local(lvls) 
+local items = `r(r)'
+
+foreach x of local lvls {
+	
+	summ pop if group==`x', meanonly
+	local mylwid = (r(max) / `mymax') * 0.7 + 0.3
+	
+	colorpalette CET L06, nograph n(`items') 
+	local mylines `mylines' (line _y _x if _id==`x', cmissing(no) nodropbase lcolor("`r(p`x')'%100") lw(`mylwid') )
+		
+}
+			
+			
+twoway ///
+	`mylines'	///
+	(scatter _sy _sx, mlabel(_mylab) mlabpos(9) mcolor(none) mlabsize(1.8) ) ///
+	, ///
+	legend(off)	///
+	xsize(1) ysize(1) aspect(1)		///			
+		xlabel(-10 10) ylabel(-10 10) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 
+						
+```
+
+<img src="/figures/example3_2.png" width="75%">
+
+
+### Example 4: Transformed shapes
+
+Prepare the data as above:
+
+
+```stata
+use "https://github.com/asjadnaqvi/stata-spider/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+
+ren y2023 pop
+keep if nuts0=="CH"		// Keep Switzerland
+collapse (sum) pop, by(nuts2 nuts2_label) // keep NUTS2 regions 
+gsort -pop    	// reserve sort on population
+gen group = _n  // generate order variable
+```
+
+Generate hexagons that are have radius normalized by the population. Also rotate them very slightly for the extra spiciness:
+
+```stata
+levelsof nuts2
+local items = `r(N)'
+
+local myrotate = 0					
+					
+summ pop, meanonly
+local mymax = r(max)	
+	
+
+forval i = 1/`items' {
+		
+	summ pop if group==`i', meanonly
+	local factor = (r(max) / `mymax') * 10
+	
+	shapes circle, rad(`factor') n(6) rotate(`myrotate')  append
+	
+	*local myrotate = `myrotate' + 2
+}
+```
+
+Plot and check:
+
+
+```stata
+twoway (area _y _x, cmissing(no) nodropbase fcolor(%30))	///
+	, xsize(1) ysize(1) aspect(1)
+```
+
+<img src="/figures/example4_1.png" width="75%">
+
+
+Improve the plot:
+
+```stata
+local myarea
+levelsof group, local(lvls) 
+local items = `r(N)'
+
+
+foreach x of local lvls {
+		colorpalette CET L20, nograph  n(`items')
+		
+		local myarea `myarea' (area _y _x if _id==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%100") lw(0.1) lc(white))
+}
+			
+				
+twoway `myarea'	///
+	, legend(off)	///
+	xsize(1) ysize(1) aspect(1)		///			
+		xlabel(-10 10) ylabel(-10 10) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 
+```
+
+<img src="/figures/example4_2.png" width="75%">
+
+
+Let's displace these shapes away from the origin, and rotate (or pivot) them on the origin:
+
+```
+levelsof _id, local(lvls)
+
+local myrot = 0
+
+foreach x of local lvls {
+	
+	shapes translate _y _x if _id==`x', x(15) replace
+	
+	shapes rotate _y _x if _id==`x', rotate(`myrot') replace
+	
+	local myrot = `myrot' + 20	
+}
+```
+
+And check the plot:
+
+```stata
+local myarea
+levelsof group, local(lvls) 
+local items = `r(N)'
+
+
+foreach x of local lvls {
+		colorpalette CET L20, nograph  n(`items')
+		
+		local myarea `myarea' (area _y _x if _id==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%100") lw(0.1) lc(white))
+}
+			
+			
+twoway `myarea'	///
+	, legend(off)	///
+	xsize(1) ysize(1) aspect(1)		///			
+		xlabel(-20 30) ylabel(-20 30) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 	
+```
+
+<img src="/figures/example4_3.png" width="75%">
+
+
+Let's round the edges for extra effects:
+
+```stata
+levelsof _id, local(lvls)
+
+foreach x of local lvls {
+	shapes round _y _x if _id==`x', round(1) n(20) factor(1.2) append	
+}
+```
+
+And plot the figure:
+
+```stata
+local myarea
+levelsof _rid, local(lvls) 
+local items = `r(r)'
+
+
+foreach x of local lvls {
+		colorpalette CET L20, nograph  n(`items')
+		
+		local myarea `myarea' (area _ry _rx if _rid==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%100") lw(0.1) lc(white))
+}
+			
+				
+twoway `myarea'	///
+	, legend(off)	///
+	xsize(1) ysize(1) aspect(1)		///			
+		xlabel(-20 20) ylabel(-20 20) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 
+
+```
+
+<img src="/figures/example4_4.png" width="75%">
+
+
+
 
 ## Feedback
 
