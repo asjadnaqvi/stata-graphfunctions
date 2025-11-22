@@ -10,7 +10,7 @@
 # graphfunctions v1.6
 *(19 Nov 2025)*
 
-A suite of graph functions for Stata visualizations. The program modular blocks that allows users to build custom visualizations. Some examples on how to use these programs are defined below.
+A suite of Stata visualization tools. The program contains modular blocks that allow users to build custom visualizations from the bottom up.
 
 The package is currently *beta* and might still contains bugs and errors, and might still be missing all checks and balances. Please report these by opening an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
 
