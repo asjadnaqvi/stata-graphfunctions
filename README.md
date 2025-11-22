@@ -448,10 +448,11 @@ Move the object by `x(a)` and `y(b)` points:
 
 $$ 
 x = x + a
-
-y = y + b
 $$
 
+$$
+y = y + b
+$$
 
 
 ### shapes dilate
@@ -471,7 +472,9 @@ Expand or reduce the object by factor `factor(a)`:
 
 $$ 
 x = x * a
+$$
 
+$$
 y = y * a
 $$
 
@@ -495,7 +498,9 @@ Stretch the object by factors `x(a)` and `y(b)`:
 
 $$ 
 x = x * (1 + a)
+$$
 
+$$
 y = y * (1 + b)
 $$
 
@@ -517,6 +522,9 @@ Rotate the shape by `rot(angle)` at points `x0(a)` and `y0(b)`:
 
 $$ 
 x = (x - a) * cos(angle) - (y - b) * sin(angle)
+$$
+`
+$$
 y = (x - a) * sin(angle) + (y - b) * cos(angle)
 $$
 
