@@ -6,6 +6,9 @@
 ---
 
 
+<img width="3000" height="1500" alt="graphfunctions_banner" src="https://github.com/user-attachments/assets/f001fa5c-cccf-40b7-9c05-525b28bc2ccc" />
+
+
 
 # graphfunctions v1.6
 *(19 Nov 2025)*
