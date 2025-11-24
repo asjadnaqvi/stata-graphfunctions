@@ -530,7 +530,7 @@ Rotate the shape by `rot(angle)` at points `x0(a)` and `y0(b)`:
 $$ 
 x = (x - a) * cos(angle) - (y - b) * sin(angle)
 $$
-`
+
 $$
 y = (x - a) * sin(angle) + (y - b) * cos(angle)
 $$
