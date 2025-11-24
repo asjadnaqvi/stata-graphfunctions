@@ -13,7 +13,7 @@
 # graphfunctions v1.6
 *(19 Nov 2025)*
 
-A modular grammar-of-graphics toolkit for Statadata visualizations.
+A modular grammar-of-graphics toolkit for Stata data visualizations.
 
 The program contains a set of programs that allow users to build custom visualizations from the bottom up.
 
