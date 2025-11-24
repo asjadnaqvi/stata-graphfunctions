@@ -1136,6 +1136,73 @@ twoway `myarea'	///
 <img src="/figures/example2_2.png" width="75%">
 
 
+Let modify and add scatter points:
+
+```stata
+cap drop _x _y _id _order	
+
+// predefine the angle
+local maxangle = 270
+local maxradius = 5
+	
+levelsof nuts2
+local items = `r(r)'
+					
+summ pop, meanonly
+local mymax = r(max)	
+
+local size = `maxangle' / `items'	
+
+local shift = 0
+	
+forval i = 1/`items' {
+	
+	summ pop if group==`i', meanonly
+	local factor = (r(max) / `mymax') * `maxradius'
+	 			
+	shapes pie, start(0) end(`size') rotate(`shift') n(30) rad(`factor') append
+
+	local shift = `shift' + `size' 
+}
+									
+								
+radscatter  pop if !missing(pop), replace start(0) end(`maxangle') radius(`maxradius') center displace(0.3)	labangle								
+			
+replace _labangle = _labangle + 90	if _radx < 0		
+replace _labangle = _labangle - 90	if _radx >= 0
+			
+local myarea
+local myscatter
+
+levelsof _id, local(lvls) 
+local items = `r(r)'
+
+foreach x of local lvls {
+	colorpalette CET L19, nograph n(`items') reverse
+	local myarea `myarea' (area _y _x if _id==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%100") lw(0.1) lc(black))
+	
+	summ _labangle if _radid==`x', meanonly
+	local myscatter `myscatter' (scatter _rady _radx if _radid==`x', mcolor(none) mlabel(nuts2_label) mlabangle(`r(mean)') mlabpos(0) mlabsize(2))
+	
+		
+}
+			
+			
+twoway ///
+	`myarea'	///
+	`myscatter'	///
+	, ///
+	legend(off)	///
+	xsize(1) ysize(1) aspect(1)		///			
+		xlabel(-5 5) ylabel(-5 5) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 
+```
+
+<img src="/figures/example2_3.png" width="75%">
+
+
+
 ### Example 3: Custom radial race plot
 
 Prepare the data as above:
@@ -1360,22 +1427,39 @@ foreach x of local lvls {
 And plot the figure:
 
 ```stata
+// specifying it here manually in case the code is run separate blocks
+// this value should equal the final one specified in the loop above
+
+local myrot = 175 
+
+radscatter if !missing(pop), replace radius(25) end(`myrot') labangle
+
+
 local myarea
+local myscatter
+
 levelsof _rid, local(lvls) 
 local items = `r(r)'
 
 
 foreach x of local lvls {
-		colorpalette CET L20, nograph  n(`items')
+		colorpalette matplotlib spring, nograph  n(`items') reverse
 		
-		local myarea `myarea' (area _ry _rx if _rid==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%100") lw(0.1) lc(white))
+		local myarea `myarea' (area _ry _rx if _rid==`x', cmissing(no) nodropbase fi(100) fcolor("`r(p`x')'%100") lw(0.1) lc(gs4))
+		
+	summ _labangle if _radid==`x', meanonly
+	local myscatter `myscatter' (scatter _rady _radx if _radid==`x', mcolor(none) mlabel(nuts2_label) mlabangle(`r(mean)') mlabpos(0) mlabsize(1.8))
+			
+		
 }
 			
-				
-twoway `myarea'	///
+
+twoway ///
+	`myarea'	///
+	`myscatter'	///
 	, legend(off)	///
 	xsize(1) ysize(1) aspect(1)		///			
-		xlabel(-20 20) ylabel(-20 20) ///
+		xlabel(-26 26) ylabel(-26 26) ///
 			xscale(off) yscale(off)	///
 			xlabel(, nogrid) ylabel(, nogrid) 
 

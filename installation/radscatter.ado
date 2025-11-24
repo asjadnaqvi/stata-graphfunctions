@@ -53,14 +53,16 @@ quietly {
 	cap generate double `hvar' = .
 	
 
-	replace `idvar' = _n if !missing(`varlist')
+	replace `idvar' = .
 	
 
 	if "`varlist'" != "" {    
+		replace `idvar' = _n if !missing(`varlist')
 		count if !missing(`varlist') & `touse'
 		local items = `r(N)'
 	}
 	else {
+		replace `idvar' = _n if `touse'
 		count if !missing(`idvar')
 		local items = `r(N)'
 	}
