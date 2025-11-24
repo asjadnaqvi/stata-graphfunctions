@@ -13,18 +13,27 @@
 {marker syntax}{title:Syntax}
 
 {p 8 15 2}
-{cmd:radscatter} {opt [} {opt numvar} {opt ]} {ifin}, {opt [} {opt ro:tate(angle)} {opt rad:ius(num)} {opt flip} {opt dis:place(num)} {opt genx(str)} {opt geny(str)} {opt gena:ngle(var)} {opt genh:eight(var)} {opt replace} {opt ]}
+{cmd:radscatter} {opt [} {opt numvar} {opt ]} {ifin}, {opt [} {opt s:tart(angle)}  {opt e:nd(angle)} {opt center} {opt ro:tate(angle)} {opt rad:ius(num)} {opt flip}
+      {opt dis:place(num)} {opt genx(str)} {opt geny(str)} {opt gena:ngle(var)} {opt genh:eight(var)} {opt replace} {opt ]}
 
 {p 8 15 2}
-If a numerical variable is specified after {cmd:radscatter}, then scatter heights will based on the values of the variable.
-If scatter height is supposed to be fixed for all points then use the {opt if} or {opt in} options.
+If a numerical variable is specified after {cmd:radscatter}, then scatter heights will based on the values of the variable normalized by {opt radius()}.
+For fixed heights, simply use {cmd:radscatter} with {opt if} or {opt in} options.
+Note that for {it:n} items, the program will generate {it:n-1} points.
 
 {synoptset 28 tabbed}{...}
 {synopthdr}
 {synoptline}
 {p2coldent : {opt rad:ius(num)}}Radius determines the height of the points.{p_end}
 
-{p2coldent : {opt ro:tate(angle)}}Rotate the points.{p_end}
+{p2coldent : {opt s:tart(angle)}}Starting angle. Default is {opt start(0)}.{p_end}
+
+{p2coldent : {opt e:nd(angle)}}Ending angle. Default is {opt end(360)}.{p_end}
+
+{p2coldent : {opt center}}Center the points on the arc segment. The {it:n-1} points generated for {it:n} items 
+are placed at the beginning of the arc which might not be optimal for some figures, e.g. custom pie charts.{p_end}
+
+{p2coldent : {opt ro:tate(angle)}}Rotate the points on the origin.{p_end}
 
 {p2coldent : {opt flip}}Flip the draw order to clockwise.{p_end}
 
@@ -56,7 +65,7 @@ Version      : {bf:radscatter} v1.0 in {stata help graphfunctions:graphfunctions
 This release : 19 Nov 2025
 First release: 19 Nov 2025
 Repository   : {browse "https://github.com/asjadnaqvi/stata-graphfunctions":GitHub}
-Keywords     : Stata, graph, arcs
+Keywords     : Stata, graph, radial, scatter, polar
 License      : {browse "https://opensource.org/licenses/MIT":MIT}
 
 Author       : {browse "https://github.com/asjadnaqvi":Asjad Naqvi}

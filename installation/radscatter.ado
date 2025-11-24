@@ -15,7 +15,7 @@ program define radscatter
 
 	version 11
 
-    syntax [ varlist(max=1 default=none numeric) ] [if] [in], [ ROtate(real 0) RADius(numlist max=1 >=0) flip DISplace(real 0) labangle genid(string) genx(string) geny(string) GENAngle(string) GENHeight(string) replace]
+    syntax [ varlist(max=1 default=none numeric) ] [if] [in], [ ROtate(real 0) center Start(real 0) End(real 360) RADius(numlist max=1 >=0) flip DISplace(real 0) labangle genid(string) genx(string) geny(string) GENAngle(string) GENHeight(string) replace]
 
 
 	marksample touse, strok novarlist
@@ -66,13 +66,31 @@ quietly {
 	}
 
 
-	local ro = (`rotate') * _pi / 180  	
-	replace `avar' = ((`idvar' - 1) * 2 * _pi / `items') + `ro'  if `touse'
+	if "`flip'" == "" {
+		local mypi = _pi
+	}
+	else {
+		local mypi = -_pi
+	}
+
+	local ro = (`rotate') 	* `mypi' / 180  	
+	local st = (`start') 	* `mypi' / 180
+	local en = (`end') 		* `mypi' / 180
+	local span = `en' - `st'
+
+	// predefine rotation offset for centering
+	local rocenter = 0
+
+	if "`center'" != "" {
+		local rocenter = (((`start' + `end') / `items') / 2) * `mypi' / 180
+	}
+	
+	replace `avar' = ((`idvar' - 1) * `span' / (`items')) + `st' + `rocenter' + `ro'  if `touse'
 
 	if "`radius'" == "" local radius = 5
 	
-	// note displace is absolute and done after transformation to get consistent results. In percentage terms we get different displacements
-	
+	// note: displace is absolute and done after transformation to get consistent results. In percentage terms we get different displacements
+
 	if "`varlist'" != "" {
 		summ `varlist', meanonly
 		replace `hvar' = (`radius' * (`varlist' / `r(max)')) + `displace'  if `touse'
@@ -112,4 +130,4 @@ quietly {
 	
 	*/
 	
-end	
+end

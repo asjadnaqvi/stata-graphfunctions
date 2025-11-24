@@ -708,17 +708,120 @@ twoway ///
 Syntax:
 
 ```stata
-radscatter [ numvar ] [if] [in], [ rotate(angle) radius(num) flip displace(num) genx(str) geny(str) genangle(var) genheight(var) replace ]
-
+radscatter [ numvar ] [if] [in], [ start(angle) end(angle) center rotate(angle) radius(num) flip displace(num) genx(str) geny(str) genangle(var) genheight(var) replace ]
 ```
 
 If `radscatter <variable>` is specified, the the variable values will be used to normalize the heights for the given `radius()`. The `displace()` option, displaced the final coordinates by the specified number of points. 
 
 If the heights are expected to stay exactly the same for all the points determined by `radius()` and `displace()`, then just specify `radscatter if !missing(<var>), <options>`.
 
-More features coming to this program soon!
+Prepare the data
+
+```stata
+use "https://github.com/asjadnaqvi/stata-graphfunctions/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+
+ren y2023 pop
+keep if nuts0=="CH"		
+collapse (sum) pop, by(nuts2 nuts2_label) 
+gsort -pop    	
+gen group = _n  
+```
 
 
+```stata
+radscatter if !missing(pop), replace
+twoway (scatter _rady _radx, mlabel(nuts2_label)), aspect(1)
+```
+
+<img src="/figures/radscatter1.png" width="75%">
+
+```stata
+radscatter pop, replace
+twoway (scatter _rady _radx, mlabel(nuts2_label)), aspect(1)
+```
+
+<img src="/figures/radscatter2.png" width="75%">
+
+```stata
+radscatter pop, replace labangle
+
+
+levelsof _radid, local(lvls)
+
+foreach x of local lvls {
+	summ _labangle if _radid==`x', meanonly
+	local myscatter `myscatter' (scatter _rady _radx if _radid==`x', mlabel(nuts2_label) mlabangle(`r(mean)') mlabpos(0))
+}
+
+twoway ///
+	`myscatter' ///
+	, aspect(1) legend(off) xlabel(-6(2)6) ylabel(-6(2)6) xsize(1) ysize(1)
+```
+
+<img src="/figures/radscatter3.png" width="75%">
+
+
+```stata
+radscatter  if !missing(pop), replace start(0) end(90) 
+
+twoway (scatter _rady _radx ), aspect(1) xsize(1) ysize(1) xlabel(0(1)5) ylabel(0(1)5)
+```
+<img src="/figures/radscatter4.png" width="75%">
+
+
+```stata
+radscatter  pop if !missing(pop), replace start(0) end(90) center 
+
+twoway (scatter _rady _radx, mlabel(_radid) ), aspect(1) xsize(1) ysize(1) xlabel(0(1)5) ylabel(0(1)5)
+```
+
+<img src="/figures/radscatter5.png" width="75%">
+
+
+Let's write a more complex script, that one can also easily adapt:
+
+```stata
+cap drop _x _y _id _order	
+
+// predefine the angle
+local maxangle = 90
+	
+levelsof nuts2
+local items = `r(r)'
+					
+summ pop, meanonly
+local mymax = r(max)	
+
+local size = `maxangle' / `items'	
+
+local shift = 0
+	
+forval i = 1/`items' {
+	
+	summ pop if group==`i', meanonly
+	local factor = (r(max) / `mymax') * 5
+	 			
+	shapes pie, start(0) end(`size') rotate(`shift') n(30) rad(`factor') append
+
+	local shift = `shift' + `size' 
+}
+									
+								
+radscatter  pop if !missing(pop), replace start(0) end(`maxangle') center displace(0.2)									
+												
+twoway ///
+	(area _y _x, cmissing(no) nodropbase fcolor(%30))	///
+	(scatter _rady _radx, mlabel(_radid))	///
+	, ///
+	legend(off)	///
+	xsize(1) ysize(1) aspect(1)		///			
+		xlabel(0 5) ylabel(0 5) ///
+			xscale(off) yscale(off)	///
+			xlabel(, nogrid) ylabel(, nogrid) 	
+```
+
+
+<img src="/figures/radscatter6.png" width="75%">
 
 
 ## Examples
