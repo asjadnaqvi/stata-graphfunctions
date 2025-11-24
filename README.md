@@ -670,7 +670,7 @@ twoway (area _y _x, fcolor(%90) cmissing(n) nodropbase)	///
 <img src="/figures/area1.png" width="75%">
 
 
-calculate the areas
+Calculate the areas
 
 ```stata
 shapes area _y _x, by(_id) 
@@ -711,6 +711,14 @@ Syntax:
 radscatter [ numvar ] [if] [in], [ rotate(angle) radius(num) flip displace(num) genx(str) geny(str) genangle(var) genheight(var) replace ]
 
 ```
+
+If `radscatter <variable>` is specified, the the variable values will be used to normalize the heights for the given `radius()`. The `displace()` option, displaced the final coordinates by the specified number of points. 
+
+If the heights are expected to stay exactly the same for all the points determined by `radius()` and `displace()`, then just specify `radscatter if !missing(<var>), <options>`.
+
+More features coming to this program soon!
+
+
 
 
 ## Examples
@@ -1084,7 +1092,7 @@ cap drop _mylab
 gen _mylab = nuts2_label + " (" + string(pop, "%15.0fc") + ")" if !missing(group)
 ```
 
-Make it epic:
+Add colors and labels:
 
 ```stata
 summ pop, meanonly
@@ -1134,7 +1142,7 @@ gsort -pop    	// reserve sort on population
 gen group = _n  // generate order variable
 ```
 
-Generate hexagons that are have radius normalized by the population. Also rotate them very slightly for the extra spiciness:
+Generate hexagons that are have radius normalized by the population:
 
 ```stata
 levelsof nuts2
@@ -1147,13 +1155,10 @@ local mymax = r(max)
 	
 
 forval i = 1/`items' {
-		
 	summ pop if group==`i', meanonly
 	local factor = (r(max) / `mymax') * 10
 	
 	shapes circle, rad(`factor') n(6) rotate(`myrotate')  append
-	
-	*local myrotate = `myrotate' + 2
 }
 ```
 
@@ -1168,13 +1173,12 @@ twoway (area _y _x, cmissing(no) nodropbase fcolor(%30))	///
 <img src="/figures/example4_1.png" width="75%">
 
 
-Improve the plot:
+Add colors:
 
 ```stata
 local myarea
 levelsof group, local(lvls) 
 local items = `r(N)'
-
 
 foreach x of local lvls {
 		colorpalette CET L20, nograph  n(`items')
@@ -1211,7 +1215,7 @@ foreach x of local lvls {
 }
 ```
 
-And check the plot:
+And test the plot:
 
 ```stata
 local myarea
@@ -1237,7 +1241,7 @@ twoway `myarea'	///
 <img src="/figures/example4_3.png" width="75%">
 
 
-Let's round the edges for extra effects:
+Let's round the edges as well:
 
 ```stata
 levelsof _id, local(lvls)
