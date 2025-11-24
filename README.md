@@ -761,30 +761,33 @@ twoway ///
 <img src="/figures/radscatter3.png" width="75%">
 
 
+Use a custom range:
+
 ```stata
 radscatter  if !missing(pop), replace start(0) end(90) 
-
-twoway (scatter _rady _radx ), aspect(1) xsize(1) ysize(1) xlabel(0(1)5) ylabel(0(1)5)
+twoway (scatter _rady _radx, mlabel(_radid) ), aspect(1) xsize(1) ysize(1) xlabel(0(1)5) ylabel(0(1)5)
 ```
 <img src="/figures/radscatter4.png" width="75%">
 
 
-```stata
-radscatter  pop if !missing(pop), replace start(0) end(90) center 
+Center the points on the arcs:
 
+```stata
+radscatter  if !missing(pop), replace start(0) end(90) center 
 twoway (scatter _rady _radx, mlabel(_radid) ), aspect(1) xsize(1) ysize(1) xlabel(0(1)5) ylabel(0(1)5)
 ```
 
 <img src="/figures/radscatter5.png" width="75%">
 
 
-Let's write a more complex script, that one can also easily adapt:
+Let's combine `shapes pie` + `radscatter`, to generate a script that one can also easily adapt:
 
 ```stata
 cap drop _x _y _id _order	
 
 // predefine the angle
 local maxangle = 90
+local maxradius = 5
 	
 levelsof nuts2
 local items = `r(r)'
@@ -799,7 +802,7 @@ local shift = 0
 forval i = 1/`items' {
 	
 	summ pop if group==`i', meanonly
-	local factor = (r(max) / `mymax') * 5
+	local factor = (r(max) / `mymax') * `maxradius'
 	 			
 	shapes pie, start(0) end(`size') rotate(`shift') n(30) rad(`factor') append
 
@@ -807,7 +810,7 @@ forval i = 1/`items' {
 }
 									
 								
-radscatter  pop if !missing(pop), replace start(0) end(`maxangle') center displace(0.2)									
+radscatter  pop if !missing(pop), replace start(0) end(`maxangle') radius(`maxradius') center displace(0.2)									
 												
 twoway ///
 	(area _y _x, cmissing(no) nodropbase fcolor(%30))	///
