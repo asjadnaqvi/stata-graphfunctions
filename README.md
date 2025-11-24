@@ -6,7 +6,9 @@
 ---
 
 
-<img width="3000" height="1500" alt="graphfunctions_banner" src="https://github.com/user-attachments/assets/f001fa5c-cccf-40b7-9c05-525b28bc2ccc" />
+<img width="100%" alt="graphfunctions_banner" src="https://github.com/user-attachments/assets/bad6ac20-65bd-4782-b60e-b9e8edb02ea3" />
+
+
 
 
 
