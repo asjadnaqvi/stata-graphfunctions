@@ -584,7 +584,7 @@ twoway ///
 		xlabel(-10(2)10) ylabel(-10(2)10) xsize(1) ysize(1) aspect(1)	
 ```
 
-<img src="/figures/rotate2_1.png" width="75%">
+<img src="/figures/rotate2.png" width="75%">
 
 
 ```stata
