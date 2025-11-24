@@ -724,7 +724,7 @@ This example was showcased in the Stata Switzerland 2025 conference (Bern, 21 No
 Load cleaned regional population file from Eurostat: 
 
 ```stata
-use "https://github.com/asjadnaqvi/stata-spider/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+use "https://github.com/asjadnaqvi/stata-graphfunctions/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
 
 ren y2023 pop
 keep if nuts0=="CH"		// Keep Switzerland
@@ -945,7 +945,7 @@ Prepare the data (as above):
 
 
 ```stata
-use "https://github.com/asjadnaqvi/stata-spider/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+use "https://github.com/asjadnaqvi/stata-graphfunctions/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
 
 ren y2023 pop
 keep if nuts0=="CH"		// Keep Switzerland
@@ -1027,7 +1027,7 @@ twoway `myarea'	///
 Prepare the data as above:
 
 ```stata
-use "https://github.com/asjadnaqvi/stata-spider/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+use "https://github.com/asjadnaqvi/stata-graphfunctions/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
 
 ren y2023 pop
 keep if nuts0=="CH"		// Keep Switzerland
@@ -1125,7 +1125,7 @@ Prepare the data as above:
 
 
 ```stata
-use "https://github.com/asjadnaqvi/stata-spider/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
+use "https://github.com/asjadnaqvi/stata-graphfunctions/blob/main/data/demo_r_pjangrp3_clean.dta?raw=true", clear
 
 ren y2023 pop
 keep if nuts0=="CH"		// Keep Switzerland
