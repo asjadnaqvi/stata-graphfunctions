@@ -1,5 +1,5 @@
 v 1.6
-d {bf:GRAPHFUNCTIONS}: A suite of data visualizations tools.
+d {bf:GRAPHFUNCTIONS}: A modular grammar-of-graphics toolkit for Stata data visualizations.
 d
 d Requires: Stata version 11 or higher.
 d

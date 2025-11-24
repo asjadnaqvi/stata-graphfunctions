@@ -5,9 +5,9 @@
 
 {hline}
 
-{it:(Back to {stata help graphfunctions})}
+{it:(back to {stata help graphfunctions})}
 
-{title:catspline}: A program for generating {browse "https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline":Catmull-Rom splines} for a set of points.
+{title:catspline}: {it:A program for generating {browse "https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline":Catmull-Rom splines}.}
 
 The program inputs two numeric variables and outputs four variables ({it:_id, _order, _x, _y}).
 

@@ -5,9 +5,9 @@
 
 {hline}
 
-{it:(Back to {stata help graphfunctions})}
+{it:(back to {stata help graphfunctions})}
 
-{title:shapes}: A program for generating, transforming, and calculating features of shapes.
+{title:shapes}: {it:A set of programs for generating, transforming, and calculating features of shapes.}
 
 {it:Notes:}
 1. {cmd:shape} can also be used as a substitute for {cmd:shapes}.
@@ -63,7 +63,9 @@ Calculating shape features:
 {cmd:shapes} area y x, {opt by(variable)} {cmd:[} {help shapes##area:{it:area options}} {cmd:]} 
 
 
-{marker circle}{title:circle}
+{marker circle}{title:circle} ({it:back to {help shapes##syntax:top}})
+
+
 
 {p 4 15 2}
 {cmd:shapes} circle, {opt rad:ius(num)} {cmd:[} {opt x0(num)} {opt y0(num)} {opt n(int)} {opt ro:tate(degrees)} {opt genx(var)} {opt geny(var)} {opt genid(var)} {opt genorder(var)} {opt replace} {opt append} {cmd:]} 
@@ -94,7 +96,7 @@ Calculating shape features:
 {synoptline}
 
 
-{marker pie}{title:pie}
+{marker pie}{title:pie} ({it:back to {help shapes##syntax:top}})
 
 {p 4 15 2}
 {cmd:shapes} pie, {opt rad:ius(num)} {opt end(degrees)} {cmd:[} {opt start(degrees)} {opt x0(num)} {opt y0(num)} {opt n(int)} {opt ro:tate(degrees)} {opt dropbase} {opt flip}
@@ -134,7 +136,7 @@ Calculating shape features:
 {synoptline}
 
 
-{marker square}{title:square}
+{marker square}{title:square} ({it:back to {help shapes##syntax:top}})
 
 {p 4 15 2}
 {cmd:shapes} square, {cmd:[} {opt len:gth(num)} {opt x0(num)} {opt y0(num)} {opt ro:tate(degrees)} {opt genx(var)} {opt geny(var)} {opt genid(var)} {opt genorder(var)} {opt replace} {opt append} {cmd:]} 
@@ -165,7 +167,7 @@ For more advanced rotations, use the {cmd:shapes rotate} command.{p_end}
 {synoptline}
 
 
-{marker translate}{title:translate}
+{marker translate}{title:translate} ({it:back to {help shapes##syntax:top}})
 
 {p 4 15 2}
 {cmd:shapes} translate <yvar> <xvar> {ifin}, {cmd:[} {opt x(num)} {opt y(num)} {opt genx(var)} {opt geny(var)} {opt replace} {cmd:]} 
@@ -186,7 +188,7 @@ For more advanced rotations, use the {cmd:shapes rotate} command.{p_end}
 {synoptline}
 
 
-{marker dilate}{title:dilate}
+{marker dilate}{title:dilate} ({it:back to {help shapes##syntax:top}})
 
 {p 4 15 2}
 {cmd:shapes} dilate <yvar> <xvar> {ifin}, {cmd:[} {opt f:actor(num)} {opt genx(var)} {opt geny(var)} {opt replace} {cmd:]} 
@@ -205,7 +207,7 @@ For more advanced rotations, use the {cmd:shapes rotate} command.{p_end}
 {synoptline}
 
 
-{marker stretch}{title:stretch}
+{marker stretch}{title:stretch} ({it:back to {help shapes##syntax:top}})
 
 {p 4 15 2}
 {cmd:shapes} stretch <yvar> <xvar> {ifin}, {cmd:[} {opt x(num)} {opt y(num)} {opt replace} {cmd:]} 
@@ -222,7 +224,7 @@ For more advanced rotations, use the {cmd:shapes rotate} command.{p_end}
 {synoptline}
 
 
-{marker rotate}{title:rotate}
+{marker rotate}{title:rotate} ({it:back to {help shapes##syntax:top}})
 
 {p 4 15 2}
 {cmd:shapes} rotate <yvar> <xvar> {ifin}, {cmd:[} {opt ro:tate(degrees)} {opt x0(num)} {opt y0(num)} {opt center} {opt genx(var)} {opt geny(var)} {opt replace} {cmd:]} 
@@ -248,7 +250,7 @@ For more advanced rotations, use the {cmd:shapes rotate} command.{p_end}
 {synoptline}
 
 
-{marker round}{title:round}
+{marker round}{title:round} ({it:back to {help shapes##syntax:top}})
 
 {p 4 15 2}
 {cmd:shapes} round <yvar> <xvar> {ifin}, {opt r:oundness(num)} {cmd:[} {opt n(num)} {opt f:actor(num)} {opt genx(var)} {opt geny(var)} {opt genid(var)} {opt genorder(var)} {opt gensegvar(var)} {opt replace} {opt append}  {cmd:]} 
@@ -262,21 +264,20 @@ with a circle.{p_end}
 
 {p2coldent : {opt n(num)}}Number of points to generate for each rounded edge. Default is {opt n(20)}.{p_end}
 
-{p2coldent : {opt f:actor(num)}}Factor is the displacement of the point which is used as a reference to draw the arc of size {opt r()}.
-The default here is kept at {opt f(1.3)}. If the edges are not 90 degrees, especially higher, 
-then this might make the rounded part look like it is bulging out. In this case, this parameter
-can be used for fine-tuning the figure.{p_end}
+{p2coldent : {opt f:actor(num)}}Factor is the displacement of the point which is used as a reference to draw the arc of size {opt roundness()}.
+The default here is {opt f(1.3)}. If the edges are not meeting at 90 degree or higher angle, 
+then this might make the rounded part bulge out. In this case, this parameter can be used for fine-tuning the amount of roundness.{p_end}
 
 
 {p2coldent : {opt genx(var)}}Custom name for the {opt _rx} variable.{p_end}
 
 {p2coldent : {opt geny(var)}}Custom name for the {opt _ry} variable.{p_end}
 
-{p2coldent : {opt genorder(var)}}Custom name for the {opt _rorder} variable.{p_end}
-
 {p2coldent : {opt genid(var)}}Custom name for the {opt _rid} variable.{p_end}
 
-{p2coldent : {opt gensegvar(var)}}Custom name for the {opt _rsegvar} variable. This is the order of drawing for each shape segment.{p_end}
+{p2coldent : {opt gensegvar(var)}}Custom name for the {opt _rsegvar} variable. This is the order of each shape segment.{p_end}
+
+{p2coldent : {opt genorder(var)}}Custom name for the {opt _rorder} variable.{p_end}
 
 {p2coldent : {opt replace}}Replace the variables.{p_end}
 
@@ -284,7 +285,7 @@ can be used for fine-tuning the figure.{p_end}
 {synoptline}
 
 
-{marker area}{title:area}
+{marker area}{title:area} ({it:back to {help shapes##syntax:top}})
 
 {p 4 15 2}
 {cmd:shapes} area <yvar> <xvar>, {cmd:[} {opt by(var} {opt gen:erate(var)} {opt replace} {cmd:]} 

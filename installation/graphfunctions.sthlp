@@ -4,19 +4,16 @@
 {right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions v1.6 (GitHub)}}
 
 
-{title:GRAPHFUNCTIONS} 
+{title:GRAPHFUNCTIONS}: {it:A modular grammar-of-graphics toolkit for Stata data visualizations.}
 
-{p 4 4 2}
 This package contains the following programs:
 
 {hline}
-
 {stata help shapes:shapes}     v1.4 (19 Nov 2025)  Create and tranform shapes.
 {stata help arc:arc}        v1.3 (19 Nov 2025)  Draw an arc between two points.
 {stata help radscatter:radscatter} v1.0 (19 Nov 2025)  Generate scatter points on a circle.
 {stata help labsplit:labsplit}   v1.1 (08 Oct 2024)  Various options for wrapping labels.
 {stata help catspline:catspline}  v1.2 (18 Feb 2025)  Generate Catmull-Rom splines.
-
 {hline}
 
 

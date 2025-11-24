@@ -5,9 +5,9 @@
 
 {hline}
 
-{it:(Back to {stata help graphfunctions})}
+{it:(back to {stata help graphfunctions})}
 
-{title:arc}: A program for generating arcs between two points. 
+{title:arc}: {it:A program for generating custom arcs.}
 
 The program inputs two pairs of coordinates ({it:x1, y1}) and ({it:x2, y2}) and outputs points for the arc segment in variables {it:_x, _y}.
 The program is {stata help return:r-class} so type {stata return list} after running the command to see the stored locals.

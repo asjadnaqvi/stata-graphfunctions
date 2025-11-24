@@ -5,9 +5,9 @@
 
 {hline}
 
-{it:(Back to {stata help graphfunctions})}
+{it:(back to {stata help graphfunctions})}
 
-{title:radscatter}: A program for radial scatter points. 
+{title:radscatter}: {it:A program for scatter points in polar coordinates.} 
 
 
 {marker syntax}{title:Syntax}
