@@ -10,8 +10,6 @@
 
 
 
-
-
 # graphfunctions v1.6
 *(19 Nov 2025)*
 
@@ -478,11 +476,11 @@ shapes dilate <yvar> <xvar> [if] [in], [ factor(num) genx(var) geny(var) replace
 Expand or reduce the object by factor `factor(a)`:
 
 $$ 
-x = x * a
+x = x \times a
 $$
 
 $$
-y = y * a
+y = y \times a
 $$
 
 
@@ -504,11 +502,11 @@ shapes stretch <yvar> <xvar> [if] [in], [ x(num) y(num) replace ]
 Stretch the object by factors `x(a)` and `y(b)`:
 
 $$ 
-x = x * (1 + a)
+x = x \times (1 + a)
 $$
 
 $$
-y = y * (1 + b)
+y = y \times (1 + b)
 $$
 
 ### shapes rotate
@@ -528,11 +526,11 @@ shapes rotate <yvar> <xvar> [if] [in], [ rotate(degrees) x0(num) y0(num) center 
 Rotate the shape by `rot(angle)` at points `x0(a)` and `y0(b)`:
 
 $$ 
-x = (x - a) * cos(angle) - (y - b) * sin(angle)
+x = (x - a) \times cos(angle) - (y - b) \times sin(angle)
 $$
 
 $$
-y = (x - a) * sin(angle) + (y - b) * cos(angle)
+y = (x - a) \times sin(angle) + (y - b) \times cos(angle)
 $$
 
 By default $(a,b) = (0,0)$.
@@ -1424,7 +1422,7 @@ foreach x of local lvls {
 }
 ```
 
-And plot the figure:
+Generate the scatter points and plot the figure:
 
 ```stata
 // specifying it here manually in case the code is run separate blocks
@@ -1462,11 +1460,9 @@ twoway ///
 		xlabel(-26 26) ylabel(-26 26) ///
 			xscale(off) yscale(off)	///
 			xlabel(, nogrid) ylabel(, nogrid) 
-
 ```
 
 <img src="/figures/example4_4.png" width="75%">
-
 
 
 
