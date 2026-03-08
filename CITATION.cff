@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+authors:
+- family-names: "Naqvi"
+  given-names: "Asjad"
+title: "Stata package ``graphfunctions''"
+version: 1.6
+date-released: 2025-11-19
+url: "https://github.com/asjadnaqvi/stata-graphfunctions"
