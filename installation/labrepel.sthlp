@@ -1,6 +1,6 @@
 {smcl}
 {* 08Mar2026}{...}
-{hi:help labrepel}{...}
+{hi:help labrepel v1.0}{...}
 {right:{browse "https://github.com/asjadnaqvi/stata-graphfunctions":graphfunctions (GitHub)}}
 
 {hline}
@@ -14,13 +14,16 @@ The command takes a y-x coordinate pair and a label variable, then creates adjus
 It is designed for crowded scatter plots where labels overlap and manual adjustment is not practical.
 
 
+{p 4 4 2}
+This program is currently in {it:beta}. It is inspired by R ggrepel function, and uses a force-directed layout algorithm for label placement.
+
+
 {marker syntax}{title:Syntax}
 
-
-{cmd:labrepel} {it:yvar xvar} {ifin}, {opt lab:el}({varname})
-		{cmd:[} {opt boxpad:ding(num)} {opt push(num)}{opt pull(num)} {opt damping(num)} {opt cooling(num)} {opt maxit:er(int)} {opt maxt:ime(num)} {opt maxo:verlaps(int)} 
-		  {opt maxd:isplacement(num)} {opt nudgex(num)} {opt nudgey(num)} {opt dir:ection(str)} {opt seed(int)} {opt jitter(num)} {opt xlim:it(min max)} {opt ylim:it(min max)}
-		  {opt xsize(num)} {opt ysize(num)} {opt plotxs:ize(num)} {opt plotys:ize(num)} {opt mlabs:ize(num)} {opt hjust(num)} {opt vjust(num)} {opt center} {opt nodetail} {cmd:]} 
+{cmd:labrepel} {it:yvar xvar} {ifin}, {opt lab:el(varname)}
+		{cmd:[} {opt boxpad:ding(num)} {opt push(num)} {opt pull(num)} {opt damp:ing(num)} {opt cool:ing(num)} {opt maxit:er(int)} {opt maxt:ime(num)} {opt maxo:verlaps(int)} 
+		  {opt maxdisp:lacement(num)} {opt nudgex(num)} {opt nudgey(num)} {opt dir:ection(str)} {opt seed(int)} {opt jit:ter(num)} {opt xlim:it(min max)} {opt ylim:it(min max)}
+		  {opt xsize(num)} {opt ysize(num)} {opt mlabs:ize(num)} {opt hjust(num)} {opt vjust(num)} {opt center} {opt nodetail} {cmd:]} 
 
 
 {marker options}{title:Options}
@@ -38,7 +41,7 @@ It is designed for crowded scatter plots where labels overlap and manual adjustm
 
 {p2coldent : {opt boxpad:ding(num)}}Padding around label bounding boxes. Higher values add more spacing. Default is {opt boxpadding(0.05)}.{p_end}
 
-{p2coldent : {opt push(num)}}Repulsion strength for overlapping labels. Higher values push labels apart more strongly. Default is {opt push(1)}.{p_end}
+{p2coldent : {opt push(num)}}Repulsion strength for overlapping labels. Higher values push labels apart more strongly. Default is {opt push(3)}.{p_end}
 
 {p2coldent : {opt pul:l(num)}}Attraction strength pulling labels toward original positions (or away from center with {opt center}). Default is {opt pull(1.5)}.{p_end}
 
@@ -49,13 +52,13 @@ It is designed for crowded scatter plots where labels overlap and manual adjustm
 
 {marker control}{dlgtab:Algorithm control}
 
-{p2coldent : {opt maxit:er(int)}}Maximum number of iterations. The algorithm may converge earlier. Default is {opt maxiter(200)}.{p_end}
+{p2coldent : {opt maxit:er(int)}}Maximum number of iterations. The algorithm may converge earlier. Default is {opt maxiter(50)}.{p_end}
 
-{p2coldent : {opt maxt:ime(num)}}Maximum runtime in seconds. Default is {opt maxtime(30)}.{p_end}
+{p2coldent : {opt maxt:ime(num)}}Maximum runtime in seconds. Default is {opt maxtime(10)}.{p_end}
 
 {p2coldent : {opt maxo:verlaps(int)}}Threshold used in overlap warnings in detailed output. Default is {opt maxoverlaps(10)}.{p_end}
 
-{p2coldent : {opt maxd:isplacement(num)}}Maximum displacement as a fraction of data range. Default {opt maxdisplacement(0)} applies an internal 10% range cap.{p_end}
+{p2coldent : {opt maxdisp:lacement(num)}}Maximum displacement as a fraction of data range. Default {opt maxdisplacement(0)} applies an internal 10% range cap.{p_end}
 
 {p2coldent : {opt jit:ter(num)}}Random perturbation for breaking symmetric force cancellation in dense clusters. Default is {opt jitter(0)}.{p_end}
 
@@ -77,8 +80,6 @@ It is designed for crowded scatter plots where labels overlap and manual adjustm
 
 {p2coldent : {opt xsize(num)}, {opt ysize(num)}}Declared graph dimensions in inches for converting label sizes to data units. Defaults are {opt xsize(5)} and {opt ysize(3)}.{p_end}
 
-{p2coldent : {opt plotxsize(num)}, {opt plotysize(num)}}Actual plot area dimensions in inches. Use when plot region differs from total graph size. Defaults are {opt plotxsize(0)} and {opt plotysize(0)} (use xsize/ysize).{p_end}
-
 
 {marker text}{dlgtab:Label size and alignment}
 
@@ -89,7 +90,7 @@ It is designed for crowded scatter plots where labels overlap and manual adjustm
 
 {marker display}{dlgtab:Display}
 
-{p2coldent : {opt nodetail}}Suppress detailed iteration diagnostics, overlap summaries, and force statistics. By default, detailed output is shown.{p_end}
+{p2coldent : {opt nodetail}}Suppress detailed diagnostics. By default, detailed output is shown.{p_end}
 
 {synoptline}
 {p2colreset}{...}

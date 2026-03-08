@@ -8,34 +8,12 @@ cap program drop labrepel
 program labrepel, rclass
     version 11
 
-    syntax varlist(numeric min=2 max=2) [if] [in], ///
-        LABel(varname string) ///
-        [ ///
-			BOXPADding(real 0.05) ///
-			PUSh(real 3) ///
-			PULl(real 1.5) ///
-			DAMping(real 0.3) ///
-			COOLing(real 0.2) ///
-			MAXTime(real 10) ///
-			MAXIter(integer 50) ///
-			MAXOverlaps(integer 10) ///
-			NUDGEx(real 0) ///
-			NUDGEy(real 0) ///
-			XLIMit(numlist min=2 max=2) ///
-			YLIMit(numlist min=2 max=2) ///
-			DIRection(string) ///
-			SEED(numlist max=1 >0) ///
-			HJust(real 0.5) ///
-			VJust(real 0.5) ///
-			MLABSize(real 2.5) ///
-			MAXDISPlacement(real 0) ///
-			JITter(real 0) ///
-            NODETail ///
-			XSIZe(real 5) ///
-			YSIZe(real 3) ///
-			PLOTXSize(real 0) ///
-			PLOTYSize(real 0) ///
-			CENTER ///
+    syntax varlist(numeric min=2 max=2) [if] [in], LABel(varname string) ///
+        [ BOXPADding(real 0.05) push(real 3) pull(real 1.5) DAMPing(real 0.3) COOLing(real 0.2) ///
+			MAXTime(real 10) MAXIter(integer 50) MAXOverlaps(integer 10) nudgex(real 0) nudgey(real 0) ///
+			XLIMit(numlist min=2 max=2) YLIMit(numlist min=2 max=2) ///
+			DIRection(string) SEED(numlist max=1 >0) HJust(real 0.5) VJust(real 0.5) MLABSize(real 2.5) ///
+			MAXDISPlacement(real 0) JITter(real 0) nodetail xsize(real 5) ysize(real 3) center ///
         ]
 
     marksample touse
@@ -108,13 +86,6 @@ program labrepel, rclass
     local x_scale = `xrange' / `xsize'   // data units per inch
     local y_scale = `yrange' / `ysize'   
 
-    * Actual plot area in inches: refine later
-    if `plotxsize' > 0 {
-        local x_scale = `xrange' / `plotxsize'   
-    }
-    if `plotysize' > 0 {
-        local y_scale = `yrange' / `plotysize'  
-    }
 
     * displacement 
     if `maxdisplacement' <= 0 {

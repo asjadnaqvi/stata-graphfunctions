@@ -9,6 +9,7 @@
 !README.md
 !installation/
 !figures/
+!data/
 
 # Exclude everything in installation/ by default
 installation/*
@@ -22,4 +23,7 @@ installation/*
 # Exclude everything in figures/ by default, then include only PNGs
 figures/*
 !figures/*.png
+
+# Include everything in data/ folder
+!data/**
 

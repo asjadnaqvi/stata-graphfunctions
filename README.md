@@ -10,14 +10,12 @@
 
 
 
-# graphfunctions v1.6
-*(19 Nov 2025)*
+# graphfunctions v1.7
+*(08 Mar 2026)*
 
 A modular grammar-of-graphics toolkit for Stata data visualizations.
 
 The program contains a set of programs that allow users to build custom visualizations from the bottom up.
-
-The package is currently *beta* and might still contains bugs and errors, and might still be missing all checks and balances. Please report these by opening an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues).
 
 This package contains the following programs:
 
@@ -25,10 +23,11 @@ This package contains the following programs:
 |Program|Version|Updated|Description|
 |----| ---- | ---- | ----- |
 | [shapes](#shapes) | 1.4 | 19 Nov 2025 | Contains `shapes circle`, `shapes pie`, `shapes square`, `shapes rotate`, `shapes area`, `shapes translate`, `shapes dilate`, `shapes stretch`, `shapes round` |
-| [arc](#arc) | 1.3 | 19 Nov 2025 | Draw major and minor arcs between two points |
-| [radscatter](#radscatter) | 1.0 | 19 Nov 2025 | Generate scatter points and angles in polar coordinates |
-| [labsplit](#labsplit) | 1.1 | 08 Oct 2024 | Text wrapper for labels |
-| [catspline](#catspline) | 1.2 | 18 Feb 2025 | Catmull-Rom splines |
+| [arc](#arc) | 1.4 | 26 Feb 2026 | Draw major and minor arcs between two points |
+| [radscatter](#radscatter) | 1.0 | 17 Nov 2025 | Generate scatter points and angles in polar coordinates |
+| [labrepel](#labrepel) | 1.0 | 08 Mar 2026 | Repel overlapping text labels |
+| [labsplit](#labsplit) | 1.2 | 03 Mar 2025 | Text wrapper for labels |
+| [catspline](#catspline) | 1.21 | 25 Aug 2025 | Catmull-Rom splines |
 
 
 In the pipeline:
@@ -47,7 +46,7 @@ SSC (**v1.52**):
 ssc install graphfunctions, replace
 ```
 
-GitHub (**v1.6**):
+GitHub (**v1.7**):
 
 ```stata
 net install graphfunctions, from("https://raw.githubusercontent.com/asjadnaqvi/stata-graphfunctions/main/installation/") replace
@@ -71,6 +70,7 @@ graph set window fontface "Arial Narrow"
 The program allows users to split text labels based on flexible or fixed character length or word positions.
 
 Syntax:
+
 ```stata
 labsplit variable, [ wrap(int) word(int) strict generate(newvar) ]
 ```
@@ -114,8 +114,136 @@ twoway (scatter y x, mlabel(newlab3) mlabsize(3)), title("Word wrap")
 <img src="/figures/labsplit0.png" width="50%"><img src="/figures/labsplit1.png" width="50%">
 <img src="/figures/labsplit2.png" width="50%"><img src="/figures/labsplit3.png" width="50%">
 
+## labrepel
+*(v1.0: 08 Mar 2026)*
+
+The program repels overlapping text labels in scatter plots and other visualizations to improve readability.
+
+Syntax:
+```stata
+labrepel y x, label(varname) [ <options? ]
+```
+
+See `help labrepel` after installation.
+
+Examples:
+
+Let's start with a basic figure
+
+```stata
+sysuse auto, clear
+
+twoway 	///
+	(scatter weight price , msym(circle) msize(1) mcolor(eltblue) mlcolor(none) mlabel(make)  mlabsize(1.8) mlabpos(0))	///
+	, legend(off)
+```
+
+And now we can try the repel algorithm:
+
+```stata
+labrepel weight price, label(make) push(3) maxiter(40)
+```
+
+<img src="/figures/labrepel_norepel.png" width="100%">
+
+which will also give us details about the algorithm. These can be turned off by typing `nodetail`. We will also get two new variables `_xcoord` and `_ycoord` that give us the x,y values of the displaced labels. We can now plot these labels without markers and also add `pcspike` as guiding lines to the original coordinate:
+
+```stata
+twoway 	///
+	(scatter weight price , msym(circle) mcolor(eltblue) mlcolor(none))	///
+	(scatter _ycoord _xcoord, mcolor(none) mlabel(make)  mlabsize(1.8) mlabpos(0)) ///
+	(pcspike weight price  _ycoord _xcoord, lcolor(gs13) lw(0.1))	///
+	, legend(off)
+```
+
+<img src="/figures/labrepel.png" width="100%">
+
+The algorithm can also do much more. We can repel on specific axes. Let's start with another example that shows timeseries values of COVID-19 cases for European countries. The prepared data already contains the ranks of the countries by the last value. Let's see what the raw data looks like:
+
+
+```stata
+use "https://github.com/asjadnaqvi/stata-graphfunctions/blob/main/data/OWID_data2.dta?raw=true", clear
+```
+
+Let's create an advanced time series graph that has labels added to the end of each line:
+
+```stata
+levelsof ctry, local(lvls)
+
+local i = 1
+
+foreach x of local lvls {
+	colorpalette tableau, nograph
+
+	local lines `lines' (line ncsmooth date if ctry==`x', lc("`r(p`i')'"))
+	
+	local scatters `scatters'  (scatter ncsmooth date if date==last & ctry==`x',  mlabel(ctry) mcolor(none) mlabc("`r(p`i')'")) ///
+	
+	local ++i
+}
+
+
+twoway ///
+	`lines' 	///
+	`scatters' 	///
+		, ///
+		xtitle("") ytitle("New cases per million (smoothed)") ///
+		legend(off) graphregion(margin(r+10))	///
+		xsize(2) ysize(1)
+```
+
+And we get this graph:
+
+<img src="/figures/labrepel_timeseries_norepel.png" width="100%">
+
+
+Now try the label repel algorithm on just the y-axis:
+
+```stata
+labrepel ncsmooth date if date==last, label(country) direction(y) 	
+```
+
+We also want to displace the labels away from the x-axis a bit and we can do this manually:
+
+```stata
+replace _xcoord = _xcoord + 5
+```
+
+Plot again:
+
+```stata
+levelsof country, local(lvls)	
+
+local i = 1
+
+foreach x of local lvls {
+	colorpalette tableau, nograph
+
+	local lines `lines' (line ncsmooth date if country=="`x'", lc("`r(p`i')'"))
+	
+	local scatters `scatters'  (scatter _ycoord _xcoord if date==last & country=="`x'",  mlabel(ctry) mcolor(none) mlabc("`r(p`i')'")) ///
+	
+	local ++i
+}
+
+twoway ///
+	`lines' 	///
+	`scatters' 	///
+	(pcspike ncsmooth date _ycoord _xcoord, lcolor(gs10) lw(0.1))	///
+		, ///
+		xtitle("") ytitle("New cases per million (smoothed)") ///
+		legend(off) graphregion(margin(r+10))	///
+		xsize(2) ysize(1)
+```
+
+which gives us a much more nicer looking figure:
+
+<img src="/figures/labrepel_timeseries_repel.png" width="100%">
+
+
+
 ## catspline
-*(v1.2: 18 Feb 2025)*
+*(v1.21: 25 Aug 2025)*
 
 
 The program allows users to generate splines based on the [Catmull-Rom algorithm](https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline).
