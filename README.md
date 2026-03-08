@@ -1602,6 +1602,14 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-graphfunctions/issues
 ## Change log
 
 
+**v1.7 (08 Mar 2026)**
+- Added new command `labrepel` v1.0 for force-directed label repulsion in crowded plots.
+- `arc` updated to v1.4 with `reverse` option, improved tolerance checks, and bug fixes.
+- `labsplit` updated to v1.2 with `replace` support and `n()` as an alias for `wrap()`.
+- `catspline` updated to v1.21 with `_id` handling fixes and marksample-related corrections.
+- Several bug fixes.
+
+
 **v1.6 (19 Nov 2025)**
 - `shapes` updated to v1.4 to include better options for `shapes square`, `shapes pie`, `shapes cirle`, and `shapes rotate`. New commands include `shapes translate`, `shapes dilate`, `shapes stretch`, `shapes round`.
 - `arc` updated with better options. `dropbase` added to ensure continuity across stacked arcs.
