@@ -121,7 +121,7 @@ The program repels overlapping text labels in scatter plots and other visualizat
 
 Syntax:
 ```stata
-labrepel y x, label(varname) [ <options? ]
+labrepel y x, label(varname) [ <options> ]
 ```
 
 See `help labrepel` after installation.
@@ -200,13 +200,13 @@ And we get this graph:
 Now try the label repel algorithm on just the y-axis:
 
 ```stata
-labrepel ncsmooth date if date==last, label(country) direction(y) 	
+labrepel ncsmooth date if date==last, push(6) pull(0.1) mlabsize(1.8) seed(2026) label(country) direction(y) 	
 ```
 
-We also want to displace the labels away from the x-axis a bit and we can do this manually:
+We fix the seed since each run would give a different layout and it be good to already store this before running. Might require a couple of iterations to get it right. We also displace the labels away from the x-axis a bit and we can do this manually:
 
 ```stata
-replace _xcoord = _xcoord + 5
+replace _xcoord = _xcoord + 8
 ```
 
 Plot again:
