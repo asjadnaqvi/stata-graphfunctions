@@ -1,0 +1,25 @@
+# Exclude everything by default
+/*
+
+# Include git files
+!.git/
+!.gitignore
+
+# Include README at root and figures
+!README.md
+!installation/
+!figures/
+
+# Exclude everything in installation/ by default
+installation/*
+
+# Only include core Stata programs and help files in installation/
+!installation/*.ado
+!installation/*.sthlp
+!installation/*.pkg
+!installation/stata.toc
+
+# Exclude everything in figures/ by default, then include only PNGs
+figures/*
+!figures/*.png
+

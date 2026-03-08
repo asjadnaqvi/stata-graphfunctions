@@ -1,0 +1,32 @@
+v 1.7
+d {bf:GRAPHFUNCTIONS}: A modular grammar-of-graphics toolkit for Stata data visualizations.
+d
+d Requires: Stata version 11 or higher.
+d
+d KW: Stata
+d KW: graphs
+d KW: figures
+d KW: text wrap
+d KW: splines
+d KW: shapes
+d
+d Distribution-Date: 20260306
+d License: MIT
+d
+d Author: Asjad Naqvi (asjadnaqvi@gmail.com)
+d
+f graphfunctions.sthlp
+f arc.ado
+f arc.sthlp
+f catspline.ado
+f catspline.sthlp
+f labrepel.ado
+f labrepel.sthlp
+f labsplit.ado
+f labsplit.sthlp
+f shape.ado
+f shape.sthlp
+f shapes.ado
+f shapes.sthlp
+f radscatter.ado
+f radscatter.sthlp
