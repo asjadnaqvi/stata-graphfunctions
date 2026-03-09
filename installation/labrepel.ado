@@ -16,6 +16,9 @@ program labrepel, rclass
 			MAXDISPlacement(real 0) JITter(real 0) nodetail xsize(real 5) ysize(real 3) center ///
         ]
 
+    return local date 		20260308
+	return local version 	1.7
+
     marksample touse
     quietly count if `touse'
     if r(N) == 0 {
@@ -109,7 +112,7 @@ program labrepel, rclass
         gen double `lab_width'   = strlen(`label') * `char_in' * `x_scale'
         gen double `lab_height'  = (`height_in' + 0.002 * (strlen(`label') - 1)) * `y_scale'
 
-        * guardrails: prevent pathological huge boxes
+        * guardrails
         replace `lab_width'  = min(`lab_width',  0.06*`xrange')     if `valid_label'
         replace `lab_height' = min(`lab_height', 0.06*`yrange')     if `valid_label'
         
@@ -147,21 +150,20 @@ program labrepel, rclass
         di as text "  Cooling minimum: `cooling'"
 		di as text "  Max displacement: `maxdisplacement'"  
 		di as text "  Max iterations: `maxiter'"
-        quietly {
-            sum `lab_width' if `valid_label', meanonly
-        }
+        
+        quietly sum `lab_width' if `valid_label', meanonly
         local avg_lw = r(mean)
         di as text "  Avg label width: " %9.1f `avg_lw' " (" %4.1f (`avg_lw'/`xrange'*100) "% of X range)"
-        quietly {
-            sum `lab_height' if `valid_label', meanonly
-        }
+        
+        quietly sum `lab_height' if `valid_label', meanonly
         local avg_lh = r(mean)
         di as text "  Avg label height: " %9.1f `avg_lh' " (" %4.1f (`avg_lh'/`yrange'*100) "% of Y range)"
+        
         di as text "  Data range X: [`xmin', `xmax'] (span: `xrange')"
         di as text "  Data range Y: [`ymin', `ymax'] (span: `yrange')"
     }
 
-    * buffers (still clamping, but less likely to become attractors now)
+    * buffers 
     local xbuf = `xrange' * 0.05
     local ybuf = `yrange' * 0.05
 
@@ -174,11 +176,9 @@ program labrepel, rclass
         local moved = 0
         local overlaps_found = 0
 
-        * cooling: allow faster decay early to break clusters, slower later to refine
-        * Scale cooling denominator with maxiter: small maxiter = strong initial dampening, large maxiter = gradual decay
+        * check if min/max functions are really needed
         local cooling_denominator = max(`maxiter' * 0.5, 1)
         
-        * For very small maxiter values, use reasonable cooling to allow productive movement in few iterations
         if `maxiter' == 1 {
             local cooling_factor = max(`cooling', 0.5)  // allow reasonable progress in single iteration
         }
@@ -189,7 +189,7 @@ program labrepel, rclass
             local cooling_factor = max(`cooling', 1 - (`iter' / `cooling_denominator'))
         }
 
-        * time limit
+        * add time limits
         local current_time = clock(c(current_date)+" "+c(current_time), "DMY hms")
         local elapsed = (`current_time' - `start_time')
         if `elapsed' > `max_time_ms' & `max_time_ms' > 0 {
@@ -200,12 +200,10 @@ program labrepel, rclass
         if `n_labels' == 0 continue, break
 
         quietly {
-            * reset accumulators for ALL observations
             replace `overlap_count' = 0
             replace `net_fx' = 0
             replace `net_fy' = 0
 
-            * pairwise overlaps -> accumulate forces (do NOT update positions yet)
             local idx_i = 0
             foreach i_obs of local valid_obs {
                 local ++idx_i
@@ -239,8 +237,7 @@ program labrepel, rclass
                         local overlap_w = min(`x2_i', `x2_j') - max(`x1_i', `x1_j')
                         local overlap_h = min(`y2_i', `y2_j') - max(`y1_i', `y1_j')
                         
-                        * Normalize overlap by plot scale to get visual overlap (in inches)
-                        * This ensures displacement is proportional to visual size, not data range
+                        * Normalize overlap by plot scale to get visual overlap (in inches): CHECK!
                         local overlap_w_norm = `overlap_w' / `x_scale'
                         local overlap_h_norm = `overlap_h' / `y_scale'
                         
@@ -257,9 +254,8 @@ program labrepel, rclass
                         * Sign of displacement (+1 or -1)
                         local sx = cond(`dx' >= 0, 1, -1)
                         local sy = cond(`dy' >= 0, 1, -1)
+                        
                         * Force = normalized overlap × push multiplier × cooling
-                        * Using normalized overlap (inches) scaled back to data units
-                        * Damping factor controls speed of label movement
                         local fx = `sx' * `push' * `overlap_w_norm' * `x_scale' * `damping' * `cooling_factor'
                         local fy = `sy' * `push' * `overlap_h_norm' * `y_scale' * `damping' * `cooling_factor'
 
@@ -278,13 +274,12 @@ program labrepel, rclass
                 }
             }
             
-            * Add random jitter for overlapping labels (optional)
-            * This breaks symmetric force cancellation in dense clusters
+            * Add random jitter for overlapping labels
             if `jitter' > 0 {
                 foreach i_obs of local valid_obs {
                     local n_overlaps = `overlap_count'[`i_obs']
                     if `n_overlaps' > 0 {
-                        * Jitter proportional to label size, number of overlaps, and jitter parameter
+
                         local jit_magnitude = `jitter' * (0.1 + 0.05 * min(`n_overlaps', 10))
                         local jit_x = (runiform() - 0.5) * `lab_width'[`i_obs'] * `jit_magnitude'
                         local jit_y = (runiform() - 0.5) * `lab_height'[`i_obs'] * `jit_magnitude'
@@ -298,7 +293,7 @@ program labrepel, rclass
                 }
             }
 
-            * pull forces (accumulate) - adaptive based on overlap state
+            * pull forces
             foreach i_obs of local valid_obs {
                 if "`center'" != "" {
                     * Direction away from center
@@ -316,8 +311,7 @@ program labrepel, rclass
                 
 
                 if `dist0' > 0.001 {
-                    * Adaptive pull: strongly suppress for overlapped labels
-                    * Only pull clear labels strongly (to origin, or away from center when center is set)
+                    * Adaptive pull
                     if `n_overlaps' == 0 {
                         local overlap_factor = 1.0  // Pull non-overlapping labels STRONGLY back
                     }
@@ -340,8 +334,7 @@ program labrepel, rclass
                 }
             }
 
-            * apply accumulated forces in one shot (reduces drift/order effects)
-            * Fill any missing force values with 0 to ensure proper calculation
+            * CHECK IF NEEDED!
             replace `net_fx' = 0 if missing(`net_fx')
             replace `net_fy' = 0 if missing(`net_fy')
             
@@ -352,7 +345,7 @@ program labrepel, rclass
                 replace `y_new' = `y_new' + `net_fy' if `valid_label'
             }
 
-            * movement flag (cheap proxy)
+            * movement flag 
             qui count if (abs(`net_fx')>1e-12 | abs(`net_fy')>1e-12) & `valid_label'
             if r(N) > 0 local moved = 1
             
@@ -362,12 +355,10 @@ program labrepel, rclass
                 continue, break
             }
 
-            * limits + caps + update boxes
-            * Apply displacement caps
+
             if "`center'" != "" {
+
                 * When center is specified: allow symmetric displacement capping
-                * Vectorized: avoid iteration by using cond() for direction signs
-                * Drop and recreate to avoid errors on iteration 2+
                 cap drop `dx_sign' `dy_sign'
                 gen int `dx_sign' = cond(`x_orig' >= `xcenter', 1, -1)
                 gen int `dy_sign' = cond(`y_orig' >= `ycenter', 1, -1)
@@ -376,14 +367,12 @@ program labrepel, rclass
                 replace `dy_sign' = 0 if !`valid_label'
                 
                 * X-direction: cap both away and toward center symmetrically
-                * Only cap if displacement is non-missing and exceeds limit
                 replace `x_new' = `x_orig' + `dx_sign' * `max_disp_x' ///
                     if `valid_label' & `dx_sign' * (`x_new' - `x_orig') > `max_disp_x' & !missing(`x_new')
                 replace `x_new' = `x_orig' - `dx_sign' * `max_disp_x' ///
                     if `valid_label' & `dx_sign' * (`x_new' - `x_orig') < 0 & abs(`x_new' - `x_orig') > `max_disp_x' & !missing(`x_new')
                 
                 * Y-direction: cap both away and toward center symmetrically
-                * Only cap if displacement is non-missing and exceeds limit
                 replace `y_new' = `y_orig' + `dy_sign' * `max_disp_y' ///
                     if `valid_label' & `dy_sign' * (`y_new' - `y_orig') > `max_disp_y' & !missing(`y_new')
                 replace `y_new' = `y_orig' - `dy_sign' * `max_disp_y' ///
@@ -431,15 +420,15 @@ program labrepel, rclass
 
     if "`nodetail'" == "" {
         di as text "Repulsion complete after `iter' iterations"
-        qui count if `overlap_count' > `maxoverlaps' & `valid_label'
+        count if `overlap_count' > `maxoverlaps' & `valid_label'
         if r(N) > 0 {
             di as text "Warning: " r(N) " labels still have >" `maxoverlaps' " overlaps"
         }
         
         * Diagnostic: check for problematic clustering
-        qui sum `overlap_count' if `valid_label', meanonly
+        sum `overlap_count' if `valid_label', meanonly
         local total_overlaps = r(sum) / 2  // divide by 2 since each pair is counted twice
-        qui count if `overlap_count' > 0 & `valid_label'
+        count if `overlap_count' > 0 & `valid_label'
         local labels_with_overlaps = r(N)
         
         if `labels_with_overlaps' == 0 {
@@ -465,4 +454,6 @@ program labrepel, rclass
     return local n_labels `n_labels'
     return local iterations `iter'
     return local direction "`direction'"
+
+
 end
