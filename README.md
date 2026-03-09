@@ -128,7 +128,7 @@ See `help labrepel` after installation.
 
 Examples:
 
-Let's start with a basic figure
+Let's start with a basic figure with marker labels:
 
 ```stata
 sysuse auto, clear
@@ -137,16 +137,17 @@ twoway 	///
 	(scatter weight price , msym(circle) msize(1) mcolor(eltblue) mlcolor(none) mlabel(make)  mlabsize(1.8) mlabpos(0))	///
 	, legend(off)
 ```
+We can see that there are huge label overlaps:
 
-And now we can try the repel algorithm:
+<img src="/figures/labrepel_norepel.png" width="100%">
+
+Let's repel these labels:
 
 ```stata
 labrepel weight price, label(make) push(3) maxiter(40)
 ```
 
-<img src="/figures/labrepel_norepel.png" width="100%">
-
-which will also give us details about the algorithm. These can be turned off by typing `nodetail`. We will also get two new variables `_xcoord` and `_ycoord` that give us the x,y values of the displaced labels. We can now plot these labels without markers and also add `pcspike` as guiding lines to the original coordinate:
+The above command also give us details about the algorithm. These can be turned off by typing `nodetail`. The command also generates two new variables `_xcoord` and `_ycoord` that give us the _x_ and _y_ values of the displaced labels. We can now plot these labels without markers and also add spikes using `pcspike` as guiding lines to the original coordinates:
 
 ```stata
 twoway 	///
@@ -158,7 +159,9 @@ twoway 	///
 
 <img src="/figures/labrepel.png" width="100%">
 
-The algorithm can also do much more. We can repel on specific axes. Let's start with another example that shows timeseries values of COVID-19 cases for European countries. The prepared data already contains the ranks of the countries by the last value. Let's see what the raw data looks like:
+The algorithm can also do much more. We can repel on specific axes, control how much is repeled, limit the repel range, etc. 
+
+Let's start with another example that shows timeseries values of COVID-19 cases for European countries. The prepared data already contains the ranks of the countries by the last value. Let's see what the raw data looks like:
 
 
 ```stata
