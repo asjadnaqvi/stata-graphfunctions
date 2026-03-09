@@ -128,7 +128,7 @@ See `help labrepel` after installation.
 
 Examples:
 
-Let's start with a basic figure with marker labels:
+Let's start with a classic scatter plot with marker labels:
 
 ```stata
 sysuse auto, clear
@@ -147,7 +147,7 @@ Let's repel these labels:
 labrepel weight price, label(make) push(3) maxiter(40)
 ```
 
-The above command also give us details about the algorithm. These can be turned off by typing `nodetail`. The command also generates two new variables `_xcoord` and `_ycoord` that give us the _x_ and _y_ values of the displaced labels. We can now plot these labels without markers and also add spikes using `pcspike` as guiding lines to the original coordinates:
+The above command also displays details about the algorithm. These can be turned off by adding the option `nodetail`. The command also generates two new variables `_xcoord` and `_ycoord` that give us the _x_ and _y_ coordinates of the displaced labels. We can plot these labels without markers and add spikes using `pcspike` as guiding lines to the original scatter points:
 
 ```stata
 twoway 	///
@@ -161,25 +161,23 @@ twoway 	///
 
 The algorithm can also do much more. We can repel on specific axes, control how much is repeled, limit the repel range, etc. 
 
-Let's start with another example that shows timeseries values of COVID-19 cases for European countries. The prepared data already contains the ranks of the countries by the last value. Let's see what the raw data looks like:
+Let's start with another example that shows timeseries values of COVID-19 cases for selected European countries. The prepared data already contains the rank of the countries by the last date value. Let's load the data:
 
 
 ```stata
 use "https://github.com/asjadnaqvi/stata-graphfunctions/blob/main/data/OWID_data2.dta?raw=true", clear
 ```
 
-Let's create an advanced time series graph that has labels added to the end of each line:
+We create an advanced time series graph that has labels added to the end of each line in the same color as the line for easy reference:
 
 ```stata
 levelsof ctry, local(lvls)
-
 local i = 1
 
 foreach x of local lvls {
 	colorpalette tableau, nograph
 
 	local lines `lines' (line ncsmooth date if ctry==`x', lc("`r(p`i')'"))
-	
 	local scatters `scatters'  (scatter ncsmooth date if date==last & ctry==`x',  mlabel(ctry) mcolor(none) mlabc("`r(p`i')'")) ///
 	
 	local ++i
@@ -195,28 +193,30 @@ twoway ///
 		xsize(2) ysize(1)
 ```
 
-And we get this graph:
+And we get this graph where we see that some labels completely overlap with each other:
 
 <img src="/figures/labrepel_timeseries_norepel.png" width="100%">
 
 
-Now try the label repel algorithm on just the y-axis:
+Here we can use the label repel algorithm on just the y-axis:
 
 ```stata
 labrepel ncsmooth date if date==last, push(6) pull(0.1) mlabsize(1.8) seed(2026) label(country) direction(y) 	
 ```
 
-We fix the seed since each run would give a different layout and it be good to already store this before running. Might require a couple of iterations to get it right. We also displace the labels away from the x-axis a bit and we can do this manually:
+Note that we also fix the seed since each run would give a different layout and it is good to control this. Otherwise we might get a layout we like but we won't know how to replicate it. We also displace the labels away from the x-axis manually:
 
 ```stata
 replace _xcoord = _xcoord + 8
 ```
 
-Plot again:
+And we plot again:
 
 ```stata
-levelsof country, local(lvls)	
+local lines  
+local scatters 
 
+levelsof country, local(lvls)	
 local i = 1
 
 foreach x of local lvls {
